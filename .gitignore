@@ -1,2 +1,21 @@
+# Environment
 .env
+.env.*
+!.env.example
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Claude Code (instructions locales non partagées)
+CLAUDE.md
