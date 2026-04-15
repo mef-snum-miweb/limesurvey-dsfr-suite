@@ -21,48 +21,54 @@ Ce repo fournit l'environnement Docker pour le **développement local** et le **
 
 ### Installation
 
-Cloner les repos au même niveau :
+Un seul clone, avec les submodules :
 
 ```bash
-cd ~/GitHub  # ou votre dossier de travail
-
-# Ce repo
-git clone https://github.com/bmatge/limesurvey-dsfr-suite.git
-
-# Les 3 modules (repos frères)
-git clone https://github.com/bmatge/limesurvey-theme-dsfr.git
-git clone https://github.com/bmatge/limesurvey-email-dsfr.git
-git clone https://github.com/bmatge/limesurvey-conversation-albert.git
+git clone --recurse-submodules https://github.com/bmatge/limesurvey-dsfr-suite.git
+cd limesurvey-dsfr-suite
 ```
 
-Structure attendue :
+Si vous avez déjà cloné sans `--recurse-submodules` :
 
+```bash
+git submodule update --init --recursive
 ```
-~/GitHub/
-├── limesurvey-dsfr-suite/            ← ce repo
-├── limesurvey-theme-dsfr/            ← thème DSFR
-├── limesurvey-email-dsfr/            ← plugin email
-└── limesurvey-conversation-albert/   ← plugin IA
-```
+
+Les 3 modules (thème + 2 plugins) vivent sous [`modules/`](modules/) en tant que submodules git, pointant sur les repos GitHub correspondants.
 
 ### Démarrage
 
 ```bash
-cd limesurvey-dsfr-suite
 docker compose -f docker-compose.dev.yml up -d
 ```
 
-LimeSurvey est accessible sur **http://localhost:8080** (identifiants : `admin` / `admin`).
+LimeSurvey est accessible sur **http://localhost:8081** (identifiants : `admin` / `admin`).
 
 ### Workflow de développement
 
-Les fichiers du thème et des plugins sont montés en direct depuis vos repos locaux. Toute modification est visible immédiatement après un rafraîchissement du navigateur.
+Les 3 submodules sont montés en direct dans le conteneur. Toute modification est visible immédiatement après un rafraîchissement du navigateur (pas de rebuild Docker).
+
+**Règle d'or** : on édite **toujours** depuis `modules/<nom>/`, jamais ailleurs. Chaque submodule est un clone git fonctionnel configuré sur sa branche `main`, avec son propre remote GitHub.
 
 ```bash
-# Éditer un fichier du thème
-code ../limesurvey-theme-dsfr/css/theme.css
+# 1. Éditer et commiter dans le submodule
+cd modules/theme-dsfr
+# ...modifs...
+git add -A
+git commit -m "feat: ..."
+git push                    # → github.com/bmatge/limesurvey-theme-dsfr (main)
 
-# Rafraîchir le navigateur → changement visible
+# 2. Remonter le pointeur de submodule dans le repo parent
+cd ../..
+git add modules/theme-dsfr
+git commit -m "chore: bump theme-dsfr"
+git push                    # → github.com/bmatge/limesurvey-dsfr-suite (master)
+```
+
+Pour tirer les dernières versions des 3 submodules depuis leurs `main` respectifs :
+
+```bash
+git submodule update --remote --merge
 ```
 
 ### Arrêt
@@ -121,8 +127,7 @@ Le script met à jour le repo, les submodules, pull les images Docker et relance
          volume               volume                volume
 ```
 
-- **Dev local** : les volumes pointent vers les repos frères (`../limesurvey-theme-dsfr/`, etc.)
-- **Production** : les volumes pointent vers les submodules (`./modules/theme-dsfr/`, etc.)
+- **Dev local et production** : les volumes pointent tous vers les submodules (`./modules/theme-dsfr/`, `./modules/email-dsfr/`, `./modules/conversation-albert/`). Le repo `limesurvey-dsfr-suite` est la source unique de vérité pour l'arborescence de travail.
 
 ---
 

@@ -2,20 +2,18 @@
 # LimeSurvey DSFR Suite — Développement local
 # =============================================================================
 #
-# Prérequis : les repos des modules doivent être clonés au même niveau :
+# Prérequis : initialiser les submodules avant le premier lancement :
 #
-#   ~/GitHub/
-#   ├── limesurvey-dsfr-suite/       ← ce repo
-#   ├── limesurvey-theme-dsfr/       ← git clone https://github.com/bmatge/limesurvey-theme-dsfr.git
-#   ├── limesurvey-email-dsfr/       ← git clone https://github.com/bmatge/limesurvey-email-dsfr.git
-#   └── limesurvey-conversation-albert/  ← git clone https://github.com/bmatge/limesurvey-conversation-albert.git
+#   git submodule update --init --recursive
+#
+# Les 3 modules (thème + 2 plugins) sont montés en direct depuis les submodules
+# de ce repo (modules/*). Toute modification faite dans modules/<nom>/ va
+# dans le submodule correspondant et est visible instantanément (F5) dans
+# le conteneur.
 #
 # Usage :
 #   docker compose -f docker-compose.dev.yml up -d
-#   → http://localhost:8080 (admin / admin)
-#
-# Les fichiers du thème et des plugins sont montés en direct depuis vos repos
-# locaux : toute modification est visible instantanément (F5).
+#   → http://localhost:8081 (admin / admin)
 # =============================================================================
 
 services:
@@ -37,10 +35,10 @@ services:
     ports:
       - "8081:8080"
     volumes:
-      # --- Modules DSFR (repos locaux montés en direct) ---
-      - ./modules/theme-dsfr:/var/www/html/themes/survey/dsfr
-      - ../limesurvey-email-dsfr:/var/www/html/plugins/DSFRMail
-      - ../limesurvey-conversation-albert:/var/www/html/plugins/ConversationIA
+      # --- Modules DSFR (submodules montés en direct) ---
+      - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
+      - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
+      - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
       # --- Données persistantes ---
       - limesurvey-upload-dev:/var/www/html/upload
     depends_on:
