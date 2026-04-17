@@ -41,7 +41,7 @@ export const S = {
   rankingLiveRegion: '[id^="ranking-live-"]',
 
   // --- Conditional questions ---
-  conditionalQuestion: '[data-relevance]',
+  conditionalQuestion: '.question-container[data-dsfr-conditional-processed]',
   conditionalLiveRegion: '#conditional-live-region',
   lsIrrelevant: '.ls-irrelevant',
   lsHidden: '.ls-hidden',
@@ -65,7 +65,7 @@ export const S = {
   validationTip: '.ls-questionhelp[id^="vmsg_"]',
 
   // --- Tables ---
-  arrayTable: '.ls-answers table',
+  arrayTable: 'table.ls-answers',
   dropdownArray: 'table.dropdown-array',
 
   // --- Navigation ---

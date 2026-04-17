@@ -156,15 +156,15 @@ test.describe.serial('Page 4 — Single choice questions', () => {
   });
 
   test('gender (G): radio buttons with DSFR styling', async ({ page }) => {
-    const radioGroups = page.locator('.fr-radio-group, ' + S.radioList);
+    const radioGroups = page.locator('.question-container .fr-radio-group, .question-container ' + S.radioList);
     await expect(radioGroups.first()).toBeVisible({ timeout: 10_000 });
   });
 
   test('yes/no (Y): two radio options visible', async ({ page }) => {
     // Find a yes/no question — it has exactly 2 substantive radio options
-    const yesNoRadios = page.locator('.yes-no-question input[type="radio"], .boilerplate-yes-no input[type="radio"]');
+    const yesNoRadios = page.locator('.question-container.yes-no input[type="radio"]');
     // Fallback: look for radio lists with exactly 2 options (+ possible "no answer")
-    const allRadioLists = page.locator(S.radioList);
+    const allRadioLists = page.locator('.question-container ' + S.radioList);
     const count = await allRadioLists.count();
 
     let foundYesNo = false;
@@ -361,9 +361,9 @@ test.describe.serial('Page 5 — Multiple choice questions', () => {
     const checkboxes = page.locator('.question-container input[type="checkbox"]:visible');
     expect(await checkboxes.count()).toBeGreaterThan(0);
 
-    // P-type questions pair checkboxes with comment textareas
-    const commentTextareas = page.locator('.question-container textarea:visible');
-    expect(await commentTextareas.count()).toBeGreaterThan(0);
+    // P-type questions pair checkboxes with comment inputs (text or textarea)
+    const commentInputs = page.locator('.question-container input[type="text"]:visible, .question-container textarea:visible');
+    expect(await commentInputs.count()).toBeGreaterThan(0);
   });
 
   test('no fatal JS errors on page 5', async () => {

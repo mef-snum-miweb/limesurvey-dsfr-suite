@@ -129,12 +129,10 @@ test.describe('Conditions et scenarios — questions conditionnelles (page 6)', 
       const ouiRadio = questionLocator(page, 42).locator('input[type="radio"][value="Y"]');
       await ouiRadio.check({ force: true });
 
-      // Wait for the MutationObserver to fire and update the live region
-      await page.waitForTimeout(1000);
-
+      // Attendre que le MutationObserver (debounce 300ms) remplisse la live region
+      // avant qu'elle soit vidée (auto-clear après 3s)
       const liveRegion = page.locator(S.conditionalLiveRegion);
-      const textContent = await liveRegion.textContent();
-      expect(textContent?.trim().length).toBeGreaterThan(0);
+      await expect(liveRegion).not.toHaveText('', { timeout: 5_000 });
     });
   });
 
@@ -143,25 +141,22 @@ test.describe('Conditions et scenarios — questions conditionnelles (page 6)', 
     test('les questions conditionnelles ont un aria-describedby', async ({ page }) => {
       await goToConditionalPage(page);
 
-      // Find conditional questions (those with data-relevance attribute, excluding the trigger question itself)
-      const conditionalQuestions = page.locator(`${S.conditionalQuestion}:not(${S.lsIrrelevant})`);
-      const count = await conditionalQuestions.count();
-      expect(count).toBeGreaterThan(0);
+      // Vérifier que custom.js a créé des descriptions conditionnelles
+      // et les a liées aux champs via aria-describedby
+      const descElements = page.locator('[id^="conditional-desc-"]');
+      const descCount = await descElements.count();
+      expect(descCount, 'Au moins une description conditionnelle devrait exister').toBeGreaterThan(0);
 
-      // Check at least one conditional question has aria-describedby on its form fields
+      // Vérifier qu'au moins un champ référence cette description
       let foundDescribedBy = false;
-      for (let i = 0; i < count; i++) {
-        const q = conditionalQuestions.nth(i);
-        const fields = q.locator('input:not([type="hidden"]), select, textarea');
-        const fieldCount = await fields.count();
-        for (let j = 0; j < fieldCount; j++) {
-          const describedBy = await fields.nth(j).getAttribute('aria-describedby');
-          if (describedBy && describedBy.trim().length > 0) {
-            foundDescribedBy = true;
-            break;
-          }
+      for (let i = 0; i < descCount; i++) {
+        const descId = await descElements.nth(i).getAttribute('id');
+        if (!descId) continue;
+        const linkedFields = page.locator(`[aria-describedby*="${descId}"]`);
+        if ((await linkedFields.count()) > 0) {
+          foundDescribedBy = true;
+          break;
         }
-        if (foundDescribedBy) break;
       }
       expect(foundDescribedBy).toBe(true);
     });
@@ -169,32 +164,19 @@ test.describe('Conditions et scenarios — questions conditionnelles (page 6)', 
     test('l\'element reference par aria-describedby contient du texte descriptif', async ({ page }) => {
       await goToConditionalPage(page);
 
-      // Find a conditional question with aria-describedby
-      const conditionalQuestions = page.locator(S.conditionalQuestion);
-      const count = await conditionalQuestions.count();
+      // Chercher tous les éléments de description conditionnelle créés par custom.js
+      const descElements = page.locator('[id^="conditional-desc-"]');
+      const count = await descElements.count();
+      expect(count, 'Au moins un élément conditional-desc-* devrait exister').toBeGreaterThan(0);
 
+      // Vérifier qu'au moins un contient du texte
       let foundDescription = false;
       for (let i = 0; i < count; i++) {
-        const q = conditionalQuestions.nth(i);
-        const field = q.locator('input:not([type="hidden"]), select, textarea').first();
-        if (await field.count() === 0) continue;
-
-        const describedBy = await field.getAttribute('aria-describedby');
-        if (!describedBy) continue;
-
-        // Check each referenced ID
-        const ids = describedBy.split(/\s+/).filter(Boolean);
-        for (const id of ids) {
-          const refElement = page.locator(`#${CSS.escape(id)}`);
-          if (await refElement.count() > 0) {
-            const text = await refElement.textContent();
-            if (text && text.trim().length > 0) {
-              foundDescription = true;
-              break;
-            }
-          }
+        const text = await descElements.nth(i).textContent();
+        if (text && text.trim().length > 0) {
+          foundDescription = true;
+          break;
         }
-        if (foundDescription) break;
       }
       expect(foundDescription).toBe(true);
     });
@@ -206,7 +188,7 @@ test.describe('Conditions et scenarios — questions conditionnelles (page 6)', 
       await goToConditionalPage(page);
 
       // Ensure there are irrelevant questions on the page
-      const irrelevantQuestions = page.locator(`${S.conditionalQuestion}${S.lsIrrelevant}`);
+      const irrelevantQuestions = page.locator(`.question-container${S.lsIrrelevant}`);
       const count = await irrelevantQuestions.count();
       expect(count).toBeGreaterThan(0);
 
