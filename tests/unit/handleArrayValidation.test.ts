@@ -1,5 +1,17 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { handleArrayValidation } from '../../modules/theme-dsfr/src/validation/array-validation.js';
+
+// handleArrayValidation planifie setTimeout(updateErrorSummary, 50) après mutation
+// — on active les fake timers pour capturer et neutraliser ces timeouts, sinon
+// jsdom se termine avant leur exécution et updateErrorSummary lève
+// "document is not defined" en unhandled error.
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+afterEach(() => {
+  vi.clearAllTimers();
+  vi.useRealTimers();
+});
 
 // --- Helpers ---
 
