@@ -1,70 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { createErrorSummary } from '../../modules/theme-dsfr/src/validation/error-summary.js';
 
-// --- Reproduire la logique depuis custom.js (lines 1269-1391, sans scrollIntoView/focus) ---
-
-function createErrorSummary(): void {
-  // Supprimer l'ancien récapitulatif s'il existe
-  const oldSummary = document.getElementById('dsfr-error-summary');
-  if (oldSummary) oldSummary.remove();
-
-  // Trouver toutes les questions en erreur
-  const errorQuestions = document.querySelectorAll(
-    '.question-container.input-error, .question-container.fr-input-group--error'
-  );
-
-  if (errorQuestions.length === 0) return;
-
-  // Construire la liste des erreurs
-  const errorList: { id: string; label: string }[] = [];
-  errorQuestions.forEach(function (question) {
-    const questionId = question.id;
-
-    const questionTextElement = question.querySelector('.ls-label-question, .question-text');
-    let questionText = questionTextElement ? questionTextElement.textContent!.trim() : 'Question sans titre';
-
-    const errorMessageElement = question.querySelector('.fr-message--error');
-    let errorMessage = errorMessageElement ? errorMessageElement.textContent!.trim() : '';
-
-    let label = questionText;
-    if (errorMessage) {
-      label += ' : ' + errorMessage;
-    }
-
-    if (label.length > 150) {
-      label = label.substring(0, 147) + '...';
-    }
-
-    errorList.push({ id: questionId, label: label });
-  });
-
-  // Créer l'alerte DSFR
-  const summary = document.createElement('div');
-  summary.id = 'dsfr-error-summary';
-  summary.className = 'fr-alert fr-alert--error fr-mb-4w';
-  summary.setAttribute('role', 'alert');
-  summary.setAttribute('tabindex', '-1');
-
-  let html = '<h3 class="fr-alert__title">';
-  html += errorList.length === 1 ? 'Une erreur a été détectée' : errorList.length + ' erreurs ont été détectées';
-  html += '</h3>';
-  html += '<p>Veuillez corriger les erreurs suivantes :</p>';
-  html += '<ul class="fr-mb-0">';
-
-  errorList.forEach(function (error) {
-    html += '<li class="error-item" data-question-id="' + error.id + '">';
-    html += '<a href="#' + error.id + '" class="fr-link fr-icon-error-warning-line fr-link--icon-left">' + error.label + '</a>';
-    html += '</li>';
-  });
-
-  html += '</ul>';
-  summary.innerHTML = html;
-
-  // Insérer avant la première question
-  const firstQuestion = document.querySelector('.question-container');
-  if (firstQuestion && firstQuestion.parentNode) {
-    firstQuestion.parentNode.insertBefore(summary, firstQuestion);
-  }
-}
+// jsdom n'implémente pas scrollIntoView — stub global pour que les setTimeout
+// déclenchés par createErrorSummary (scroll + focus) ne plantent pas après coup.
+(Element.prototype as unknown as { scrollIntoView: () => void }).scrollIntoView = () => {};
 
 // --- Helpers ---
 
