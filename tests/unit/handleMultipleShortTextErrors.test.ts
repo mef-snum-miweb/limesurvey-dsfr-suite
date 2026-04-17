@@ -1,5 +1,16 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { handleMultipleShortTextErrors } from '../../modules/theme-dsfr/src/validation/mst-errors.js';
+
+// Fake timers : handleMultipleShortTextErrors planifie setTimeout(updateErrorSummary, 50)
+// après chaque mutation. On les capture pour que jsdom ne soit pas déjà torn-down
+// au moment où ils firent.
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+afterEach(() => {
+  vi.clearAllTimers();
+  vi.useRealTimers();
+});
 
 // --- Helpers ---
 
