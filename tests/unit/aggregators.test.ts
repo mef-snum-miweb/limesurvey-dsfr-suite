@@ -54,11 +54,11 @@ describe('refreshAllItems — agrégateur ranking', () => {
     expect((items[1].querySelector('.ranking-btn-down') as HTMLButtonElement).disabled).toBe(true);
   });
 
-  it('pose aria-selected="true" sur les items classés et "false" sur les choix', () => {
+  it('ne pose plus d\'aria-selected (pattern listbox retiré pour nested-interactive)', () => {
     buildDOM();
     refreshAllItems('10');
-    expect(document.querySelector('#sortable-rank-10 li')!.getAttribute('aria-selected')).toBe('true');
-    expect(document.querySelector('#sortable-choice-10 li')!.getAttribute('aria-selected')).toBe('false');
+    expect(document.querySelector('#sortable-rank-10 li')!.hasAttribute('aria-selected')).toBe(false);
+    expect(document.querySelector('#sortable-choice-10 li')!.hasAttribute('aria-selected')).toBe(false);
   });
 
   it('nettoie les boutons choice-controls résiduels dans la ranked list', () => {

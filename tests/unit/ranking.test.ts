@@ -175,13 +175,13 @@ describe('updateRankNumbers', () => {
     expect(items[1].getAttribute('aria-label')).toContain('Rang 2 sur 2');
   });
 
-  it('pose aria-selected="true" sur les items classés', () => {
+  it('ne pose plus d\'aria-selected (pattern listbox retiré pour nested-interactive)', () => {
     buildRankingDOM('10', ['Pomme'], ['Banane']);
 
     updateRankNumbers('10');
 
-    expect(document.querySelector('#sortable-rank-10 li')!.getAttribute('aria-selected')).toBe('true');
-    expect(document.querySelector('#sortable-choice-10 li')!.getAttribute('aria-selected')).toBe('false');
+    expect(document.querySelector('#sortable-rank-10 li')!.hasAttribute('aria-selected')).toBe(false);
+    expect(document.querySelector('#sortable-choice-10 li')!.hasAttribute('aria-selected')).toBe(false);
   });
 
   it('supprime les badges des items dans la choice list', () => {
