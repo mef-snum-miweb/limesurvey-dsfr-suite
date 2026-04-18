@@ -35,22 +35,27 @@ services:
       db:
         condition: service_healthy
     networks:
-      - ecosystem-network
+      - traefik_public
       - internal
     labels:
-      # --- Traefik : adapter le domaine ci-dessous ---
+      # --- Traefik : tout est variabilisé via .env ---
+      # PUBLIC_DOMAIN            : domaine public servi (ex. survey.example.org)
+      # TRAEFIK_CERT_RESOLVER    : nom du certresolver Traefik (ex. letsencrypt)
+      # TRAEFIK_TLS_OPTIONS      : nom de l'options TLS (ex. default, anssi-strict@file)
+      # TRAEFIK_SECURITY_MW      : middleware de sécurité (ex. security-headers@file)
+      #                            → laisser vide si pas de middleware
       - "traefik.enable=true"
       # HTTP → HTTPS redirect
-      - "traefik.http.routers.limesurvey-http.rule=Host(`galileo.bercy.matge.com`)"
+      - "traefik.http.routers.limesurvey-http.rule=Host(`${PUBLIC_DOMAIN}`)"
       - "traefik.http.routers.limesurvey-http.entrypoints=web"
       - "traefik.http.routers.limesurvey-http.middlewares=redirect-to-https"
       # HTTPS
-      - "traefik.http.routers.limesurvey-https.rule=Host(`galileo.bercy.matge.com`)"
+      - "traefik.http.routers.limesurvey-https.rule=Host(`${PUBLIC_DOMAIN}`)"
       - "traefik.http.routers.limesurvey-https.entrypoints=websecure"
       - "traefik.http.routers.limesurvey-https.tls=true"
-      - "traefik.http.routers.limesurvey-https.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.limesurvey-https.tls.options=anssi-strict@file"
-      - "traefik.http.routers.limesurvey-https.middlewares=security-headers@file"
+      - "traefik.http.routers.limesurvey-https.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.routers.limesurvey-https.tls.options=${TRAEFIK_TLS_OPTIONS:-default}"
+      - "traefik.http.routers.limesurvey-https.middlewares=${TRAEFIK_SECURITY_MW:-}"
       # Service
       - "traefik.http.services.limesurvey.loadbalancer.server.port=8080"
       # Middleware
@@ -79,7 +84,10 @@ volumes:
   limesurvey-upload:
 
 networks:
-  ecosystem-network:
+  # Réseau externe partagé avec la stack Traefik parente. Le nom du réseau
+  # Docker externe est paramétrable via TRAEFIK_NETWORK (défaut : traefik_public).
+  traefik_public:
     external: true
+    name: ${TRAEFIK_NETWORK:-traefik_public}
   internal:
     driver: bridge

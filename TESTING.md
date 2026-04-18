@@ -8,7 +8,51 @@ Suite de tests du thème DSFR, pilotée depuis ce repo parent. Trois strates com
 | **E2E + a11y** | [Playwright](https://playwright.dev/) + [axe-core](https://www.deque.com/axe/) | Rendu réel dans Chromium sur une instance LimeSurvey dockerisée | [`tests/e2e/`](tests/e2e/) |
 | **Round-trip saisie ↔ DB** | Playwright + MySQL | Remplit tout un questionnaire, soumet, vérifie que chaque valeur est correctement stockée en base | [`tests/e2e/results.spec.ts`](tests/e2e/results.spec.ts) |
 
-Volume actuel : ~350 tests Vitest, ~125 tests Playwright classiques, 2 tests round-trip (variantes A et B avec valeurs différentes). ~71 s pour l'intégralité sur un Mac récent.
+Volume actuel : ~370 tests Vitest, ~125 tests Playwright classiques, 2 tests round-trip (variantes A et B avec valeurs différentes). ~71 s pour l'intégralité sur un Mac récent.
+
+---
+
+## Prérequis
+
+Les tests tournent **en local sur la machine hôte** (Node + Chromium). Docker n'héberge que l'app ciblée par les E2E.
+
+| Strate | Docker | Node / npm | Chromium |
+|---|:---:|:---:|:---:|
+| Vitest (`--simple`) | — | ✅ | — |
+| Playwright (`--ui`, `--classic`, `--results`, `--full`) | ✅ (app + DB) | ✅ | ✅ |
+
+### Installation (une fois par machine)
+
+```bash
+# 1. Dépendances Node (vitest, playwright, jsdom, axe-core, esbuild)
+npm ci
+
+# 2. Browser Chromium pour Playwright
+npx playwright install chromium
+```
+
+### Stack Docker : lancée automatiquement
+
+`playwright.config.ts` déclare un bloc [`webServer`](https://playwright.dev/docs/test-webserver) qui **démarre la stack et seede la DB si le port `8081` est libre** :
+
+```ts
+webServer: {
+  command: 'docker compose -f docker-compose.dev.yml up -d && ./db/seed.sh',
+  url: 'http://localhost:8081',
+  reuseExistingServer: true,
+  timeout: 180_000,
+}
+```
+
+- Premier lancement → Playwright fait `docker compose up -d` et `./db/seed.sh` tout seul (~60 s).
+- Si la stack tourne déjà (parce que tu as la démo ouverte) → `reuseExistingServer: true` réutilise l'instance, rien à faire.
+
+Tu **peux** quand même préchauffer manuellement avant les tests si tu préfères maîtriser le timing :
+
+```bash
+docker compose -f docker-compose.dev.yml up -d
+./db/seed.sh
+```
 
 ---
 
@@ -24,8 +68,6 @@ Orchestrateur : [`run_tests.sh`](run_tests.sh). Cinq modes via switch :
 ./run_tests.sh --full      # Tout : --classic + --results
 ```
 
-Prérequis : la stack Docker doit tourner (`docker compose -f docker-compose.dev.yml up -d`) et la base doit être seedée (`./db/seed.sh`).
-
 ### Avant un round-trip
 
 Le mode `--results` ajoute des lignes dans `lime_survey_<sid>`. Pour repartir d'une base propre :
@@ -35,14 +77,23 @@ docker exec limesurvey-dev-db mysql -u limesurvey -plimesurvey limesurvey \
     -e "TRUNCATE TABLE lime_survey_282267;"
 ```
 
+Le `sid` `282267` est celui du questionnaire de démo chargé par [`db/seed.sh`](db/seed.sh) — s'il change, adapte la commande.
+
 ---
 
-## Rapport des résultats
+## Consulter les rapports
 
 Chaque exécution de `run_tests.sh` génère un **rapport HTML unifié** dans :
 
 ```
 test-reports/<timestamp>/index.html
+```
+
+Ouvre-le dans un navigateur :
+
+```bash
+open test-reports/*/index.html        # macOS — dernier rapport
+xdg-open test-reports/*/index.html    # Linux
 ```
 
 Il contient :
@@ -109,3 +160,15 @@ Build du bundle theme + diff check (pour détecter les bundles commités obsolè
 ```bash
 npm run build:theme:check     # build + git diff --exit-code sur scripts/custom.js
 ```
+
+---
+
+## Dépannage
+
+| Symptôme | Cause probable | Solution |
+|---|---|---|
+| `Cannot find module '@rollup/rollup-linux-*'` au lancement de Vitest | `node_modules/` cross-compilé (macOS → Linux ou inverse) | `rm -rf node_modules && npm ci` |
+| `Process from config.webServer was not able to start. Exit code: 127` | Docker pas installé / pas dans le `PATH` | Installer Docker Desktop ou Docker Engine |
+| `Error: browserType.launch: Executable doesn't exist…` | Chromium Playwright pas installé | `npx playwright install chromium` |
+| Tests `--results` qui échouent sur des valeurs "inattendues" | DB déjà peuplée par un run précédent | Voir [Avant un round-trip](#avant-un-round-trip) |
+| Rapport HTML avec `—/—` partout sur Vitest | Vitest a planté avant d'écrire le JSON | Regarder `test-reports/<timestamp>/vitest.log` |

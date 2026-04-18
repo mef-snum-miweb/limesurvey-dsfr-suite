@@ -5,7 +5,7 @@ const reportDir = `./test-reports/${timestamp}`;
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['e2e/**/*.spec.ts', 'a11y/**/*.spec.ts'],
+  testMatch: ['e2e/**/*.spec.ts'],
   fullyParallel: false,
   retries: 1,
   timeout: 30_000,
