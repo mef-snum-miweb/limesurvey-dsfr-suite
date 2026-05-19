@@ -24,17 +24,17 @@ services:
       - DB_TYPE=mysql
       - DB_HOST=db
       - DB_PORT=3306
-      # --- PHP : limites d'upload (override de la conf par défaut 2M)
-      # Suffisant pour les ZIP de thème (~3M) et les fichiers répondants.
-      # Override possible via .env si besoin de plus.
-      - PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE:-16M}
-      - PHP_POST_MAX_SIZE=${PHP_POST_MAX_SIZE:-32M}
-      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}
     volumes:
       # --- Modules DSFR (submodules git) ---
       - ./modules/theme-dsfr:/var/www/html/themes/survey/dsfr
       - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
       - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
+      # --- PHP : override des limites par défaut (upload 2M → 16M).
+      # `martialblog/limesurvey` ne propage pas les variables d'env vers
+      # php.ini, on monte donc le fichier directement dans conf.d/. Le
+      # préfixe `zzz-` du nom de destination garantit qu'il est chargé en
+      # dernier et écrase les valeurs par défaut. Cf. php-uploads.ini.
+      - ./php-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
       # --- Données persistantes ---
       - limesurvey-upload:/var/www/html/upload
     depends_on:
