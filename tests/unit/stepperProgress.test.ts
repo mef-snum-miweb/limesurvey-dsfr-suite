@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { initStepperProgress } from '../../modules/theme-dsfr/src/ui/stepper-progress.js';
+import {
+  initStepperProgress,
+  buildSegmentedGradient,
+} from '../../modules/theme-dsfr/src/ui/stepper-progress.js';
 
 function buildStepper(steps: number | string, current: number | string): HTMLDivElement {
   const el = document.createElement('div');
@@ -10,7 +13,60 @@ function buildStepper(steps: number | string, current: number | string): HTMLDiv
   return el;
 }
 
-describe('initStepperProgress', () => {
+/** Compte les segments « actifs » et « disabled » dans une string linear-gradient. */
+function countSegments(gradient: string): { active: number; disabled: number } {
+  const active = (gradient.match(/--background-active-blue-france/g) || []).length;
+  const disabled = (gradient.match(/--background-disabled-grey/g) || []).length;
+  // Chaque segment apparaît 2 fois dans les stops (début + fin).
+  return { active: active / 2, disabled: disabled / 2 };
+}
+
+describe('buildSegmentedGradient — génération du linear-gradient', () => {
+  it('produit un linear-gradient(to right, …)', () => {
+    const g = buildSegmentedGradient(7, 3);
+    expect(g).toMatch(/^linear-gradient\(to right,/);
+  });
+
+  it('génère 7 segments dont 3 actifs et 4 disabled pour 3/7', () => {
+    const g = buildSegmentedGradient(7, 3);
+    expect(countSegments(g)).toEqual({ active: 3, disabled: 4 });
+  });
+
+  it('génère 15 segments dont 8 actifs pour 8/15 (au-delà de la limite DSFR)', () => {
+    const g = buildSegmentedGradient(15, 8);
+    expect(countSegments(g)).toEqual({ active: 8, disabled: 7 });
+  });
+
+  it('génère uniquement des segments disabled pour 0/N (rien commencé)', () => {
+    const g = buildSegmentedGradient(5, 0);
+    expect(countSegments(g)).toEqual({ active: 0, disabled: 5 });
+  });
+
+  it('génère uniquement des segments actifs pour N/N (terminé)', () => {
+    const g = buildSegmentedGradient(5, 5);
+    expect(countSegments(g)).toEqual({ active: 5, disabled: 0 });
+  });
+
+  it('clamp current à total si current > total (état incohérent)', () => {
+    const g = buildSegmentedGradient(5, 10);
+    expect(countSegments(g)).toEqual({ active: 5, disabled: 0 });
+  });
+
+  it('insère un séparateur transparent entre chaque segment (N-1 séparateurs)', () => {
+    const g = buildSegmentedGradient(5, 2);
+    // Chaque séparateur apparaît 2 fois dans les stops (début + fin).
+    const transparentStops = (g.match(/transparent/g) || []).length;
+    expect(transparentStops).toBe((5 - 1) * 2);
+  });
+
+  it('pas de séparateur final (après le dernier segment)', () => {
+    const g = buildSegmentedGradient(3, 1);
+    // Vérifie que la string ne se termine pas par "transparent X%)"
+    expect(g).not.toMatch(/transparent[^,]+\)$/);
+  });
+});
+
+describe('initStepperProgress — application au DOM', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
@@ -19,61 +75,40 @@ describe('initStepperProgress', () => {
     document.body.innerHTML = '';
   });
 
-  it('calcule 0% pour la première étape', () => {
-    const el = buildStepper(7, 0);
-    initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('0%');
-  });
-
-  it('calcule (1/7)×100 ≈ 14.28% pour étape 1 sur 7', () => {
+  it('pose un background-image linear-gradient sur le stepper', () => {
     const el = buildStepper(7, 1);
     initStepperProgress();
-    const v = el.style.getPropertyValue('--fr-progress');
-    expect(parseFloat(v)).toBeCloseTo(14.2857, 1);
+    expect(el.style.backgroundImage).toMatch(/^linear-gradient\(to right,/);
   });
 
-  it('calcule 100% sur la dernière étape', () => {
-    const el = buildStepper(7, 7);
+  it('supporte 14 étapes (cas Galileo BNA)', () => {
+    const el = buildStepper(14, 4);
     initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('100%');
+    expect(countSegments(el.style.backgroundImage)).toEqual({ active: 4, disabled: 10 });
   });
 
-  it('supporte 12 étapes (au-delà de la limite DSFR à 8)', () => {
-    const el = buildStepper(12, 5);
-    initStepperProgress();
-    const v = el.style.getPropertyValue('--fr-progress');
-    expect(parseFloat(v)).toBeCloseTo(41.666, 1);
-  });
-
-  it('supporte 20 étapes (largement au-delà de la limite DSFR)', () => {
+  it('supporte 20 étapes', () => {
     const el = buildStepper(20, 17);
     initStepperProgress();
-    const v = el.style.getPropertyValue('--fr-progress');
-    expect(parseFloat(v)).toBeCloseTo(85, 1);
-  });
-
-  it('clamp à 100% si current > total (état incohérent)', () => {
-    const el = buildStepper(5, 10);
-    initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('100%');
+    expect(countSegments(el.style.backgroundImage)).toEqual({ active: 17, disabled: 3 });
   });
 
   it('ignore les steppers avec total = 0', () => {
     const el = buildStepper(0, 0);
     initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('');
+    expect(el.style.backgroundImage).toBe('');
   });
 
   it('ignore les steppers avec total négatif', () => {
     const el = buildStepper(-3, 1);
     initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('');
+    expect(el.style.backgroundImage).toBe('');
   });
 
   it('ignore les data-attributs non numériques', () => {
     const el = buildStepper('abc', 'xyz');
     initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('');
+    expect(el.style.backgroundImage).toBe('');
   });
 
   it('ignore les steppers sans les data-attributs', () => {
@@ -81,21 +116,22 @@ describe('initStepperProgress', () => {
     el.className = 'fr-stepper__steps';
     document.body.appendChild(el);
     initStepperProgress();
-    expect(el.style.getPropertyValue('--fr-progress')).toBe('');
+    expect(el.style.backgroundImage).toBe('');
   });
 
   it('traite plusieurs steppers indépendamment', () => {
     const a = buildStepper(8, 2);
     const b = buildStepper(15, 7);
     initStepperProgress();
-    expect(parseFloat(a.style.getPropertyValue('--fr-progress'))).toBeCloseTo(25, 1);
-    expect(parseFloat(b.style.getPropertyValue('--fr-progress'))).toBeCloseTo(46.666, 1);
+    expect(countSegments(a.style.backgroundImage)).toEqual({ active: 2, disabled: 6 });
+    expect(countSegments(b.style.backgroundImage)).toEqual({ active: 7, disabled: 8 });
   });
 
   it('peut être appelée plusieurs fois (idempotent)', () => {
     const el = buildStepper(10, 3);
     initStepperProgress();
+    const firstResult = el.style.backgroundImage;
     initStepperProgress();
-    expect(parseFloat(el.style.getPropertyValue('--fr-progress'))).toBeCloseTo(30, 1);
+    expect(el.style.backgroundImage).toBe(firstResult);
   });
 });
