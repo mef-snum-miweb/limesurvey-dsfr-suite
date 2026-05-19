@@ -24,6 +24,12 @@ services:
       - DB_TYPE=mysql
       - DB_HOST=db
       - DB_PORT=3306
+      # --- PHP : limites d'upload (override de la conf par défaut 2M)
+      # Suffisant pour les ZIP de thème (~3M) et les fichiers répondants.
+      # Override possible via .env si besoin de plus.
+      - PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE:-16M}
+      - PHP_POST_MAX_SIZE=${PHP_POST_MAX_SIZE:-32M}
+      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}
     volumes:
       # --- Modules DSFR (submodules git) ---
       - ./modules/theme-dsfr:/var/www/html/themes/survey/dsfr
