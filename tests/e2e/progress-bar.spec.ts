@@ -90,6 +90,13 @@ test.describe.serial('Barre de progression DSFR — découplée de l\'index des 
       // qu'on n'a PAS le libellé générique "Étape courante".
       const title = await page.locator('.fr-stepper__title').textContent();
       expect(title).not.toMatch(/^Étape courante/);
+
+      // Régression visuelle : la barre doit occuper 100% de la largeur du
+      // conteneur (sinon le CSS DSFR officiel la compresse à current/total %).
+      const bgSize = await stepper.locator('.fr-stepper__steps').evaluate(
+        (el) => getComputedStyle(el).backgroundSize,
+      );
+      expect(bgSize).toMatch(/^100%/);
     });
   }
 

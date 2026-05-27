@@ -134,4 +134,13 @@ describe('initStepperProgress — application au DOM', () => {
     initStepperProgress();
     expect(el.style.backgroundImage).toBe(firstResult);
   });
+
+  it('force `background-size: 100% 100%` pour neutraliser le CSS DSFR officiel', () => {
+    // Sans ce reset, le SCSS DSFR pose `background-size: current/total * 100%`
+    // (12.5% pour 1/8) — notre gradient est alors compressé sur cette fraction
+    // de la largeur. Régression visuelle remontée par le métier 2026-05-27.
+    const el = buildStepper(8, 1);
+    initStepperProgress();
+    expect(el.style.backgroundSize).toBe('100% 100%');
+  });
 });
