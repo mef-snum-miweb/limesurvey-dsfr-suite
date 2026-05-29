@@ -7,6 +7,10 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['e2e/**/*.spec.ts'],
   fullyParallel: false,
+  // Force un seul worker pour éviter que des specs touchant à l'état du sondage
+  // (round-trip DB, submit page, bascule de paramètres) ne se polluent
+  // mutuellement quand Playwright parallélise entre fichiers.
+  workers: 1,
   retries: 1,
   timeout: 30_000,
   outputDir: `${reportDir}/artifacts`,
