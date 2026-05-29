@@ -93,6 +93,27 @@ describe('updateErrorSummary', () => {
     expect(remaining[0].getAttribute('data-question-id')).toBe('q2');
   });
 
+  it('retire une question encore input-error mais devenue masquée par relevance', () => {
+    // Cas 527199 : une question listée puis rendue non pertinente (l'utilisateur
+    // a décoché le déclencheur). Elle garde input-error côté core LimeSurvey,
+    // mais n'est plus affichée → doit sortir du résumé.
+    const q1 = document.createElement('div');
+    q1.id = 'q1';
+    q1.className = 'question-container input-error ls-irrelevant ls-hidden';
+    document.body.appendChild(q1);
+    addQuestion('q2', { isError: true });
+    buildSummary([
+      { questionId: 'q1', label: 'Q1' },
+      { questionId: 'q2', label: 'Q2' },
+    ]);
+
+    updateErrorSummary();
+
+    const remaining = document.querySelectorAll('.error-item');
+    expect(remaining.length).toBe(1);
+    expect(remaining[0].getAttribute('data-question-id')).toBe('q2');
+  });
+
   it('garde en liste une question dont input-error est toujours présent', () => {
     addQuestion('q1', { isError: true, value: 'un peu rempli' });
     buildSummary([{ questionId: 'q1', label: 'Q1' }]);

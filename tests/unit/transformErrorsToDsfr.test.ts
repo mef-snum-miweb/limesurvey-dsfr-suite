@@ -203,4 +203,48 @@ describe('transformErrorsToDsfr', () => {
 
     expect(q.querySelector('.fr-message--error')!.textContent).toBe('Ce champ est obligatoire');
   });
+
+  // --- Questions masquées par relevance (régression 527199) ---
+  // Le core LimeSurvey pose `input-error` sur des questions mandatory masquées.
+  // On ne doit ni poser aria-invalid ni fabriquer de message d'erreur dessus,
+  // sinon elles apparaîtraient déjà en erreur dès que la relevance les révèle.
+  it.each(['ls-irrelevant', 'ls-hidden', 'd-none'] as const)(
+    'ignore une question en erreur masquée via %s',
+    (hideClass) => {
+      const q = createQuestionWithError({ qid: 1, mandatoryText: 'Obligatoire' });
+      q.classList.add(hideClass);
+      document.body.appendChild(q);
+
+      transformErrorsToDsfr();
+
+      expect(q.querySelector('input')!.getAttribute('aria-invalid')).toBeNull();
+      expect(q.querySelector('.fr-message--error')).toBeNull();
+      expect(q.querySelector('.fr-input-group')!.classList.contains('fr-input-group--error')).toBe(false);
+    },
+  );
+
+  it('ignore une question en erreur masquée via display:none inline', () => {
+    const q = createQuestionWithError({ qid: 1, mandatoryText: 'Obligatoire' });
+    q.style.display = 'none';
+    document.body.appendChild(q);
+
+    transformErrorsToDsfr();
+
+    expect(q.querySelector('input')!.getAttribute('aria-invalid')).toBeNull();
+    expect(q.querySelector('.fr-message--error')).toBeNull();
+  });
+
+  it('traite la question visible mais ignore sa voisine masquée (mix)', () => {
+    const visible = createQuestionWithError({ qid: 1, mandatoryText: 'Obligatoire visible' });
+    const hidden = createQuestionWithError({ qid: 2, mandatoryText: 'Obligatoire masquée' });
+    hidden.classList.add('ls-irrelevant');
+    document.body.appendChild(visible);
+    document.body.appendChild(hidden);
+
+    transformErrorsToDsfr();
+
+    expect(visible.querySelector('.fr-message--error')!.textContent).toBe('Obligatoire visible');
+    expect(hidden.querySelector('.fr-message--error')).toBeNull();
+    expect(hidden.querySelector('input')!.getAttribute('aria-invalid')).toBeNull();
+  });
 });

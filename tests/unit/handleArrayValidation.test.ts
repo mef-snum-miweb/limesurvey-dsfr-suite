@@ -126,3 +126,100 @@ describe('handleArrayValidation', () => {
     expect(document.querySelector('[id^="mandatory-counter-"]')).toBeNull();
   });
 });
+
+/**
+ * Tableaux À CHOIX (radios) — régression 527199 (Q17DGCCRF, Q17INSEE…).
+ * Avant le fix, `handleArrayValidation` ne comptait que les champs texte ;
+ * un tableau de radios (0 champ texte) était considéré « tout rempli »,
+ * `input-error` retiré, et la question disparaissait du récapitulatif.
+ */
+describe('handleArrayValidation — tableaux à choix (radios)', () => {
+  beforeEach(() => { document.body.innerHTML = ''; });
+  afterEach(() => { document.body.innerHTML = ''; });
+
+  /**
+   * Tableau radio à `rows` lignes × 2 colonnes. `answered` = nb de lignes
+   * dont un radio est coché (les premières).
+   */
+  function buildRadioArrayDOM(qid: string, rows: number, answered = 0): void {
+    let trs = '';
+    for (let r = 1; r <= rows; r++) {
+      const name = `q${qid}SQ00${r}`;
+      const checkedA = r <= answered ? 'checked' : '';
+      trs += `
+        <tr class="ls-mandatory-error">
+          <th class="fr-text--error">Ligne ${r}</th>
+          <td><input type="radio" name="${name}" value="A1" ${checkedA}></td>
+          <td><input type="radio" name="${name}" value="A2"></td>
+        </tr>`;
+    }
+    document.body.innerHTML = `
+      <div id="${qid}" class="question-container input-error array-flexible-row mandatory">
+        <div class="ls-question-mandatory">Obligatoire</div>
+        <div class="question-valid-container">OK</div>
+        <div class="fr-table">
+          <table class="ls-answers"><tbody>${trs}</tbody></table>
+        </div>
+      </div>`;
+  }
+
+  it('NE retire PAS input-error sur un tableau radio incomplet (cœur du bug 527199)', () => {
+    buildRadioArrayDOM('question238', 8, 2); // 2/8 lignes répondues
+    handleArrayValidation();
+
+    const q = document.getElementById('question238')!;
+    expect(q.classList.contains('input-error')).toBe(true);
+    expect(q.classList.contains('input-valid')).toBe(false);
+  });
+
+  it('affiche un compteur de LIGNES restantes (pas de champs)', () => {
+    buildRadioArrayDOM('question238', 8, 2);
+    handleArrayValidation();
+
+    const counter = document.getElementById('mandatory-counter-question238')!;
+    expect(counter).not.toBeNull();
+    // 6 lignes restantes sur 8
+    expect(counter.textContent).toContain('6');
+    expect(counter.textContent).toContain('lignes');
+  });
+
+  it('message "dernière ligne" au singulier quand il reste 1 ligne', () => {
+    buildRadioArrayDOM('question238', 3, 2);
+    handleArrayValidation();
+
+    const counter = document.getElementById('mandatory-counter-question238')!;
+    expect(counter.textContent).toBe('Veuillez répondre à la dernière ligne.');
+  });
+
+  it('passe en valide et retire le compteur quand toutes les lignes sont répondues', () => {
+    buildRadioArrayDOM('question238', 3, 2);
+    handleArrayValidation();
+
+    const q = document.getElementById('question238')!;
+    // L'utilisateur répond à la 3e ligne.
+    const lastRowRadio = q.querySelector('input[name="qquestion238SQ003"]') as HTMLInputElement;
+    lastRowRadio.checked = true;
+    lastRowRadio.dispatchEvent(new Event('change', { bubbles: true }));
+
+    expect(q.classList.contains('input-error')).toBe(false);
+    expect(q.classList.contains('input-valid')).toBe(true);
+    expect(document.getElementById('mandatory-counter-question238')).toBeNull();
+  });
+
+  it('masque l\'habillage d\'erreur natif (ls-mandatory-error / fr-text--error)', () => {
+    buildRadioArrayDOM('question238', 4, 1);
+    handleArrayValidation();
+
+    expect(document.querySelectorAll('tr.ls-mandatory-error').length).toBe(0);
+    expect(document.querySelectorAll('th.fr-text--error').length).toBe(0);
+  });
+
+  it('un tableau radio entièrement répondu n\'est pas marqué en erreur', () => {
+    buildRadioArrayDOM('question238', 4, 4);
+    handleArrayValidation();
+
+    const q = document.getElementById('question238')!;
+    expect(q.classList.contains('input-error')).toBe(false);
+    expect(q.classList.contains('input-valid')).toBe(true);
+  });
+});

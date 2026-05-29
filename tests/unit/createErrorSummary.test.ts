@@ -27,6 +27,32 @@ function addErrorQuestion(id: string, text: string, errorMsg?: string): void {
   document.getElementById('questions')!.appendChild(q);
 }
 
+/**
+ * Ajoute une question en erreur masquée par relevance (conditionnelle non
+ * affichée). `hideBy` choisit le mécanisme de masquage utilisé par LimeSurvey.
+ */
+function addHiddenErrorQuestion(
+  id: string,
+  text: string,
+  hideBy: 'ls-irrelevant' | 'ls-hidden' | 'd-none' | 'display-none',
+): void {
+  const q = document.createElement('div');
+  q.id = id;
+  q.className = 'question-container input-error';
+  if (hideBy === 'display-none') {
+    q.style.display = 'none';
+  } else {
+    q.classList.add(hideBy);
+  }
+
+  const label = document.createElement('h3');
+  label.className = 'question-text';
+  label.textContent = text;
+  q.appendChild(label);
+
+  document.getElementById('questions')!.appendChild(q);
+}
+
 // --- Tests ---
 
 describe('createErrorSummary', () => {
@@ -204,5 +230,50 @@ describe('createErrorSummary', () => {
     expect(summary.classList.contains('fr-alert')).toBe(true);
     expect(summary.classList.contains('fr-alert--error')).toBe(true);
     expect(summary.classList.contains('fr-mb-4w')).toBe(true);
+  });
+
+  // --- Exclusion des questions non pertinentes (masquées par relevance) ---
+  // Régression sondage 527199 (Galileo BNA) : le core LimeSurvey pose
+  // `input-error` sur des questions mandatory masquées par relevance ; elles
+  // ne doivent jamais figurer dans le résumé puisqu'elles ne sont pas affichées.
+  describe('exclut les questions masquées par relevance', () => {
+    it.each(['ls-irrelevant', 'ls-hidden', 'd-none', 'display-none'] as const)(
+      'ne liste pas une question en erreur masquée via %s',
+      (hideBy) => {
+        addErrorQuestion('question1', 'Question visible', 'Obligatoire');
+        addHiddenErrorQuestion('question2', 'Question masquée', hideBy);
+
+        createErrorSummary();
+
+        const links = document.querySelectorAll('#dsfr-error-summary a');
+        expect(links.length).toBe(1);
+        expect(links[0].getAttribute('href')).toBe('#question1');
+        expect(document.querySelector('.fr-alert__title')!.textContent).toBe(
+          'Une erreur à corriger',
+        );
+      },
+    );
+
+    it('reproduit le cas 527199 : 1 visible + 4 masquées → "Une erreur à corriger"', () => {
+      addErrorQuestion('question271', 'Parmi les équipements numériques…', 'Obligatoire');
+      addHiddenErrorQuestion('question286', 'Concernant votre ordinateur portable…', 'ls-irrelevant');
+      addHiddenErrorQuestion('question287', 'Concernant votre ordinateur fixe…', 'ls-irrelevant');
+      addHiddenErrorQuestion('question288', 'Concernant votre tablette…', 'ls-irrelevant');
+      addHiddenErrorQuestion('question234', 'Concernant votre smartphone…', 'ls-irrelevant');
+
+      createErrorSummary();
+
+      expect(document.querySelectorAll('#dsfr-error-summary .error-item').length).toBe(1);
+      expect(document.querySelector('.fr-alert__title')!.textContent).toBe('Une erreur à corriger');
+    });
+
+    it('ne crée aucun résumé si toutes les questions en erreur sont masquées', () => {
+      addHiddenErrorQuestion('question286', 'Suivi portable', 'ls-irrelevant');
+      addHiddenErrorQuestion('question287', 'Suivi fixe', 'display-none');
+
+      createErrorSummary();
+
+      expect(document.getElementById('dsfr-error-summary')).toBeNull();
+    });
   });
 });

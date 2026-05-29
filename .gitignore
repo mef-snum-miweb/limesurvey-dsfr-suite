@@ -17,6 +17,13 @@ Thumbs.db
 # Logs
 *.log
 
+# Exports de sondage LimeSurvey (sources lourdes — la définition de référence
+# vit dans db/init.sql, rejouée par db/seed.sh). Le .lss reste dispo en local.
+*.lss
+
+# Artefact de test ponctuel (écriture disque)
+.write-test
+
 # Node / Tests
 node_modules/
 playwright-report/

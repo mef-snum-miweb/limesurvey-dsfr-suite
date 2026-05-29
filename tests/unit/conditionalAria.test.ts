@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createConditionalDescription, addAriaDescribedBy, excludeIrrelevantInputsFromTabOrder } from '../../modules/theme-dsfr/src/a11y/conditional-aria.js';
+import { createConditionalDescription, addAriaDescribedBy, excludeIrrelevantInputsFromTabOrder, initConditionalVisibilityNotifier } from '../../modules/theme-dsfr/src/a11y/conditional-aria.js';
+
+/** Laisse les callbacks MutationObserver (microtasks) se vider. */
+function flushObservers(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
 
 // --- Tests ---
 
@@ -150,5 +155,60 @@ describe('excludeIrrelevantInputsFromTabOrder', () => {
     excludeIrrelevantInputsFromTabOrder();
 
     expect(document.getElementById('visible1')!.hasAttribute('tabindex')).toBe(false);
+  });
+});
+
+describe('initConditionalVisibilityNotifier — nettoyage à la révélation (régression 527199)', () => {
+  beforeEach(() => { document.body.innerHTML = ''; });
+  afterEach(() => { document.body.innerHTML = ''; });
+
+  /** Question conditionnelle masquée portant un état d'erreur hérité d'un submit. */
+  function buildHiddenErrorQuestion(id: string): HTMLElement {
+    const q = document.createElement('div');
+    q.id = id;
+    q.className = 'question-container mandatory input-error ls-irrelevant ls-hidden';
+    q.innerHTML = `
+      <div class="fr-input-group fr-input-group--error">
+        <input type="text" aria-invalid="true">
+        <div class="fr-messages-group">
+          <p class="fr-message fr-message--error">Ce champ est obligatoire</p>
+        </div>
+      </div>`;
+    document.body.appendChild(q);
+    return q;
+  }
+
+  it('purge input-error / aria-invalid / message d\'erreur quand la question réapparaît', async () => {
+    const q = buildHiddenErrorQuestion('question286');
+
+    initConditionalVisibilityNotifier();
+
+    // L'utilisateur coche le déclencheur → le core retire le masquage.
+    q.classList.remove('ls-irrelevant', 'ls-hidden');
+    await flushObservers();
+
+    expect(q.classList.contains('input-error')).toBe(false);
+    expect(q.querySelector('input')!.hasAttribute('aria-invalid')).toBe(false);
+    expect(q.querySelector('.fr-message--error')).toBeNull();
+    expect(q.querySelector('.fr-input-group')!.classList.contains('fr-input-group--error')).toBe(false);
+  });
+
+  it('ne touche pas une question déjà visible qui passe en erreur (vrai cas d\'erreur)', async () => {
+    const q = document.createElement('div');
+    q.id = 'question1';
+    q.className = 'question-container mandatory';
+    q.innerHTML = '<div class="fr-input-group"><input type="text"></div>';
+    document.body.appendChild(q);
+
+    initConditionalVisibilityNotifier();
+
+    // Une question visible qui devient en erreur ne doit PAS être nettoyée :
+    // ce n'est pas une transition masqué→visible.
+    q.classList.add('input-error');
+    q.querySelector('input')!.setAttribute('aria-invalid', 'true');
+    await flushObservers();
+
+    expect(q.classList.contains('input-error')).toBe(true);
+    expect(q.querySelector('input')!.getAttribute('aria-invalid')).toBe('true');
   });
 });
