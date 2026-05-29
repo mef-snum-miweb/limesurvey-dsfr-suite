@@ -30,6 +30,51 @@ const sql = (q: string) =>
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
   ).trim();
 
+test.describe('Bug 3 — question theme bootstrap_buttons : alignement boutons + gap label Autre', () => {
+  test.beforeAll(() => {
+    reseed();
+    // Active le question theme bootstrap_buttons sur Q18 (List Radio avec other=Y).
+    execFileSync(
+      'docker',
+      ['exec', 'limesurvey-dev-db', 'mysql', '-u', 'limesurvey', '-plimesurvey', '-D', 'limesurvey', '-sNe',
+        `UPDATE lime_questions SET question_theme_name='bootstrap_buttons' WHERE qid=18;`],
+      { stdio: ['ignore', 'pipe', 'ignore'] },
+    );
+    execFileSync('docker', ['exec', 'limesurvey-dev', 'sh', '-c', 'rm -rf /var/www/html/tmp/assets/*'], { stdio: ['ignore', 'pipe', 'ignore'] });
+  });
+
+  test.afterAll(() => {
+    // Restore via seed (idempotent).
+    reseed();
+  });
+
+  test('tous les boutons s\'alignent verticalement (pas de décalage de 4px sur "Autre")', async ({ page }) => {
+    await page.goto(SURVEY_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await navigateToSelector(page, '#question18', 15);
+
+    const otherBox = await page.locator('#question18 label[for="answer282267X3X18othercbox"]').first().boundingBox();
+    const naBox = await page.locator('#question18 label[for="answer282267X3X18"]').first().boundingBox();
+    const diff = Math.abs((otherBox?.y || 0) - (naBox?.y || 0));
+    // Avant fix : 4px de décalage à cause du padding 0.25rem appliqué deux fois
+    // (sur le wrapper externe ET sur le .form-check.bootstrap-buttons-div interne).
+    expect(diff).toBeLessThan(2);
+  });
+
+  test('le label « Autre : » du champ texte garde un espace avec l\'input', async ({ page }) => {
+    await page.goto(SURVEY_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await navigateToSelector(page, '#question18', 15);
+
+    const labelMargin = await page
+      .locator('#question18 [id^="div"][id$="other"] > .col-form-label')
+      .first()
+      .evaluate((el) => getComputedStyle(el).marginRight);
+    // Avant fix : 0px → label collé à l'input quand "Autre" cochée.
+    expect(parseFloat(labelMargin)).toBeGreaterThan(0);
+  });
+});
+
 test.describe('Bug 1 — option exclusive (« Aucun ») ne doit pas masquer les autres sous-questions', () => {
   test.beforeAll(() => {
     // Sécurité : si un autre spec a pollué l'état du sondage avant nous, reseed.
