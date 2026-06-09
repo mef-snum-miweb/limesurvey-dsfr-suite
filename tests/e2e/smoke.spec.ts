@@ -99,9 +99,11 @@ test.describe('Smoke — questionnaire RGAA charge et fonctionne', () => {
     const questionContainers = page.locator(S.questionContainer);
     await expect(questionContainers.first()).toBeVisible({ timeout: 10_000 });
 
-    // Les questions ont la classe dsfr-question
-    const dsfrQuestions = page.locator('.dsfr-question');
-    const count = await dsfrQuestions.count();
+    // Les questions portent le conteneur du thème (la classe legacy
+    // .dsfr-question, posée en JS par l'ancien enhanceLimeSurveyQuestions
+    // de theme.js, a été purgée — revue 2026-06, #27).
+    const themedQuestions = page.locator('.question-container');
+    const count = await themedQuestions.count();
     expect(count).toBeGreaterThan(0);
   });
 });
