@@ -68,6 +68,22 @@ Orchestrateur : [`run_tests.sh`](run_tests.sh). Cinq modes via switch :
 ./run_tests.sh --full      # Tout : --classic + --results
 ```
 
+### Snapshots visuels (sur demande)
+
+```bash
+npm run test:visual                          # compare aux baselines committées
+npm run test:visual -- --update-snapshots    # régénère les baselines (à committer)
+```
+
+Filet de sécurité **visuel** (prérequis des refactors CSS — revue 2026-06, #41) :
+88 captures plein-page (2 questionnaires × chaque page × desktop/mobile ×
+clair/sombre), comparées pixel à pixel aux baselines de
+`tests/e2e/visual.spec.ts-snapshots/`. Exclu de la suite par défaut
+(variable `VISUAL=1` posée par le script npm). Les baselines sont liées à la
+plateforme (générées sur macOS) ; un changement de rendu **assumé** se
+revoit dans le diff d'images puis se committe via `--update-snapshots`.
+Les questions à ordre aléatoire (random_order/answer_order) sont masquées.
+
 ### Avant un round-trip
 
 Le mode `--results` ajoute des lignes dans `lime_survey_<sid>`. Pour repartir d'une base propre :
@@ -132,6 +148,7 @@ Catégories couvertes :
 - **`responsive.spec.ts`** — viewports mobile/tablet/desktop, linéarisation tableaux, labels visibles dans les cellules
 - **`a11y.spec.ts`** — audit axe-core WCAG 2.1 AA par page, skip links, aria-required, aria-invalid, hiérarchie des titres, labels, focus
 - **`results.spec.ts`** — round-trip saisie ↔ base : 2 variantes (A, B) avec valeurs déterministes différentes, vérification colonne par colonne dans `lime_survey_<sid>`
+- **`visual.spec.ts`** — snapshots visuels des 2 questionnaires de démo (282267 **et** 527199), chaque page × desktop/mobile × clair/sombre — sur demande via `npm run test:visual`. Le questionnaire 527199 (inactif dans le seed : table de réponses désynchronisée) est ré-activé à la volée par `fixtures/ensure-survey-active.ts` + la commande console `db/ActivatesurveyCommand.php`
 
 Helpers partagés dans [`tests/e2e/helpers/`](tests/e2e/helpers/) :
 - `selectors.ts` — dictionnaire centralisé des sélecteurs CSS
