@@ -20,7 +20,7 @@
  * puis commit des PNG modifiés — le diff d'images EST la revue.
  */
 import { test, expect, type Page } from '@playwright/test';
-import { advancePages } from './fixtures/survey';
+import { advancePages, fillMandatoryFields } from './fixtures/survey';
 import { ensureSurveyActive } from './fixtures/ensure-survey-active';
 
 const SURVEYS = [
@@ -49,6 +49,10 @@ const NON_DETERMINISTIC_QUESTIONS = ['#question7', '#question39'];
 /** Stabilise la page avant capture : fontes chargées, focus relâché, JS du thème posé. */
 async function settle(page: Page): Promise<void> {
   await page.waitForLoadState('networkidle').catch(() => {});
+  // Souris en coin neutre : la position virtuelle persiste entre les pages
+  // et peut laisser un état :hover sur un lien (observé sur les liens du
+  // récapitulatif d'erreurs — une ligne soulignée différemment par run).
+  await page.mouse.move(0, 0);
   await page.evaluate(async () => {
     await (document as any).fonts?.ready;
     (document.activeElement as HTMLElement | null)?.blur?.();
@@ -99,5 +103,94 @@ for (const { sid, pages } of SURVEYS) {
         await expect(page.locator('#ls-button-submit[value="movesubmit"]')).toBeVisible();
       });
     }
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   États de GESTION D'ERREUR — le cœur de ce que #41/#42 vont remuer :
+   récapitulatif en haut de page, questions invalidées avec message
+   dédié, puis messages de validation après correction.
+
+   Page cible = étape 2 de chaque questionnaire (la plus riche en
+   questions obligatoires : 282267 → 6 obligatoires de types Q/S/T/;,
+   527199 → 12 obligatoires de types L/M/S).
+   ──────────────────────────────────────────────────────────────────── */
+
+const ERROR_PAGES = [
+  { sid: 282267, walkTo: 3 }, // welcome(1) → étape 1(2) → étape 2(3)
+  { sid: 527199, walkTo: 3 },
+];
+
+for (const { sid, walkTo } of ERROR_PAGES) {
+  for (const [vpName, viewport] of Object.entries(VIEWPORTS)) {
+    for (const scheme of SCHEMES) {
+      test(`@visual errors ${sid} ${vpName} ${scheme}`, async ({ page }) => {
+        test.setTimeout(240_000);
+
+        await ensureSurveyActive(sid);
+        await page.addInitScript((s) => {
+          window.localStorage.setItem('dsfr-theme', s);
+        }, scheme);
+        await page.setViewportSize(viewport);
+
+        await page.goto(`/index.php/${sid}?newtest=Y&lang=fr`);
+        await page.waitForLoadState('domcontentloaded');
+        await advancePages(page, walkTo - 1);
+
+        // 1. Soumission À VIDE → la page revient avec les erreurs
+        //    serveur, transformées en DSFR par le thème : récapitulatif
+        //    fr-alert--error en haut + message dédié par question.
+        await page.locator('#ls-button-submit[value="movenext"]').click();
+        await page.waitForLoadState('domcontentloaded');
+        await page.locator('#dsfr-error-summary').waitFor({ state: 'visible', timeout: 8_000 });
+        await settle(page);
+        await expect(page).toHaveScreenshot(
+          `s${sid}-errors-empty-${vpName}-${scheme}.png`,
+          { fullPage: true, mask: NON_DETERMINISTIC_QUESTIONS.map((sel) => page.locator(sel)) },
+        );
+
+        // 2. CORRECTION : remplissage des obligatoires → messages de
+        //    validation (« Merci d'avoir répondu »), compteurs retirés,
+        //    récapitulatif mis à jour en place (sans re-soumettre).
+        await fillMandatoryFields(page);
+        await page.waitForTimeout(900); // updateErrorSummary (50ms) + annonces
+        await settle(page);
+        await expect(page).toHaveScreenshot(
+          `s${sid}-errors-fixed-${vpName}-${scheme}.png`,
+          { fullPage: true, mask: NON_DETERMINISTIC_QUESTIONS.map((sel) => page.locator(sel)) },
+        );
+      });
+    }
+  }
+}
+
+/* État « avertissement à la frappe » : caractères non numériques dans un
+   champ numérique (étape 3 de 282267) — message dédié sous le champ. */
+for (const [vpName, viewport] of Object.entries(VIEWPORTS)) {
+  for (const scheme of SCHEMES) {
+    test(`@visual numeric-warning 282267 ${vpName} ${scheme}`, async ({ page }) => {
+      test.setTimeout(240_000);
+
+      await ensureSurveyActive(282267);
+      await page.addInitScript((s) => {
+        window.localStorage.setItem('dsfr-theme', s);
+      }, scheme);
+      await page.setViewportSize(viewport);
+
+      await page.goto('/index.php/282267?newtest=Y&lang=fr');
+      await page.waitForLoadState('domcontentloaded');
+      await advancePages(page, 3); // étape 3 : questions numériques
+
+      const numericInput = page.locator('input[data-number="1"]:visible').first();
+      await numericInput.pressSequentially('abc', { delay: 40 });
+      // Le core (fixnumauto) purge les caractères, le thème affiche
+      // l'avertissement « Ce champ n'accepte que des chiffres… ».
+      await page.waitForTimeout(700);
+      await settle(page);
+      await expect(page).toHaveScreenshot(
+        `s282267-numeric-warning-${vpName}-${scheme}.png`,
+        { fullPage: true },
+      );
+    });
   }
 }
