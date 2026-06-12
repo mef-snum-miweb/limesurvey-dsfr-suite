@@ -117,4 +117,74 @@ describe('handleMultipleShortTextErrors', () => {
     handleMultipleShortTextErrors();
     expect(document.querySelectorAll('[id^="mandatory-counter-"]').length).toBe(1);
   });
+
+  // --- InputOnDemand : les lignes masquées (.d-none) comptent comme manquantes ---
+
+  function buildInputOnDemandDOM(qid: string, visibleFilled: boolean): void {
+    document.body.innerHTML = `
+      <div id="${qid}" class="question-container multiple-short-txt input-error">
+        <div id="selector--inputondemand-${qid}">
+          <div class="ls-answers selector--inputondemand-list">
+            <div class="answer-item selector--inputondemand-list-item">
+              <div class="fr-input-group">
+                <input type="text" value="${visibleFilled ? 'rempli' : ''}">
+                <div class="fr-messages-group"></div>
+              </div>
+            </div>
+            <div class="answer-item selector--inputondemand-list-item d-none">
+              <div class="fr-input-group">
+                <input type="text" value="">
+                <div class="fr-messages-group"></div>
+              </div>
+            </div>
+            <div class="answer-item selector--inputondemand-list-item d-none">
+              <div class="fr-input-group">
+                <input type="text" value="">
+                <div class="fr-messages-group"></div>
+              </div>
+            </div>
+          </div>
+          <button class="selector--inputondemand-addlinebutton">Ajouter une ligne</button>
+        </div>
+      </div>
+    `;
+  }
+
+  it('IOD : la question reste en erreur même si toutes les lignes visibles sont remplies', () => {
+    buildInputOnDemandDOM('q20', true);
+    handleMultipleShortTextErrors();
+
+    const question = document.getElementById('q20')!;
+    expect(question.classList.contains('input-error')).toBe(true);
+    expect(question.classList.contains('input-valid')).toBe(false);
+  });
+
+  it('IOD : message dédié invitant à ajouter des lignes', () => {
+    buildInputOnDemandDOM('q20', true);
+    handleMultipleShortTextErrors();
+
+    const msg = document.querySelector('#mandatory-counter-q20 .fr-message--error')!;
+    expect(msg.textContent).toContain('Ajouter une ligne');
+    expect(msg.textContent).toContain('3'); // total de lignes attendues
+  });
+
+  it('IOD : passe au valide quand les lignes révélées sont toutes remplies', () => {
+    buildInputOnDemandDOM('q20', true);
+    handleMultipleShortTextErrors();
+
+    // Révéler et remplir les 2 lignes masquées (comme après « Ajouter une ligne »)
+    document.querySelectorAll('.answer-item.d-none').forEach((item) => {
+      item.classList.remove('d-none');
+    });
+    document.querySelectorAll<HTMLInputElement>('.answer-item input').forEach((input) => {
+      input.value = 'rempli';
+    });
+    // Déclencher la mise à jour via l'event input (listeners attachés aux lignes masquées aussi)
+    const lastInput = document.querySelectorAll<HTMLInputElement>('.answer-item input')[2];
+    lastInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+    const question = document.getElementById('q20')!;
+    expect(question.classList.contains('input-valid')).toBe(true);
+    expect(question.classList.contains('input-error')).toBe(false);
+  });
 });

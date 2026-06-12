@@ -45,15 +45,37 @@ async function fillMandatoryFieldsFast(page: Page): Promise<void> {
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     });
-    // Cocher 1 radio par question mandatory
+    // Cocher 1 radio par GROUPE de radios (name) des questions mandatory.
+    // Un groupe par question pour les listes simples, mais un groupe par
+    // LIGNE pour les matrices (array-flexible-row, dual-scale…) — cocher un
+    // seul radio de toute la question laissait « 7 lignes restantes sur 8 ».
+    // On évite value='' (radios « Sans réponse ») qui ne satisfont pas le
+    // mandatory.
     document.querySelectorAll('.mandatory.question-container').forEach((q) => {
       const radios = Array.from(q.querySelectorAll('input[type="radio"]:not([disabled])')) as HTMLInputElement[];
-      if (radios.length === 0) return;
-      if (radios.some((r) => r.checked)) return;
-      const first = radios[0];
-      first.checked = true;
-      first.dispatchEvent(new Event('click', { bubbles: true }));
-      first.dispatchEvent(new Event('change', { bubbles: true }));
+      const byName = new Map<string, HTMLInputElement[]>();
+      radios.forEach((r) => {
+        if (!byName.has(r.name)) byName.set(r.name, []);
+        byName.get(r.name)!.push(r);
+      });
+      byName.forEach((group) => {
+        if (group.some((r) => r.checked && r.value !== '')) return;
+        const first = group.find((r) => r.value !== '') || group[0];
+        first.checked = true;
+        first.dispatchEvent(new Event('click', { bubbles: true }));
+        first.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+    // Sélectionner la 1re option non vide des selects mandatory
+    // (list-dropdown, dual-scale dropdown, multiflexi… — sans quoi les
+    // questionnaires à liste déroulante obligatoire bloquent la navigation)
+    document.querySelectorAll('.mandatory.question-container select').forEach((el) => {
+      const sel = el as HTMLSelectElement;
+      if (sel.disabled || sel.value) return;
+      const opt = Array.from(sel.options).find((o) => o.value && o.value !== '');
+      if (!opt) return;
+      sel.value = opt.value;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
     });
     // Cocher 1 checkbox par question mandatory
     document.querySelectorAll('.mandatory.question-container').forEach((q) => {
