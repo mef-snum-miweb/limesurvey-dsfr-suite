@@ -18,7 +18,11 @@
 
 services:
   limesurvey:
-    image: martialblog/limesurvey:6-apache
+    # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
+    # du thème est le core déployé (6.16.16, cf. check-list de montée de version
+    # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
+    # core silencieusement. Bump = décision explicite + re-gate complet.
+    image: martialblog/limesurvey:6.16.16-260408-apache
     container_name: limesurvey-dev
     restart: unless-stopped
     environment:
