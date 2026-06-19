@@ -6,9 +6,9 @@ Trois modules vivent en submodules sous [`modules/`](modules/) :
 
 | Module | Repo | Description |
 |---|---|---|
-| **Thème DSFR** | [`limesurvey-theme-dsfr`](https://github.com/bmatge/limesurvey-theme-dsfr) | Thème de sondage conforme au DSFR et au RGAA 4.1 |
-| **Email DSFR** | [`limesurvey-email-dsfr`](https://github.com/bmatge/limesurvey-email-dsfr) | Plugin de templates d'email conformes DSFR |
-| **Conversation Albert** | [`limesurvey-conversation-albert`](https://github.com/bmatge/limesurvey-conversation-albert) | Plugin d'assistant conversationnel IA |
+| **Thème DSFR** | [`limesurvey-theme-dsfr`](https://github.com/mef-snum-miweb/limesurvey-theme-dsfr) | Thème de sondage conforme au DSFR et au RGAA 4.1 |
+| **Email DSFR** | [`limesurvey-email-dsfr`](https://github.com/mef-snum-miweb/limesurvey-email-dsfr) | Plugin de templates d'email conformes DSFR |
+| **Conversation Albert** | [`limesurvey-conversation-albert`](https://github.com/mef-snum-miweb/limesurvey-conversation-albert) | Plugin d'assistant conversationnel IA |
 
 ---
 
@@ -33,7 +33,7 @@ Objectif : avoir LimeSurvey avec le thème DSFR et les 2 plugins **opérationnel
 
 ```bash
 # 1. Cloner avec les submodules
-git clone --recurse-submodules https://github.com/bmatge/limesurvey-dsfr-suite.git
+git clone --recurse-submodules https://github.com/mef-snum-miweb/limesurvey-dsfr-suite.git
 cd limesurvey-dsfr-suite
 
 # 2. Démarrer la stack (LimeSurvey + MySQL)
@@ -175,7 +175,7 @@ git submodule update --remote --merge
 ## 4. Déploiement en production
 
 ```bash
-git clone --recurse-submodules https://github.com/bmatge/limesurvey-dsfr-suite.git
+git clone --recurse-submodules https://github.com/mef-snum-miweb/limesurvey-dsfr-suite.git
 cd limesurvey-dsfr-suite
 cp .env.example .env        # adapter les valeurs pour la prod
 ./deploy.sh                 # pull repo + submodules + images Docker, restart
