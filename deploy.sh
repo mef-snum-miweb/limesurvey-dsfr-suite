@@ -28,7 +28,7 @@ docker compose up -d
 # sondage). `|| true` : ne pas faire échouer le déploiement si le conteneur
 # n'est pas encore prêt (les caches se régénéreront de toute façon).
 echo "==> Purge des caches LimeSurvey (tmp/assets + tmp/runtime)..."
-docker compose exec -T limesurvey sh -c \
+docker compose exec -T web sh -c \
   'rm -rf /var/www/html/tmp/runtime/* /var/www/html/tmp/assets/* 2>/dev/null' || true
 
 echo "==> Déploiement terminé."

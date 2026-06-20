@@ -15,7 +15,9 @@
 # =============================================================================
 
 services:
-  limesurvey:
+  # Service nommé `web` : requis par l'override mail de spawn (--mail) qui attache
+  # le réseau `mail` au service `web`. container_name reste `limesurvey-dsfr`.
+  web:
     # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
     # du thème est le core déployé (6.16.16, cf. check-list de montée de version
     # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
@@ -61,6 +63,9 @@ services:
       # TRAEFIK_SECURITY_MW      : middleware de sécurité (ex. security-headers@file)
       #                            → laisser vide si pas de middleware
       - "traefik.enable=true"
+      # Conteneur sur plusieurs réseaux (traefik + internal [+ mail]) → indiquer à
+      # Traefik lequel utiliser pour joindre l'app, sinon 404.
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}"
       # HTTP → HTTPS redirect
       - "traefik.http.routers.limesurvey-http.rule=Host(`${PUBLIC_DOMAIN}`)"
       - "traefik.http.routers.limesurvey-http.entrypoints=web"
