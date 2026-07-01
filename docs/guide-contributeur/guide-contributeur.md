@@ -180,7 +180,7 @@ Ces options concernent la mise en page générale et le comportement du question
 - **Quand la changer** : désactivez-le pour ne plus voir ces avertissements en prévisualisation (déconseillé pendant la conception).
 - **Impact a11y/DSFR** : **votre principal allié.** Ces repères vous disent, pendant que vous construisez le questionnaire, quand une mise en forme sera aplatie ou ignorée. Gardez-les activés : ils vous évitent des surprises et vous guident vers les bons composants DSFR (voir les sections 6 (Mises en forme et composants DSFR) et 7 (Prévisualiser et vérifier)).
 
-![Repères contributeur affichés en prévisualisation, signalant une mise en forme non conservée](img/c2a-contributor-hints.png)
+![Repères contributeur affichés en prévisualisation, signalant une mise en forme non conservée](img/8-couleur-vers-composant.png)
 
 #### `show_pdf_export` — Export PDF du récapitulatif
 - **Rôle** : affiche le bouton « Exporter en PDF » sur le récapitulatif des réponses. (Un second bouton d'export PDF standard reste toujours disponible par ailleurs.)
@@ -485,7 +485,7 @@ Quand vous prévisualisez votre questionnaire, le thème affiche des **repères 
 
 Le plus visible est le **bandeau « Aperçu contributeur »**, affiché en haut de la prévisualisation. Il vous signale que vous êtes en mode conception et que certains éléments visibles à l'écran sont des aides internes, non destinées au public.
 
-![Bandeau « Aperçu contributeur » affiché en haut de la prévisualisation](img/apercu-contributeur-bandeau.png)
+![Bandeau « Aperçu contributeur » affiché en haut de la prévisualisation](img/8-couleur-vers-composant.png)
 
 **Ce que cela change pour vous :**
 
@@ -662,7 +662,7 @@ Ces deux outils ont le même but : vous permettre d'obtenir une présentation **
 
 Le menu **Styles** applique une mise en forme DSFR à votre texte. Sélectionnez d'abord le texte concerné, puis choisissez une entrée dans la liste déroulante.
 
-![Le menu déroulant Styles ouvert dans la barre d'outils de l'éditeur](img/c5-menu-styles.png)
+![Le menu déroulant Styles ouvert dans la barre d'outils de l'éditeur](img/3bis-menu-styles-titres.png)
 
 #### Pourquoi passer par Styles plutôt que par une couleur ou un agrandissement « manuel » ?
 
@@ -697,7 +697,7 @@ Un **badge** est un marqueur **court et non cliquable** qui signale l'**état** 
 
 Le bouton **Modèles** ouvre une **boîte de dialogue** listant des composants DSFR prêts à insérer. Placez le curseur là où vous voulez insérer le bloc, cliquez sur le modèle voulu : le composant s'ajoute avec un **texte d'exemple** que vous n'avez plus qu'à remplacer.
 
-![La palette Modèles ouverte, avec la liste des composants DSFR disponibles](img/c5-palette-templates.png)
+![La palette Modèles ouverte, avec la liste des composants DSFR disponibles](img/annexeB-palette.png)
 
 La palette propose exactement ces composants :
 
@@ -789,7 +789,6 @@ Ce composant signale et déclenche le téléchargement d'un **document** (PDF, t
   - « Intitulé du fichier » → un libellé **explicite et autoporteur** (« Notice d'aide au remplissage » plutôt que « Cliquez ici » ou « Télécharger ») : le libellé décrit le **document**, pas l'action ;
   - « Format – Poids » → renseignez-les **réellement** (ex. « PDF – 1,7 Mo ») : c'est une information d'**accessibilité et de confiance**, précieuse sur mobile ou faible connexion. Ne laissez **jamais** ce détail vide.
 
-  ![Le composant Téléchargement inséré, avec les zones adresse, intitulé et « Format – Poids » à remplacer](img/c5-telechargement-champs.png)
 
 ### 6.4. À retenir
 
@@ -828,7 +827,7 @@ LimeSurvey vous propose trois portées de prévisualisation, de la plus fine à 
 - **Aperçu d'un groupe** — pour vérifier l'enchaînement de plusieurs questions présentées ensemble sur une même page, et la cohérence d'un bloc thématique.
 - **Aperçu du questionnaire complet** — la vérification finale, obligatoire avant activation. Vous déroulez tout le parcours comme un répondant : page d'accueil, enchaînement des groupes, boutons de navigation, page de fin.
 
-![Boutons d'aperçu question, groupe et questionnaire complet dans LimeSurvey](img/c6-boutons-apercu.png)
+![Boutons d'aperçu question, groupe et questionnaire complet dans LimeSurvey](img/8-apercu-complet-vs-question.png)
 
 L'aperçu du questionnaire complet ne compte pas de réponse réelle et ne nécessite pas d'activer le questionnaire : vous pouvez le lancer autant de fois que nécessaire pendant la construction.
 
@@ -891,7 +890,7 @@ Rappel de la section 3 (Créer un questionnaire) : le **libellé de question** r
 
 > **⚠️ N'écrivez jamais « en dur » les messages que LimeSurvey produit seul.** Les confirmations d'enregistrement, les erreurs de validation et les rappels de champ obligatoire manquant sont générés **automatiquement** par LimeSurvey et le thème, au bon endroit et de façon accessible. Le caractère obligatoire d'une question, en particulier, est déjà signalé nativement (astérisque + mention) : n'ajoutez pas de badge ni d'alerte pour le rappeler. Une **alerte** que vous insérez sert uniquement à un **message d'état statique que vous maîtrisez** (ex. « La collecte se termine le 30 juin »).
 
-![Palette Modèles déroulée dans l'éditeur](img/c7-palette-templates.png)
+![Palette Modèles déroulée dans l'éditeur](img/annexeB-palette.png)
 
 ### 8.2 Les confusions les plus fréquentes (et comment trancher)
 
@@ -1031,7 +1030,6 @@ Vous n'êtes pas développeur, et ce n'est pas grave : une bonne remontée tient
 
 Remarquez : cet exemple **ne montre aucune donnée de questionnaire**. Il décrit un comportement du thème avec un cas neutre. C'est exactement ce qui peut vivre en public.
 
-![Onglet Issues du dépôt GitHub du thème, avec le bouton de création d'un nouveau ticket](img/9-github-issues.png)
 
 Avant de créer un ticket, **jetez un œil aux tickets existants** : votre problème est peut-être déjà signalé. Dans ce cas, ajoutez plutôt un commentaire (« même souci de mon côté ») — c'est plus utile qu'un doublon.
 
@@ -1222,7 +1220,6 @@ Aide au choix rapide. En cas d'hésitation entre deux composants voisins, la col
 | **Tableau** | Données comparables en lignes/colonnes | Listes, synthèses chiffrées comparables | Grille de mise en page, graphique |
 | **Téléchargement** | Fichier à récupérer (format + poids annoncés) | Notice, export, pièce à télécharger | Lien standard, bouton de soumission |
 
-![Menu Templates de l'éditeur avec les composants DSFR insérables](img/annexeB-templates.png)
 
 ### B.10 Pour aller plus loin
 

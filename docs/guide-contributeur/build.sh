@@ -23,6 +23,7 @@ PY
 # 2) HTML autonome (CSS + images embarqués en data-URI)
 pandoc "$TMP" -s --toc --toc-depth=3 --embed-resources \
   --metadata pagetitle="$TITLE" --metadata lang=fr \
+  --include-before-body assets/header.html \
   -c assets/guide.css -o guide-contributeur.html
 
 # 3) Word (sommaire natif, images intégrées)
