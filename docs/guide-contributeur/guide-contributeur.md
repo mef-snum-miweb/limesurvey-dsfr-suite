@@ -118,7 +118,7 @@ Utiliser un composant à contre-emploi (une alerte pour décorer, un badge parto
 
 Le thème DSFR expose un ensemble d'**options** que vous réglez depuis l'administration de LimeSurvey, sans toucher au code. Ces réglages pilotent l'apparence (largeur d'affichage, mode sombre), l'en-tête et le pied de page (logos, titres, liens légaux) et des comportements de conformité (mise en forme automatique des contenus, protection anti-bot). Cette page les passe **toutes en revue**, onglet par onglet.
 
-> **Où trouver ces options ?** Dans l'administration LimeSurvey, ouvrez le thème DSFR puis ses **options avancées**. Les réglages sont répartis en onglets. La plupart s'appliquent à l'ensemble des questionnaires qui utilisent le thème ; vérifiez toujours l'effet en **prévisualisation** (voir la section 7 (Prévisualiser et vérifier)).
+> **Où trouver ces options ?** Elles se règlent **questionnaire par questionnaire**. Ouvrez votre questionnaire, puis **Paramètres › Options de thème du questionnaire**, et cliquez sur **« Personnaliser le thème »** pour pouvoir les modifier. Les réglages sont répartis en onglets. Par défaut, chaque option **hérite** d'une valeur globale déjà conforme : vous n'ajustez que ce qui concerne votre questionnaire. Vérifiez toujours l'effet en **prévisualisation** (voir la section 7 (Prévisualiser et vérifier)).
 
 Pour chaque option : son **rôle**, sa **valeur par défaut**, **quand la changer**, et son **impact accessibilité / DSFR**. Les valeurs par défaut sont pensées pour être conformes : ne les modifiez qu'en connaissance de cause.
 
@@ -130,7 +130,7 @@ Pour chaque option : son **rôle**, sa **valeur par défaut**, **quand la change
 
 ![Onglet Options générales du thème DSFR](img/c2a-options-generales.png)
 
-Ces options concernent la mise en page globale et le comportement du questionnaire.
+Ces options concernent la mise en page générale et le comportement du questionnaire.
 
 #### `container` — Largeur du conteneur
 - **Rôle** : affiche le questionnaire centré dans un conteneur de largeur limitée, ou en pleine largeur.
