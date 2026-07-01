@@ -38,9 +38,9 @@ Les quelques opérations plus techniques et rares (le mode code de l'éditeur, l
 
 La **présentation est normalisée pour vous**. Couleurs, polices, marges, boutons, contrastes, comportement sur mobile : tout cela est pris en charge par le thème. Vous n'avez rien à installer, rien à régler visuellement.
 
-Côté accessibilité, une nuance essentielle : le thème assure toute la part **technique et graphique** du RGAA (contrastes, focus au clavier, structure des composants). Mais la conformité RGAA *légale* dépend **aussi** de votre contenu éditorial — la formulation des libellés, les alternatives d'images, les intitulés de liens. Le thème **vous met sur de bons rails, il ne signe pas l'audit à votre place** : cette part éditoriale reste votre responsabilité (voir la section 4, Accessibilité éditoriale).
+Côté accessibilité, une précision utile : **le thème est déjà déclaré conforme au RGAA** sur sa partie technique et graphique (contrastes, focus au clavier, structure des composants). Ce qui garantit la conformité au bout du compte, c'est de **rester dans les règles d'usage** — soigner votre contenu éditorial : libellés clairs, alternatives d'images, intitulés de liens explicites (voir la section 4, Accessibilité éditoriale). Vous n'avez **ni audit ni déclaration à produire** : c'est votre bon usage qui maintient la conformité.
 
-Concrètement, vous n'avez **jamais** à choisir une couleur, régler une taille de texte, ni « faire joli ». Vous vous concentrez uniquement sur le **sens** : la formulation des questions, l'ordre logique, les explications utiles au répondant. Le thème habille le reste.
+Concrètement, vous n'avez **jamais** à choisir une couleur, régler une taille de texte, ni vous soucier de l.esthétique. Vous vous concentrez uniquement sur le **sens** : la formulation des questions, l'ordre logique, les explications utiles au répondant. Le thème habille le reste.
 
 ### Prérequis
 
@@ -78,7 +78,7 @@ Vous n'avez **rien à installer, rien à paramétrer visuellement, rien à corri
 
 Autrement dit, deux questionnaires créés par deux personnes différentes auront la même qualité de présentation, sans effort particulier.
 
-> **⚠️ Une nuance importante.** Le thème prend en charge la part **technique et graphique** de l'accessibilité. Mais la conformité RGAA **légale** dépend aussi de votre **contenu éditorial** : un libellé de question clair, une image correctement décrite, un lien explicite, une langue accessible. Cette part-là relève de vous, et de personne d'autre (voir section 4 (Accessibilité éditoriale)). Le thème **vous met sur de bons rails, il ne signe pas l'audit à votre place.**
+> **⚠️ Bon à savoir.** Le thème est **déjà déclaré conforme** sur sa partie technique et graphique (contrastes, focus, structure des composants). Ce qui reste entre vos mains, c'est le **contenu éditorial** : un libellé clair, une image correctement décrite, un lien explicite, une langue accessible (voir section 4 (Accessibilité éditoriale)). Vous n'avez pas de déclaration à produire — c'est votre bon usage qui maintient la conformité.
 
 ### Votre rôle : le sens, pas la forme
 
@@ -282,43 +282,23 @@ Ces options concernent la mise en page générale et le comportement du question
 
 ![Onglet Accessibilité avec la mention de conformité RGAA](img/c2d-accessibilite.png)
 
-Ces options alimentent la **déclaration d'accessibilité** obligatoire et la mention affichée en pied de page.
+Ces options concernent la **déclaration d'accessibilité** du site (mention affichée en pied de page). **Le thème est déjà déclaré conforme** sur sa partie technique et graphique. Cette déclaration relève de **votre direction ou de votre référent accessibilité**, pas d'un audit par questionnaire : **en principe, vous n'y touchez pas**. Ne renseignez ces champs que si votre direction vous transmet une déclaration officielle à publier.
 
-#### `rgaa_conformity` — Niveau de conformité RGAA
-- **Rôle** : mention affichée en pied de page : **Totalement**, **Partiellement** ou **Non** conforme. Doit refléter l'**audit réel** du site rendu, **contenu éditorial compris**.
-- **Défaut** : `totalement`.
-- **Quand la changer** : mettez `partiellement` ou `non` selon le résultat réel de l'audit d'accessibilité.
-- **Impact a11y/DSFR** : **mention légale engageante.** N'affirmez jamais « Totalement conforme » sans audit ; votre contenu (libellés, images, liens) fait partie du périmètre audité — d'où l'importance de la section 4 (Accessibilité éditoriale).
+#### `rgaa_conformity` — Niveau de conformité affiché
+- **Rôle** : mention en pied de page : **Totalement**, **Partiellement** ou **Non** conforme.
+- **Défaut** : `totalement` (correspond à la conformité du thème).
+- **Quand la changer** : uniquement sur **consigne de votre direction / référent accessibilité**, si une déclaration officielle fixe un autre niveau. Ne l'ajustez pas de vous-même.
 
-> #### ⚠️ Ne laissez jamais la valeur par défaut
->
-> La valeur par défaut « Totalement conforme » produit une déclaration juridiquement **fausse** tant qu'aucun audit d'accessibilité n'a eu lieu. **Réglez-la sur votre niveau réel (Non ou Partiellement)** : c'est une **étape obligatoire avant activation** du questionnaire (voir la section 7 (Prévisualiser et vérifier)).
->
-> Le thème prend en charge la part **technique et graphique** de l'accessibilité (contrastes, focus, structure des composants) ; mais la conformité RGAA **légale** dépend **aussi** de votre contenu éditorial (libellés, images, liens), qui reste votre responsabilité. Le thème **vous met sur de bons rails, il ne signe pas l'audit à votre place.**
-
-#### `rgaa_declaration_date` — Date de la déclaration
-- **Rôle** : date de publication de la déclaration d'accessibilité (format JJ/MM/AAAA ; date réelle, figée, elle n'évolue pas à l'affichage).
-- **Défaut** : vide.
-- **Quand la changer** : renseignez la date réelle de publication de la déclaration.
-- **Impact a11y/DSFR** : obligation réglementaire ; date exacte requise.
-
-#### `accessibility_statement_url` — URL de la déclaration
-- **Rôle** : URL de la page dédiée de déclaration d'accessibilité. Si renseignée, le lien du pied de page **remplace la modale**.
-- **Défaut** : vide.
-- **Quand la changer** : renseignez quand la déclaration RGAA est publiée à une URL pérenne (**recommandé**).
-- **Impact a11y/DSFR** : une déclaration sur page dédiée pérenne est la solution la plus robuste.
-
-#### `accessibility_content` — Contenu de la modale
-- **Rôle** : contenu affiché dans la modale « Accessibilité » (déclaration type ; zone de 40 lignes). Le titre principal est déjà fourni automatiquement.
-- **Défaut** : vide.
-- **Quand la changer** : remplissez pour fournir le contenu de la déclaration en modale — **sauf** si vous utilisez `accessibility_statement_url`.
-- **Impact a11y/DSFR** : utilisez soit l'URL, soit ce contenu ; ne dupliquez pas.
+#### `rgaa_declaration_date`, `accessibility_statement_url`, `accessibility_content`
+- **Rôle** : respectivement la date de publication, l'URL de la page dédiée, ou le contenu en modale de la déclaration d'accessibilité.
+- **Défaut** : vides.
+- **Quand les changer** : **à renseigner par votre direction / référent** si une déclaration officielle existe (une URL pérenne est préférable). Sinon, laissez tel quel.
 
 ---
 
 ### Onglet « Mentions légales »
 
-Ces champs **génèrent automatiquement** les mentions légales. Renseignez-les tant que `legal_content` est vide.
+**Renseignez ces champs avec les informations de votre direction** (éditeur, directeur de publication, hébergeur) : le thème **génère automatiquement** les mentions légales à partir de là. Ce sont des mentions **obligatoires** — ne les laissez pas vides. Renseignez-les tant que `legal_content` est vide.
 
 #### `editor` — Éditeur
 - **Rôle** : nom, adresse, SIRET, contact (zone de 5 lignes). Sert à la génération auto.
@@ -342,7 +322,7 @@ Ces champs **génèrent automatiquement** les mentions légales. Renseignez-les 
 
 ### Onglet « Données personnelles »
 
-Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD). Renseignez-les tant que `privacy_content` est vide.
+**Renseignez ces champs avec les informations de votre direction** (responsable de traitement, finalité, durée de conservation, contact DPO) : le thème **génère automatiquement** la politique de confidentialité (RGPD) à partir de là. Ce sont des mentions **obligatoires** — ne les laissez pas vides. Renseignez-les tant que `privacy_content` est vide.
 
 #### `data_controller` — Responsable de traitement
 - **Rôle** : nom, organisme, contact (zone de 3 lignes). Sert à la génération auto.
@@ -407,12 +387,10 @@ Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD
 ### En résumé
 
 - Deux options veillent en permanence sur la conformité : **`sanitize_rte_content`** (nettoie les mises en forme collées) et **`contributor_hints`** (vous prévient en aperçu). **Laissez-les activées.**
-- Réglez **impérativement** le niveau de conformité RGAA (`rgaa_conformity`) sur votre valeur **réelle avant activation** : la valeur par défaut « Totalement conforme » est **juridiquement fausse** sans audit (voir la section 7 (Prévisualiser et vérifier)).
+- **Renseignez les onglets Mentions légales et Données personnelles avec les informations de votre direction** (éditeur, hébergeur, responsable de traitement, contact DPO) : ce sont des mentions obligatoires. La **déclaration d'accessibilité** (onglet Accessibilité), elle, relève de votre direction / référent — n'y touchez pas de vous-même.
 - Le **logo opérateur** (`brandlogo`) est réservé aux entités autorisées et certifiées SIRCOM ; en cas de doute, le **bloc-marque Marianne seul suffit et reste toujours conforme**.
 - Les onglets **Accessibilité, Mentions légales, Données personnelles, Cookies** alimentent des pages **obligatoires** : renseignez-les, et laissez la **génération automatique** faire le travail sauf besoin de surcharge totale.
 - Après tout changement, **prévisualisez** (voir la section 7 (Prévisualiser et vérifier)) pour vérifier le rendu.
-
----
 
 ---
 
@@ -499,7 +477,7 @@ Le plus visible est le **bandeau « Aperçu contributeur »**, affiché en haut 
 
 ## 4. Accessibilité éditoriale (RGAA au quotidien)
 
-Le thème et les composants DSFR prennent déjà en charge la part **technique et graphique** de l'accessibilité (contrastes, focus clavier, structure des composants). Mais aucun thème ne peut corriger un **contenu mal rédigé** : un lien nommé « cliquez ici », une image sans description utile ou un faux titre en gras restent des obstacles pour les personnes qui utilisent un lecteur d'écran, naviguent au clavier ou distinguent mal les couleurs. Autrement dit, le thème vous met sur de bons rails, il ne signe pas l'audit à votre place : la conformité RGAA légale dépend **aussi** de votre contenu éditorial.
+Le thème et les composants DSFR prennent déjà en charge la part **technique et graphique** de l'accessibilité (contrastes, focus clavier, structure des composants). Mais aucun thème ne peut corriger un **contenu mal rédigé** : un lien nommé « cliquez ici », une image sans description utile ou un faux titre en gras restent des obstacles pour les personnes qui utilisent un lecteur d'écran, naviguent au clavier ou distinguent mal les couleurs. Autrement dit, la conformité se **maintient par votre bon usage** : le thème est déclaré conforme sur la partie technique et graphique, et c'est votre contenu éditorial qui fait le reste.
 
 Cette section rassemble les cinq gestes éditoriaux qui relèvent de **vous, gestionnaire d'enquête**, et que personne ne fera à votre place. Aucun ne demande de compétence technique : ce sont des réflexes de rédaction.
 
@@ -688,7 +666,7 @@ Un **badge** est un marqueur **court et non cliquable** qui signale l'**état** 
 - **À NE PAS utiliser pour** :
   - délivrer un **message d'état important** que le répondant doit voir → c'est le rôle d'une **alerte** ;
   - en faire un **bouton ou un lien** : un badge n'est pas cliquable ;
-  - de la **décoration** ou de l'accroche (« Top ! ») : la couleur a un sens (succès, information…) et doit rester fiable ;
+  - de la **décoration** ou une accroche : la couleur a un sens (succès, information…) et doit rester fiable ;
   - **marquer une question comme obligatoire** : le caractère obligatoire est déjà géré nativement par LimeSurvey (astérisque et mention), n'ajoutez pas de badge pour cela ;
   - **empiler** plusieurs badges ou y mettre une phrase.
 - **Bonnes pratiques** : texte très court, sans ponctuation finale ; employez un **vocabulaire de statut cohérent** dans tout le questionnaire (voir section 4, Accessibilité éditoriale) ; ne faites **jamais reposer le sens sur la seule couleur** — le mot doit suffire à comprendre. **Employez-le avec parcimonie** : s'il y en a partout, il ne signale plus rien.
@@ -750,7 +728,7 @@ L'alerte est un message qui exige l'attention **immédiate** du répondant. Le *
 Composant qui attire l'attention sur une information **importante et utile**, complémentaire au contenu principal, **sans le caractère d'urgence** d'une alerte. Il contient un **titre et un texte**. Deux variantes : **avec titre** (mise en avant autonome) ou **sans titre** (texte seul).
 
 - **À utiliser pour** : rappeler une **consigne clé** avant un module de questions (« Répondez en pensant aux 12 derniers mois ») ; donner un **contexte rassurant** (durée estimée, anonymat, reprise possible) ; signaler une information **notable mais non urgente**.
-- **À NE PAS utiliser pour** : une **erreur / succès / info urgente** (→ Alerte) ; une **citation** (→ Citation) ; une **FAQ** repliable (→ Accordéon) ; un simple **encadré coloré « pour faire joli »**.
+- **À NE PAS utiliser pour** : une **erreur / succès / info urgente** (→ Alerte) ; une **citation** (→ Citation) ; une **FAQ** repliable (→ Accordéon) ; un simple **encadré décoratif**.
 - **Bonnes pratiques** : sa force tient à sa **rareté** — **une, exceptionnellement deux** par page. Titre court, texte concis (2–3 phrases, **une seule idée**).
 
 #### Mise en exergue — faire ressortir un court passage clé
@@ -766,7 +744,7 @@ La mise en exergue détache un **court passage de texte réellement important** 
 La citation met en valeur les **propos exacts** d'une personne ou l'extrait fidèle d'un texte, **en les attribuant** à leur auteur. C'est un composant de **sens** (verbatim attribué), jamais un surligneur décoratif.
 
 - **À utiliser pour** : un **verbatim de répondant** (témoignage, réponse ouverte marquante) attribué à sa source ; une **parole officielle** (déclaration d'un responsable) ; un **extrait fidèle** d'un texte de référence dont les mots font foi.
-- **À NE PAS utiliser pour** : faire ressortir un **texte ordinaire** parce qu'on le trouve « joli » encadré ; porter une **consigne ou une info critique** (→ mise en exergue ou alerte) ; **inventer ou reformuler** des propos (une citation = **mots exacts + auteur identifiable**).
+- **À NE PAS utiliser pour** : faire ressortir un **texte ordinaire** pour un simple effet visuel ; porter une **consigne ou une info critique** (→ mise en exergue ou alerte) ; **inventer ou reformuler** des propos (une citation = **mots exacts + auteur identifiable**).
 - **Bonnes pratiques** : reproduisez les propos **mot pour mot** et **attribuez-les systématiquement** (nom, et si utile fonction/organisme) — une citation **sans auteur** perd son sens. Une ou deux par page suffisent. Sur des réponses au questionnaire, **anonymisez ou obtenez le consentement** avant d'attribuer nominativement.
 
 #### Tableau — des données comparables en lignes et colonnes
@@ -793,17 +771,7 @@ Ce composant signale et déclenche le téléchargement d'un **document** (PDF, t
 ### 6.4. À retenir
 
 - **Styles** = mise en forme de texte (intro, tailles, **badge de statut**) ; ces réglages sont **conservés**, contrairement à une couleur posée à la main.
-- **Modèles** = **composants DSFR** prêts à insérer, chacun avec un **sens précis**. Le tableau ci-dessous résume les confusions les plus fréquentes :
-
-| Vous voulez… | Utilisez | Pas… |
-| --- | --- | --- |
-| Afficher un **message d'état que vous maîtrisez** (ex. fin de collecte) | **Alerte** | Mise en avant, exergue, badge |
-| Rappeler une **info importante et durable** | **Mise en avant** ou **Mise en exergue** | Alerte |
-| Rapporter **une parole attribuée** | **Citation** | Mise en exergue |
-| Replier une **info secondaire / FAQ** | **Accordéon** | Alerte |
-| Afficher un **statut** en un mot | **Badge** (menu Styles) | Alerte |
-| Comparer des **données** | **Tableau** | (mise en page) |
-| Faire **récupérer un fichier** | **Téléchargement** | Lien standard |
+- **Modèles** = **composants DSFR** prêts à insérer, chacun avec un **sens précis**. Pour choisir vite selon votre intention, voyez la section 8 (Recettes rapides), et l'Annexe B pour un tableau récapitulatif.
 
 - Et toujours : **ces composants vont dans l'AIDE (ou les textes d'introduction/fin), jamais dans le libellé** de la question.
 
@@ -815,9 +783,9 @@ Avant de diffuser un questionnaire, vous devez **voir ce que verra le répondant
 
 Prenez cette étape au sérieux : une fois le questionnaire activé et diffusé, certaines corrections deviennent plus délicates. Mieux vaut vérifier une fois de trop.
 
-> ### ⚠️ Vérifiez la déclaration de conformité RGAA avant activation
+> ### ⚠️ Vérifiez les mentions obligatoires avant activation
 >
-> C'est le moment de contrôler l'option de mention RGAA du thème (voir section 2, Gérer les options du thème). Sa valeur par défaut est **« Totalement conforme »** — or, tant qu'aucun audit d'accessibilité n'a été réalisé sur votre questionnaire, cette mention est **juridiquement fausse**. **Ne laissez jamais la valeur par défaut :** réglez-la sur votre niveau réel (**Non** ou **Partiellement** conforme). C'est une **étape obligatoire** avant d'activer le questionnaire. Rappel : le thème vous met sur de bons rails côté technique et graphique (contrastes, focus, structure des composants), mais la conformité RGAA légale dépend **aussi** de votre contenu éditorial — il ne signe pas l'audit à votre place.
+> Avant d'activer, assurez-vous que les onglets **Mentions légales** et **Données personnelles** (voir section 2) portent bien les informations de **votre direction** (éditeur, hébergeur, responsable de traitement, contact DPO). Ce sont des pages **obligatoires**. La **déclaration d'accessibilité**, elle, est gérée par votre direction / référent : le thème est déjà déclaré conforme, vous n'avez pas de déclaration à produire. Votre part de la conformité RGAA se joue dans le **contenu** (voir section 4, Accessibilité éditoriale).
 
 ### Trois niveaux d'aperçu
 
@@ -854,7 +822,7 @@ Conséquence pratique : ne jugez jamais le rendu d'un composant interactif depui
 
 À faire au minimum une fois, sur l'aperçu du questionnaire complet :
 
-1. **Réglez la déclaration de conformité RGAA sur votre niveau réel** (voir l'encadré ci-dessus) : ne laissez jamais « Totalement conforme » par défaut.
+1. **Vérifiez les mentions légales et données personnelles** (voir l'encadré ci-dessus) : elles doivent porter les informations de votre direction.
 2. **Parcourez tout le questionnaire de bout en bout**, comme un répondant, sans sauter de page.
 3. **Cliquez sur chaque composant interactif** (accordéons) pour confirmer qu'il se déplie et que le contenu est correct.
 4. **Vérifiez chaque libellé de question** : court, clair, en position de titre.
@@ -869,7 +837,7 @@ Une fois ce parcours validé sans surprise, vous pouvez activer le questionnaire
 
 Cette section est un aide-mémoire. Vous savez ce que vous voulez obtenir, mais vous ne savez pas quel composant DSFR employer ? Cherchez votre intention dans la colonne de gauche, appliquez le composant de la colonne de droite. Le détail du sens de chaque composant vit à la section 6 (Mises en forme et composants DSFR) et à l'Annexe B (référentiel) : ici, on va à l'essentiel.
 
-**Le principe qui gouverne toute cette section :** chaque composant DSFR porte un **sens**, jamais une simple décoration. On ne choisit pas un composant parce qu'il « rend bien » ou parce que sa couleur ressort, mais parce qu'il **dit la bonne chose**. Une information importante et durable, un message d'état que vous annoncez, une parole rapportée, un fichier à récupérer : ce sont autant d'intentions différentes, donc autant de composants différents. Utiliser le bon composant pour le bon sens, c'est déjà faire de l'accessibilité et de la clarté.
+**Le principe qui gouverne toute cette section :** chaque composant DSFR porte un **sens**, jamais une simple décoration. On ne choisit pas un composant pour son rendu visuel, mais parce qu'il **dit la bonne chose**. Une information importante et durable, un message d'état que vous annoncez, une parole rapportée, un fichier à récupérer : ce sont autant d'intentions différentes, donc autant de composants différents. Utiliser le bon composant pour le bon sens, c'est déjà faire de l'accessibilité et de la clarté.
 
 Rappel de la section 3 (Créer un questionnaire) : le **libellé de question** reste un titre court et neutre. Tous les composants ci-dessous se placent dans le **texte d'aide** de la question (ou dans un texte d'introduction de groupe), jamais dans le libellé.
 
@@ -983,8 +951,6 @@ Gardez le libellé pour **la question, en une phrase**.
 | Mon texte long est aplati | Il est dans le **libellé** (= titre) | Aide, ou question « Texte d'affichage » |
 
 **Le fil rouge :** le **libellé de question** porte la question (court, un titre) ; l'**aide** et les **questions Texte d'affichage** portent le contenu riche ; et le **sens** (attention, statut, alerte) passe par un **composant DSFR**, jamais par une couleur posée à la main. Si un doute persiste, voyez la section 10 (Aide et remontées).
-
----
 
 ---
 
@@ -1119,113 +1085,21 @@ Recommandation pratique : après la mise en place, **testez le rendu avec un com
 
 ## Annexe B — Référentiel des composants DSFR
 
-Cette annexe est votre aide-mémoire. Pour chaque composant proposé par l'éditeur — via la palette **Modèles** (bouton *Templates* de l'éditeur) ou le menu **Styles** — elle rappelle en une fiche courte : ce qu'il **veut dire** (son sens), **à quoi il sert**, **ce qu'il ne faut PAS lui faire porter**, et **où** l'utiliser dans une question (libellé de question, introduction ou aide).
+Aide-mémoire d'un coup d'œil. Le **détail** de chaque composant — son sens, ses usages, les cas à éviter, les bonnes pratiques — est en section 6 (Mises en forme et composants DSFR) ; la section 8 (Recettes rapides) donne l'entrée « intention → composant ». Cette annexe condense l'essentiel dans un tableau, avec le lien vers la fiche officielle du Système de Design de l'État.
 
-Le **sens détaillé** de chaque composant est développé à la section 6 (Mises en forme et composants DSFR) ; la section 8 (Recettes rapides) donne l'aide-mémoire « intention → composant ». Cette annexe condense l'essentiel en fiches, chacune complétée du lien vers la documentation officielle.
-
-**Rappel du principe transverse.** Un composant DSFR n'est jamais décoratif : il porte un sens éditorial. On ne choisit pas un composant « parce qu'il est joli » ou « parce que ça se voit », mais parce que son sens correspond au vôtre. Et tous ces composants d'accentuation (mise en avant, exergue, alerte, badge, citation) tirent leur force de leur **rareté** : si tout est mis en avant, plus rien ne l'est.
-
-**Rappel du placement.** Le **libellé de question** reste un titre court et aplati (voir la section 3, Créer un questionnaire) : on n'y met pas de composant. Les composants riches ci-dessous se placent dans l'**aide** de la question ou dans un **texte d'introduction** de groupe ou de questionnaire.
+Rappel : le **libellé de question** reste un titre court (voir la section 3) ; les composants se placent dans l'**aide** de la question ou dans un **texte d'introduction**. Ces composants d'accentuation tirent leur utilité de leur rareté : quand tout est mis en avant, plus rien ne l'est.
 
 ![Palette des composants DSFR dans l'éditeur](img/annexeB-palette.png)
 
-> **Note.** Plusieurs fiches officielles du systeme-de-design.gouv.fr étaient temporairement inaccessibles au moment de la rédaction. Les liens vers la documentation officielle restent la référence à jour : en cas de doute, vérifiez-y les libellés et variantes exacts.
+| Composant | Sens en une phrase | À utiliser pour | Ne pas confondre avec | Fiche officielle |
+|---|---|---|---|---|
+| **Accordéon** | Contenu secondaire replié, ouvert à la demande | FAQ, précisions, aide longue | Alerte (à voir sans clic) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/accordeon/) |
+| **Alerte** | Message d'état statique que vous affichez (information / succès / avertissement / erreur) | Info d'état maîtrisée (collecte, clôture, maintenance) | Mise en avant ; messages automatiques de LimeSurvey (confirmations, erreurs) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/alerte/) |
+| **Badge** | Statut court non cliquable (3 variantes : information, succès, nouveau) | « Brouillon », « Clôturée », « Nouveau » | Alerte (message important) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/badge/) |
+| **Mise en avant** | Information importante et stable à lire en priorité (titre + texte) | Consigne clé, cadrage rassurant | Alerte (urgence), Citation (parole) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/mise-en-avant/) |
+| **Mise en exergue** | Court passage clé détaché par un liseré | Phrase-pivot d'une introduction ou d'une consigne | Alerte (état), Citation (auteur) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/mise-en-exergue/) |
+| **Citation** | Parole exacte attribuée à un auteur | Verbatim, parole officielle, extrait de loi | Exergue (message clé sans auteur) | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/citation/) |
+| **Tableau** | Données comparables en lignes et colonnes | Listes, synthèses chiffrées comparables | Grille de mise en page, graphique | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/tableau/) |
+| **Téléchargement** | Fichier à récupérer (format et poids annoncés) | Notice, export, pièce à télécharger | Lien standard, bouton de soumission | [DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/telechargement-de-fichier/) |
 
-### B.1 Accordéon
-
-- **Sens :** « contenu secondaire, consultable à la demande ». Des en-têtes cliquables que le répondant déplie s'il le souhaite.
-- **À utiliser pour :** une FAQ (questions/réponses repliées), des précisions méthodologiques ou mentions que tout le monde n'a pas besoin de lire, découper un contenu long en sections navigables, alléger une page sur mobile.
-- **À ne PAS utiliser pour :** masquer une consigne indispensable ; diffuser un message d'état, une erreur ou une confirmation (→ Alerte) ; afficher un statut court (→ Badge) ; naviguer entre pages ; replier un texte d'une ou deux phrases.
-- **Où :** dans l'**aide** d'une question ou une **introduction** — jamais dans un libellé de question ni une consigne obligatoire.
-- **Plusieurs accordéons au même endroit :** le plus simple est de les répartir dans des aides de questions différentes. Pour en placer plusieurs à un même endroit, demandez à votre référent thème / webmestre.
-- **En aperçu :** un accordéon peut apparaître déplié en prévisualisation — c'est normal (voir la section 7, Prévisualiser et vérifier).
-- **Bon réflexe :** en-têtes explicites et autoporteurs (le répondant devine le contenu sans ouvrir), au plus 6-8 plis, pas d'imbrication, pas de panneaux tous préouverts.
-- 📖 [Accordéon — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/accordeon/)
-
-### B.2 Alerte
-
-- **Sens :** un message d'**état statique**, que vous maîtrisez et affichez à un moment précis du parcours. Le **type** porte le sens : information (bleu), succès (vert), avertissement (orange), erreur (rouge).
-- **À utiliser pour :** annoncer une information d'état dont vous décidez le contenu — « La collecte se termine le 30 juin », période de collecte en cours, maintenance prévue, mode brouillon.
-- **À ne PAS utiliser pour :** recopier en dur une confirmation d'enregistrement, une erreur de validation ou un rappel de champ obligatoire manquant — LimeSurvey et le thème les affichent **automatiquement**, ne les dupliquez jamais dans une aide ; un encart affiché en permanence (une alerte permanente n'alerte plus) ; du contenu riche ; un statut d'élément (→ Badge) ; choisir la couleur « pour que ça se voie » (le type a un sens normé).
-- **Où :** au plus près de ce qu'elle concerne, au bon moment — pas en continu. La palette propose les quatre types : **information, succès, avertissement, erreur**.
-- **Bon réflexe :** titre court qui résume l'état, message qui dit **quoi faire ensuite**, une seule alerte à la fois par niveau.
-- 📖 [Alerte — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/alerte/)
-
-### B.3 Badge
-
-- **Sens :** un marqueur court, **non cliquable**, qui signale le **statut** d'un élément. Le menu **Styles** propose **trois badges** : information (bleu), succès (vert) et nouveau.
-- **À utiliser pour :** un statut de questionnaire (« Brouillon », « Clôturée ») ; une nouveauté (« Nouveau »).
-- **À ne PAS utiliser pour :** un bouton ou un lien (il n'est pas cliquable) ; un message important ou bloquant (→ Alerte) ; de la décoration ou une accroche (« Top ») ; une phrase entière (un badge = un ou deux mots) ; signaler qu'un champ est obligatoire — LimeSurvey s'en charge nativement (astérisque et mention).
-- **Où :** à côté du libellé d'un élément dans une liste ou un tableau.
-- **Bon réflexe :** un vocabulaire de statut cohérent partout (toujours « Clôturée », jamais tantôt « Fermée » — voir la section 4, Accessibilité éditoriale), et un sens lisible même sans la couleur.
-- 📖 [Badge — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/badge/)
-
-### B.4 Mise en avant
-
-- **Sens :** « lisez ceci en priorité ». Une information importante et **stable**, complémentaire au contenu principal, sans l'urgence d'une alerte. Elle contient un **titre et un texte**, sans bouton.
-- **À utiliser pour :** rappeler une consigne clé avant un module (« Répondez en pensant aux 12 derniers mois ») ; rassurer/cadrer (durée estimée, anonymat, reprise possible) ; signaler une info notable non urgente.
-- **À ne PAS utiliser pour :** une erreur, une confirmation ou une info urgente (→ Alerte) ; une citation (→ Citation) ; empiler plusieurs mises en avant ; un simple encadré « pour faire joli » ; remplacer une FAQ repliable (→ Accordéon).
-- **Où :** en tête d'une introduction ou dans l'aide. **Une, exceptionnellement deux par page.**
-- **Bon réflexe :** titre court, texte de 2-3 phrases (une seule idée).
-- 📖 [Mise en avant — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/mise-en-avant/)
-
-### B.5 Mise en exergue
-
-- **Sens :** attirer l'œil sur un **court passage important** grâce à un liseré vertical coloré, sans changer le sens ni sonner l'alerte.
-- **À utiliser pour :** souligner une info clé dans une intro ou une consigne (« Vos réponses restent anonymes ») ; faire ressortir une phrase-pivot à lire avant de commencer ; mettre en avant une modalité importante mais non urgente ; aérer un texte dense.
-- **À ne PAS utiliser pour :** une erreur, un blocage ou une info temporaire (→ Alerte) ; une parole attribuée (→ Citation) ; « colorer » la page ; encadrer plusieurs paragraphes ; en empiler plusieurs.
-- **Où :** dans une introduction ou une aide, sur une à trois phrases. **Une, au maximum deux par écran.**
-- **Bon réflexe :** un message autoportant ; pas de gras ni de majuscules à l'intérieur (le liseré suffit). Le test : « état/action à corriger ? » → Alerte ; « info de fond à retenir ? » → Exergue.
-- 📖 [Mise en exergue — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/mise-en-exergue/)
-
-### B.6 Citation
-
-- **Sens :** « quelqu'un a dit/écrit ceci ». Un verbatim **exact** et **attribué** à son auteur — jamais une simple mise en forme.
-- **À utiliser pour :** un témoignage de répondant clairement attribué ; une parole officielle (responsable, élu) ; un extrait fidèle d'un texte de référence (loi, rapport) ; incarner un chiffre par un témoignage.
-- **À ne PAS utiliser pour :** faire ressortir un texte ordinaire « parce que c'est joli encadré » ; porter une consigne d'action (→ Exergue ou Alerte) ; inventer ou reformuler des propos ; empiler des citations décoratives.
-- **Où :** dans une intro ou une page de restitution. Une ou deux par page suffisent.
-- **Bon réflexe :** mot pour mot, avec l'auteur (nom, et si utile fonction/source). Sur des réponses au questionnaire, **anonymisez ou obtenez le consentement** avant d'attribuer nominativement.
-- 📖 [Citation — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/citation/)
-
-### B.7 Tableau
-
-- **Sens :** organiser des **données comparables** en lignes et colonnes, pour lire et croiser des valeurs — jamais pour mettre en page.
-- **À utiliser pour :** des données vraiment tabulaires (liste de questionnaires avec statut, nombre de réponses, date de clôture) ; comparer des valeurs ligne à ligne ou colonne à colonne ; un jeu où chaque colonne a un intitulé stable et chaque ligne un enregistrement homogène ; une synthèse chiffrée.
-- **À ne PAS utiliser pour :** mettre en page ou aligner des blocs (→ grille de colonnes) ; une seule paire clé/valeur (→ Badge ou liste) ; un contenu narratif ou dépliable (→ Accordéon) ; imiter un graphique ; tasser des données hétérogènes.
-- **Où :** dans une aide ou une page de restitution.
-- **Bon réflexe :** toujours un **titre** (la légende du tableau) ; en-têtes de colonnes courts ; nombres alignés à droite, libellés à gauche ; pas de cellules fusionnées ni de tableaux imbriqués ; peu de colonnes sur mobile. Test : si vous ne pouvez pas nommer chaque colonne ni justifier que les lignes se comparent, ce n'est pas un tableau.
-- 📖 [Tableau — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/tableau/)
-
-### B.8 Téléchargement de fichier
-
-- **Sens :** « voici un fichier à récupérer ». Le composant annonce **avant le clic** l'intitulé du document, son **format** et son **poids** (ex. « PDF – 1,7 Mo »).
-- **À utiliser pour :** proposer un document réel et autonome (notice, règlement du questionnaire, courrier de consentement, résultats à exporter) ; tout fichier récupéré hors du navigateur ; regrouper plusieurs documents à télécharger ; donner une version imprimable/archivable.
-- **À ne PAS utiliser pour :** un simple lien vers une page web ou une ancre (→ lien standard) ; un bouton d'action du questionnaire (« Envoyer mes réponses » — télécharger n'est pas soumettre) ; un lien « nu » sans format ni poids ; de la décoration.
-- **Où :** dans une aide ou une intro, groupé si plusieurs fichiers d'un même contexte.
-- **Bon réflexe :** un intitulé qui **décrit le document** (« Notice d'aide au remplissage »), pas l'action (« Cliquez ici ») ; conserver la mention automatique format + poids ; préciser la langue si elle diffère de la page. Règle simple : le répondant reste dans le navigateur → **lien** ; il récupère un fichier sur son appareil → **téléchargement**.
-- 📖 [Téléchargement de fichier — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/telechargement-de-fichier/)
-
-### B.9 Tableau récapitulatif
-
-Aide au choix rapide. En cas d'hésitation entre deux composants voisins, la colonne « Ne pas confondre avec » tranche.
-
-| Composant | Sens en une phrase | À utiliser pour | Ne pas confondre avec |
-|---|---|---|---|
-| **Accordéon** | Contenu secondaire replié, ouvert à la demande | FAQ, précisions, aide longue | Alerte (à voir sans clic) |
-| **Alerte** | Message d'état statique que vous affichez (information/succès/avertissement/erreur) | Info d'état maîtrisée (collecte, clôture, maintenance) | Mise en avant (info stable), messages automatiques de LimeSurvey (confirmations, erreurs) |
-| **Badge** | Statut court non cliquable (3 variantes : information, succès, nouveau) | « Brouillon », « Clôturée », « Nouveau » | Alerte (message important) |
-| **Mise en avant** | Information importante et stable à lire en priorité (titre + texte) | Consigne clé, cadrage rassurant | Alerte (urgence), Citation (parole) |
-| **Mise en exergue** | Court passage clé détaché par un liseré | Phrase-pivot d'une intro/consigne | Alerte (état), Citation (auteur) |
-| **Citation** | Parole exacte attribuée à un auteur | Verbatim, parole officielle, extrait de loi | Exergue (message clé sans auteur) |
-| **Tableau** | Données comparables en lignes/colonnes | Listes, synthèses chiffrées comparables | Grille de mise en page, graphique |
-| **Téléchargement** | Fichier à récupérer (format + poids annoncés) | Notice, export, pièce à télécharger | Lien standard, bouton de soumission |
-
-
-### B.10 Pour aller plus loin
-
-Le catalogue complet, avec toutes les variantes et exemples officiels, est sur le **Système de Design de l'État** : [systeme-de-design.gouv.fr](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/). C'est la source de vérité en cas de doute sur un libellé ou une variante.
-
----
-
----
-
+Le catalogue complet (variantes et exemples officiels) est sur le **Système de Design de l'État** : [systeme-de-design.gouv.fr](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/). C'est la source de vérité en cas de doute sur un libellé ou une variante.
