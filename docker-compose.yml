@@ -41,15 +41,10 @@ services:
       - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
       - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
       - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
-      # --- Overlay CKEditor DSFR (palette de composants + styles, cf. ADR-071) ---
-      # Override d'assets core (config.js décoré + fichiers DSFR dans le même
-      # package). deploy.sh purge tmp/assets → republication au déploiement.
-      # Ne PAS éditer ces fichiers dans un conteneur qui tourne (le bind-mount
-      # de fichier unique casse sur save atomique) : rebuild/recreate à la place.
-      - ./overlays/ckeditor/config.js:/var/www/html/assets/packages/ckeditor/config.js
-      - ./overlays/ckeditor/dsfr-templates.js:/var/www/html/assets/packages/ckeditor/dsfr-templates.js
-      - ./overlays/ckeditor/dsfr-styles.js:/var/www/html/assets/packages/ckeditor/dsfr-styles.js
-      - ./overlays/ckeditor/dsfr-contents.css:/var/www/html/assets/packages/ckeditor/dsfr-contents.css
+      # --- Plugin CKEditorDSFR (palette de composants + styles, cf. ADR-071) ---
+      # Injection via événements natifs CKEditor (aucun override de config.js).
+      # À activer une fois dans Configuration > Plugins (persisté en base).
+      - ./modules/ckeditor-dsfr:/var/www/html/plugins/CKEditorDSFR
       # --- PHP : override des limites par défaut (upload 2M → 16M).
       # `martialblog/limesurvey` ne propage pas les variables d'env vers
       # php.ini, on monte donc le fichier directement dans conf.d/. Le

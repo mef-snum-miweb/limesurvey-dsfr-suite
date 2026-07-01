@@ -10,3 +10,7 @@
 	path = modules/conversation-albert
 	url = https://github.com/mef-snum-miweb/limesurvey-conversation-albert.git
 	branch = main
+[submodule "modules/ckeditor-dsfr"]
+	path = modules/ckeditor-dsfr
+	url = https://github.com/mef-snum-miweb/limesurvey-ckeditor-dsfr.git
+	branch = main

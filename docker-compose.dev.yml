@@ -43,14 +43,10 @@ services:
       - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
       - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
       - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
-      # --- Overlay CKEditor DSFR (palette de composants + styles, cf. ADR-071) ---
-      # Override d'assets core : config.js décoré + fichiers DSFR dans le même
-      # package (publiés ensemble → CKEDITOR.basePath les résout). Purger
-      # tmp/assets après montage pour forcer la republication.
-      - ./overlays/ckeditor/config.js:/var/www/html/assets/packages/ckeditor/config.js
-      - ./overlays/ckeditor/dsfr-templates.js:/var/www/html/assets/packages/ckeditor/dsfr-templates.js
-      - ./overlays/ckeditor/dsfr-styles.js:/var/www/html/assets/packages/ckeditor/dsfr-styles.js
-      - ./overlays/ckeditor/dsfr-contents.css:/var/www/html/assets/packages/ckeditor/dsfr-contents.css
+      # --- Plugin CKEditorDSFR (palette de composants + styles, cf. ADR-071) ---
+      # Injection via événements natifs CKEditor (aucun override de config.js).
+      # Monté comme les autres plugins ; à activer dans Configuration > Plugins.
+      - ./modules/ckeditor-dsfr:/var/www/html/plugins/CKEditorDSFR
       # --- Données persistantes ---
       - limesurvey-upload-dev:/var/www/html/upload
     depends_on:
