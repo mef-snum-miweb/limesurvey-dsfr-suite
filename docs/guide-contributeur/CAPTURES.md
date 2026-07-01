@@ -1,148 +1,87 @@
 # Captures à réaliser — Guide contributeur DSFR
 
-## Section 0 — À qui s'adresse ce guide
+Spec autonome pour produire les captures d'écran du guide. Chaque image est
+nommée **exactement** comme le guide l'attend : enregistrer dans
+`docs/guide-contributeur/img/<nom>.png`.
 
-### `0-theme-active-sondage`
-- **Montrer** : L'écran des réglages généraux d'un sondage LimeSurvey, avec le sélecteur de thème affichant le thème DSFR comme thème actif du sondage.
-- **Annoter** : Entourer le champ/sélecteur de thème indiquant que le thème DSFR est bien sélectionné.
+## Prérequis / environnement
 
-## Section 1 — La philosophie du thème — conformité RGAA / DSFR
+- Instance LimeSurvey avec le **thème DSFR activé** et le **plugin CKEditorDSFR activé**
+  (Configuration › Plugins › Analyser les fichiers › Installer › Activer).
+  - En local : `docker compose -f docker-compose.dev.yml up -d` → `http://localhost:8081`
+    (admin/admin), puis `./db/seed.sh` charge le questionnaire de test.
+- **Questionnaire de test** : « Baromètre numérique de l'agent » (sid **527199**, inactif).
+- **Question vitrine** : pour les rendus de composants, coller le HTML ci-dessous dans le
+  champ **Aide** d'une question (ex. qid 238, groupe 16), en mode source `</>` :
 
-### `c1-apercu-formulaire-dsfr`
-- **Montrer** : Une page de questionnaire LimeSurvey affichée avec le thème DSFR activé, montrant l'en-tête officiel (bloc Marianne / logo République Française), une question dont le libellé apparaît comme un titre court, et le texte d'aide enrichi affiché juste en dessous. L'ensemble illustre le rendu conforme DSFR sans intervention du contributeur.
-- **Annoter** : Entourer l'en-tête Marianne (présentation DSFR automatique), le libellé de la question (repère 'titre court') et la zone d'aide sous le libellé (repère 'contenu riche').
+```html
+<p class="fr-text--lead">Texte d'introduction (style DSFR).</p>
+<div class="fr-callout"><h3 class="fr-callout__title">Mise en avant</h3><p class="fr-callout__text">Information importante à signaler.</p></div>
+<p>Statut : <span class="fr-badge fr-badge--info">Nouveau</span> <span class="fr-badge fr-badge--success">Clôturée</span></p>
+<div class="fr-alert fr-alert--info"><h3 class="fr-alert__title">Information</h3><p>La collecte se termine le 30 juin.</p></div>
+<section class="fr-accordion"><h3 class="fr-accordion__title"><button type="button" class="fr-accordion__btn" aria-expanded="false" aria-controls="acc-demo">En savoir plus</button></h3><div class="fr-collapse" id="acc-demo"><p>Information complémentaire repliable.</p></div></section>
+<figure class="fr-quote"><blockquote><p>« Une citation. »</p></blockquote><figcaption><p class="fr-quote__author">Auteur</p></figcaption></figure>
+<div class="fr-table"><table><caption>Tableau</caption><thead><tr><th scope="col">Colonne 1</th><th scope="col">Colonne 2</th></tr></thead><tbody><tr><td>A</td><td>B</td></tr></tbody></table></div>
+<div class="fr-download"><p><a href="#" download class="fr-download__link">Notice d'aide au remplissage<span class="fr-download__detail">PDF – 1,7 Mo</span></a></p></div>
+```
 
-## Section 2 — Gérer les options du thème
+> Les composants **interactifs** (accordéon) ne se déplient qu'en **aperçu** (ou sur le
+> questionnaire activé), pas dans l'éditeur.
 
-### `c2-panneau-options`
-- **Montrer** : Vue d'ensemble du panneau des options avancées du thème DSFR dans l'administration LimeSurvey, montrant la rangée d'onglets (Options générales, Images, Header et footer, Accessibilité, Mentions légales, Données personnelles, Gestion des cookies, Protection anti-bot).
-- **Annoter** : Entourer la barre d'onglets pour montrer comment naviguer entre les groupes d'options.
+## Plan par écran (URLs pour l'instance locale)
 
-### `c2a-options-generales`
-- **Montrer** : L'onglet Options générales déployé, avec les champs container, showpopups, showclearall, questionhelptextposition, fixnumauto, showquestioncode, sanitize_rte_content, contributor_hints et show_pdf_export.
-- **Annoter** : Surligner sanitize_rte_content et contributor_hints comme options de conformité à laisser activées.
+### Écran 1 — Rendu front (question vitrine)
+`…/index.php/survey/index/action/previewquestion/sid/527199/gid/16/qid/238`
+- `c1-apercu-formulaire-dsfr` — vue haut : en-tête Marianne + libellé + aide. **Annoter** : en-tête (présentation DSFR auto), libellé (« titre court »), aide (« contenu riche »).
+- `apercu-contributeur-bandeau` **et** `c2a-contributor-hints` — le bandeau « Aperçu contributeur ». **Annoter** : entourer le bandeau ; noter « invisible pour le répondant ».
+- `3bis-badge-statut-texte` — la ligne « Statut : Nouveau Clôturée ». **Annoter** : le texte porte le sens, la couleur n'est qu'un renfort.
+- `8-couleur-vers-composant` — le bandeau illustre la mise en forme retirée.
+- `c6-accordeon-apercu` — cliquer « En savoir plus » pour déplier ; idéalement montrer replié + déplié.
+- `3bis-telechargement-fichier` — descendre jusqu'au bloc « Notice d'aide au remplissage — PDF ». **Annoter** : intitulé + format/poids décrivent le document.
 
-### `c2a-contributor-hints`
-- **Montrer** : Une prévisualisation d'enquête où les repères contributeur signalent une mise en forme non conservée (message d'avertissement en aperçu).
-- **Annoter** : Entourer le bandeau/repère d'avertissement et préciser qu'il n'est visible qu'en aperçu, jamais par les répondants.
+### Écran 2 — Options du thème
+`…/index.php/themeOptions/updateSurvey/surveyid/527199` → cliquer **« Personnaliser le thème »**, puis chaque onglet :
+- `c2-panneau-options` — la barre des 8 onglets. **Annoter** : la barre d'onglets.
+- `c2a-options-generales` — onglet Options générales. **Annoter** : surligner `Nettoyer les styles inline` et `Repères contributeur en prévisualisation`.
+- `c2b-images-logos` — onglet Images. **Annoter** : avertissement DSFR logo + certification SIRCOM.
+- `c2c-header-footer` — onglet Header et footer.
+- `c2d-accessibilite` — onglet Accessibilité. **Annoter** : la mention de conformité RGAA (« doit refléter l'audit »).
+- `c2e-antibot` — onglet Protection anti-bot.
 
-### `c2b-images-logos`
-- **Montrer** : L'onglet Images avec les options brandlogo, brandlogo_sircom_certified et brandlogofile (liste déroulante de fichiers).
-- **Annoter** : Encadrer les cases brandlogo et brandlogo_sircom_certified pour rappeler la double condition d'autorisation + certification SIRCOM.
+### Écran 3 — Plugins
+`…/index.php/admin/pluginmanager/sa/index`
+- `a3-plugin-active` — ligne **CKEditorDSFR**, statut ● (actif). **Annoter** : la ligne + le bouton « Analyser les fichiers ».
 
-### `c2c-header-footer`
-- **Montrer** : L'onglet Header et footer avec dsfr_theme (Clair/Sombre/Système), show_marianne, show_footer_links, marianne_text, header_title, baseline_text, footer_text et intellectual_property.
-- **Annoter** : Surligner marianne_text et header_title, et pointer marianne_text = « République Française » quand un logo opérateur est présent.
+### Écran 4 — Éditeur (question 238 → **Éditer** → onglet **Aide**)
+`…/index.php/questionAdministration/view/surveyid/527199/gid/16/qid/238`
+- `4a-bascule-barres` — barre d'outils simple + complète. **Annoter** : le bouton de bascule ; les menus Styles et Modèles.
+- `8-tableau-vers-aide` — vue avec les onglets Question / Aide (montrer que le riche va dans l'Aide).
+- `c5-menu-styles` **et** `3bis-menu-styles-titres` — clic sur **Styles** (menu ouvert : Paragraphe introduction / plus grand / petit, Texte, Badges).
+- `c5-palette-templates` + `c7-palette-templates` + `annexeB-palette` + `annexeB-templates` — clic sur l'**icône document** (à droite de Styles) → dialogue « Contenu des modèles » listant les 11 composants.
+- `4b-mode-source` — clic sur **`</>`** (montre le HTML).
+- `3bis-alt-image` — clic sur l'**icône image** → champ « texte alternatif ».
+- `c5-telechargement-champs` — insérer le modèle **Téléchargement** → montrer les zones URL / intitulé / « Format – Poids ».
 
-### `c2d-accessibilite`
-- **Montrer** : L'onglet Accessibilité avec rgaa_conformity (Totalement/Partiellement/Non), rgaa_declaration_date, accessibility_statement_url et accessibility_content.
-- **Annoter** : Entourer rgaa_conformity en rappelant qu'il doit refléter l'audit réel.
+### Écran 5 — Boutons d'aperçu
+Même page que l'écran 4, **avant** de cliquer « Éditer » (barre du haut) :
+- `c6-boutons-apercu` **et** `8-apercu-complet-vs-question` — les 3 boutons « Prévisualiser le questionnaire / le groupe / la question ». **Annoter** : numéroter 1-2-3.
 
-### `c2e-antibot`
-- **Montrer** : L'onglet Protection anti-bot avec antibot_enabled, antibot_timer et antibot_custom_questions (zone au format Question|Réponse).
-- **Annoter** : Surligner antibot_enabled et montrer un exemple de question personnalisée au format Question|Réponse.
+### Écran 6 — Sélecteur de thème
+Sondage → **Paramètres › Présentation** (choix du thème) :
+- `0-theme-active-sondage` **et** `a2-selection-theme` — le thème DSFR sélectionné. **Annoter** : le sélecteur.
 
-## Section 3 — Créer un formulaire
+### Écran 7 — GitHub (remontées publiques)
+`https://github.com/mef-snum-miweb/limesurvey-theme-dsfr/issues`
+- `9-github-issues` — liste des tickets + bouton « New issue ». **Annoter** : le bouton « New issue ».
 
-### `apercu-contributeur-bandeau`
-- **Montrer** : La page de prévisualisation d'un questionnaire dans LimeSurvey avec le thème DSFR, cadrée sur le haut de page pour montrer le bandeau/repère « Aperçu contributeur » qui indique le mode conception.
-- **Annoter** : Entourer le bandeau « Aperçu contributeur » en haut de la prévisualisation ; ajouter une note indiquant que ce repère n'apparaît pas pour le répondant final.
+## Récapitulatif des 28 fichiers attendus
 
-## Section 3bis — Accessibilité éditoriale (RGAA au quotidien)
-
-### `3bis-telechargement-fichier`
-- **Montrer** : Le composant DSFR Téléchargement de fichier tel qu'il s'affiche pour l'usager, montrant un intitulé de document explicite suivi de la mention automatique du format et du poids (ex. « Notice d'aide au remplissage — PDF, 1,7 Mo »).
-- **Annoter** : Entourer la ligne format+poids et l'intitulé du document pour montrer qu'ils décrivent le fichier, pas l'action.
-
-### `3bis-alt-image`
-- **Montrer** : La boîte de dialogue d'insertion d'image de l'éditeur avec le champ de saisie de l'alternative textuelle (texte alternatif) rempli d'un exemple pertinent.
-- **Annoter** : Entourer le champ d'alternative textuelle et pointer un exemple correct par rapport à un exemple creux (« image.png »).
-
-### `3bis-menu-styles-titres`
-- **Montrer** : Le menu déroulant Styles de l'éditeur de texte ouvert, montrant les niveaux de titre disponibles, distincts de l'option de mise en gras.
-- **Annoter** : Entourer les entrées de niveaux de titre et barrer visuellement le bouton Gras pour illustrer « un titre n'est pas du gras ».
-
-### `3bis-badge-statut-texte`
-- **Montrer** : Un exemple de Badge DSFR de statut (ex. « Clôturée ») affiché à côté du libellé d'un élément, où le texte du statut est lisible indépendamment de la couleur.
-- **Annoter** : Entourer le libellé texte du badge pour souligner qu'il porte le sens, la couleur n'étant qu'un renfort.
-
-## Section 4 — Utiliser l'éditeur de texte
-
-### `4a-bascule-barres`
-- **Montrer** : L'éditeur CKEditor de LimeSurvey ouvert sur un champ de texte (libellé de question ou aide), montrant la barre d'outils simple sur une ligne. Idéalement une vue avant/après, ou la barre complète déployée juste en dessous pour comparaison.
-- **Annoter** : Entourer le bouton de bascule (agrandir/réduire la barre) à l'extrémité de la barre d'outils. Sur la vue complète, entourer aussi les menus 'Styles' et 'Modèles/Templates' qui apparaissent.
-
-### `4b-mode-source`
-- **Montrer** : L'éditeur CKEditor basculé en mode code/source, affichant le HTML brut d'un contenu simple (ex. un texte d'aide avec une liste et un lien).
-- **Annoter** : Entourer le bouton qui active le mode source dans la barre d'outils. Éventuellement surligner un fragment de balise pour illustrer qu'on ne touche qu'à un endroit précis.
-
-## Section 5 — Mises en forme et blocs DSFR
-
-### `c5-menu-styles`
-- **Montrer** : La barre d'outils de l'éditeur de texte LimeSurvey avec le menu déroulant Styles ouvert, montrant les entrées DSFR : Paragraphe — introduction, Paragraphe — plus grand/plus petit, Texte — plus grand/plus petit, Badge — information/succès/nouveau.
-- **Annoter** : Entourer le bouton Styles dans la barre d'outils et encadrer la liste déroulante déployée.
-
-### `c5-palette-templates`
-- **Montrer** : La boîte de dialogue Templates (Modèles) ouverte depuis la barre d'outils, listant les blocs DSFR : Accordéon, Mise en avant (avec/sans titre), Mise en exergue, Alerte (information, succès, erreur, avertissement), Citation, Tableau, Téléchargement de fichier.
-- **Annoter** : Entourer le bouton Templates/Modèles dans la barre d'outils et encadrer la liste des modèles proposés.
-
-### `c5-telechargement-champs`
-- **Montrer** : Le bloc Téléchargement de fichier fraîchement inséré dans l'éditeur, avec le texte d'exemple visible : l'intitulé du fichier, le détail « Format – Poids » et, en vue code ou via l'attribut du lien, l'espace réservé [URL-du-fichier].
-- **Annoter** : Entourer les trois zones à remplacer : l'URL ([URL-du-fichier]), l'intitulé du fichier, et la mention « Format – Poids ».
-
-## Section 6 — Prévisualiser et vérifier
-
-### `c6-boutons-apercu`
-- **Montrer** : Barre d'outils de l'écran de gestion des questions dans LimeSurvey montrant côte à côte les trois boutons/actions de prévisualisation : aperçu d'une question, aperçu d'un groupe, aperçu du questionnaire complet.
-- **Annoter** : Entourer et numéroter (1, 2, 3) les trois boutons d'aperçu : question, groupe, questionnaire complet.
-
-### `c6-accordeon-apercu`
-- **Montrer** : Rendu répondant (aperçu ou questionnaire activé) avec le thème DSFR : à gauche un accordéon replié dans une aide de question, à droite le même accordéon déplié après clic laissant apparaître son contenu complémentaire.
-- **Annoter** : Montrer l'état replié et l'état déplié côte à côte ; entourer le libellé cliquable de l'accordéon et la flèche qui indique le pliage/dépliage.
-
-## Section 7 — Recettes rapides
-
-### `c7-palette-templates`
-- **Montrer** : L'éditeur de texte d'aide d'une question LimeSurvey avec la palette Templates du thème DSFR déroulée, listant les composants disponibles (Accordéon, Mise en avant avec/sans titre, Mise en exergue, les quatre Alertes, Citation, Tableau, Téléchargement de fichier).
-- **Annoter** : Entourer le bouton/menu Templates dans la barre d'outils et la liste déroulée des composants.
-
-## Section 8 — Pièges & FAQ
-
-### `8-couleur-vers-composant`
-- **Montrer** : Comparaison avant/apres : a gauche une phrase saisie en rouge dans l'editeur qui s'affiche en noir sur le sondage ; a droite la meme information portee par une alerte DSFR et un badge de statut.
-- **Annoter** : Entourer en rouge la couleur perdue a gauche ; entourer en vert le composant alerte et le badge a droite.
-
-### `8-tableau-vers-aide`
-- **Montrer** : L'ecran d'edition d'une question LimeSurvey montrant le champ Libelle (avec une phrase courte) et, en dessous, le champ Aide contenant le tableau riche.
-- **Annoter** : Fleche du tableau initialement dans le Libelle vers le champ Aide ; encadrer le champ Aide.
-
-### `8-apercu-complet-vs-question`
-- **Montrer** : La barre d'apercu de LimeSurvey avec les boutons d'apercu d'une seule question, d'apercu du groupe et d'apercu du sondage complet.
-- **Annoter** : Barrer le bouton d'apercu d'une seule question ; entourer en vert les boutons apercu du groupe et apercu du sondage complet.
-
-## Section 9 — Aide et remontées
-
-### `9-github-issues`
-- **Montrer** : La page de l'onglet Issues du dépôt GitHub mef-snum-miweb/limesurvey-theme-dsfr, montrant la liste des tickets existants et le bouton vert 'New issue' pour en créer un nouveau.
-- **Annoter** : Entourer le bouton 'New issue' (créer un ticket) et la barre de recherche/filtre des tickets existants.
-
-## Section annexeA — Annexe A — Mise en place (administrateur)
-
-### `a2-selection-theme`
-- **Montrer** : L'écran des réglages de présentation d'un sondage LimeSurvey, avec la liste déroulante de choix du thème et le thème DSFR sélectionné.
-- **Annoter** : Entourer le sélecteur de thème et l'option DSFR retenue.
-
-### `a3-plugin-active`
-- **Montrer** : La page Configuration > Plugins de LimeSurvey montrant la ligne CKEditorDSFR avec le statut activé, et à proximité les boutons Analyser les fichiers / Installer.
-- **Annoter** : Entourer la ligne du plugin CKEditorDSFR, son indicateur d'état activé, et le bouton Analyser les fichiers.
-
-## Section annexeB — Annexe B — Référentiel des composants DSFR
-
-### `annexeB-palette`
-- **Montrer** : La palette / liste des composants DSFR proposés par le plugin CKEditorDSFR dans l'éditeur de texte d'une question ou d'une aide LimeSurvey, montrant les entrées Accordéon, Mise en avant (avec/sans titre), Mise en exergue, Alerte (information/succès/erreur/avertissement), Citation, Tableau, Téléchargement de fichier.
-- **Annoter** : Entourer l'ensemble des entrées de composants DSFR de la palette pour montrer qu'elles correspondent aux fiches de l'annexe.
-
-### `annexeB-templates`
-- **Montrer** : Le menu Templates (ou galerie de modèles) de l'éditeur ouvert, listant les blocs DSFR insérables tels qu'ils apparaissent au contributeur avant insertion dans le champ aide/introduction.
-- **Annoter** : Encadrer le bouton ou l'onglet Templates et la liste déroulée des blocs disponibles.
-
+c1-apercu-formulaire-dsfr · apercu-contributeur-bandeau · c2a-contributor-hints ·
+3bis-badge-statut-texte · 8-couleur-vers-composant · c6-accordeon-apercu ·
+3bis-telechargement-fichier · c2-panneau-options · c2a-options-generales ·
+c2b-images-logos · c2c-header-footer · c2d-accessibilite · c2e-antibot ·
+a3-plugin-active · 4a-bascule-barres · 8-tableau-vers-aide · c5-menu-styles ·
+3bis-menu-styles-titres · c5-palette-templates · c7-palette-templates ·
+annexeB-palette · annexeB-templates · 4b-mode-source · 3bis-alt-image ·
+c5-telechargement-champs · c6-boutons-apercu · 8-apercu-complet-vs-question ·
+0-theme-active-sondage · a2-selection-theme · 9-github-issues
