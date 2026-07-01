@@ -1,0 +1,35 @@
+/**
+ * CSS appliqué DANS l'iframe de l'éditeur CKEditor (config.contentsCss).
+ *
+ * Objectif : donner un aperçu WYSIWYG proche du rendu DSFR réel pour les
+ * composants insérés via la palette « Templates » et les styles « fr-… ».
+ * Approximation minimale (prototype) — le rendu de référence reste le thème
+ * de sondage. À enrichir si besoin, ou à remplacer par le CSS DSFR complet.
+ */
+
+body.cke_editable { font-family: Marianne, arial, sans-serif; color: #161616; }
+
+/* Utilitaires de texte */
+.fr-text--lead { font-size: 1.25rem; line-height: 2rem; }
+.fr-text--lg { font-size: 1.125rem; }
+.fr-text--sm { font-size: 0.875rem; }
+
+/* Callout / highlight */
+.fr-callout { padding: 1.5rem; background-color: #f6f6f6; border-left: 3px solid #6a6af4; margin: 1rem 0; }
+.fr-callout__text { margin: 0; }
+.fr-highlight { padding: 0 0 0 1rem; border-left: 4px solid #6a6af4; margin: 1rem 0; }
+
+/* Alertes */
+.fr-alert { position: relative; padding: 1rem 1rem 1rem 3rem; border: 1px solid; margin: 1rem 0; }
+.fr-alert__title { font-size: 1.125rem; margin: 0 0 .25rem; }
+.fr-alert--info { border-color: #0063cb; background: #e8edff; }
+.fr-alert--info .fr-alert__title { color: #0063cb; }
+.fr-alert--warning { border-color: #b34000; background: #fff4ed; }
+.fr-alert--warning .fr-alert__title { color: #b34000; }
+
+/* Badges */
+.fr-badge { display: inline-block; padding: .125rem .5rem; font-size: .75rem; font-weight: 700;
+    text-transform: uppercase; border-radius: 0; background: #eee; color: #3a3a3a; }
+.fr-badge--info { background: #e8edff; color: #0063cb; }
+.fr-badge--success { background: #b8fec9; color: #18753c; }
+.fr-badge--new { background: #feebd0; color: #695240; }
