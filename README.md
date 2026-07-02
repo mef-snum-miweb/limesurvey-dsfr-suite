@@ -2,11 +2,12 @@
 
 Suite d'intégration DSFR (Système de Design de l'État) pour [LimeSurvey](https://www.limesurvey.org/). Environnement Docker pour le dev local et le déploiement en production — sans fork de LimeSurvey, avec l'image officielle [`martialblog/limesurvey`](https://github.com/martialblog/docker-limesurvey).
 
-Trois modules vivent en submodules sous [`modules/`](modules/) :
+Quatre modules vivent en submodules sous [`modules/`](modules/) :
 
 | Module | Repo | Description |
 |---|---|---|
 | **Thème DSFR** | [`limesurvey-theme-dsfr`](https://github.com/mef-snum-miweb/limesurvey-theme-dsfr) | Thème de sondage conforme au DSFR et au RGAA 4.1 |
+| **CKEditor DSFR** | [`limesurvey-ckeditor-dsfr`](https://github.com/mef-snum-miweb/limesurvey-ckeditor-dsfr) | Plugin éditeur : palette de composants + styles DSFR dans l'éditeur admin |
 | **Email DSFR** | [`limesurvey-email-dsfr`](https://github.com/mef-snum-miweb/limesurvey-email-dsfr) | Plugin de templates d'email conformes DSFR |
 | **Conversation Albert** | [`limesurvey-conversation-albert`](https://github.com/mef-snum-miweb/limesurvey-conversation-albert) | Plugin d'assistant conversationnel IA |
 
@@ -27,7 +28,7 @@ Ce repo sert trois scénarios distincts — chacun avec ses propres prérequis. 
 
 ## 1. Démo — faire tourner la suite
 
-Objectif : avoir LimeSurvey avec le thème DSFR et les 2 plugins **opérationnels en local**, pour naviguer dans l'admin ou répondre au questionnaire de démo. Pas de build, pas de Node, juste Docker.
+Objectif : avoir LimeSurvey avec le thème DSFR et les 3 plugins **opérationnels en local**, pour naviguer dans l'admin ou répondre au questionnaire de démo. Pas de build, pas de Node, juste Docker.
 
 **Prérequis** : [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/install/) (inclus dans Docker Desktop).
 
@@ -45,7 +46,7 @@ docker compose -f docker-compose.dev.yml up -d
 # 4. Ouvrir → http://localhost:8081  (admin / admin)
 ```
 
-Les 3 submodules sont montés en direct dans le conteneur — toute modification est visible après un simple refresh du navigateur, sans rebuild Docker.
+Les 4 submodules sont montés en direct dans le conteneur — toute modification est visible après un simple refresh du navigateur, sans rebuild Docker.
 
 Si tu as cloné **sans** `--recurse-submodules`, tu peux rattraper :
 
@@ -164,7 +165,7 @@ git commit -m "chore: bump theme-dsfr"
 git push
 ```
 
-Pour tirer les dernières versions des 3 submodules :
+Pour tirer les dernières versions des 4 submodules :
 
 ```bash
 git submodule update --remote --merge
@@ -189,6 +190,7 @@ Le réseau `ecosystem-network` doit exister (créé par la stack Traefik). Les l
 
 | Sujet | Où |
 |---|---|
+| **Guide du contributeur** (gestionnaires d'enquêtes — thème + éditeur) | [`docs/guide-contributeur/guide-contributeur.md`](docs/guide-contributeur/guide-contributeur.md) |
 | Le thème DSFR lui-même | [`modules/theme-dsfr/README.md`](modules/theme-dsfr/README.md) |
 | Options de config du thème | [`modules/theme-dsfr/THEME_OPTIONS.md`](modules/theme-dsfr/THEME_OPTIONS.md) |
 | Couverture fonctionnelle du thème | [`modules/theme-dsfr/THEME_COVERAGE.md`](modules/theme-dsfr/THEME_COVERAGE.md) |
