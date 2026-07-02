@@ -22,9 +22,7 @@
 
 ## À qui s'adresse ce guide
 
-Ce guide est destiné aux **gestionnaires d'enquêtes** : les agents métier qui conçoivent, rédigent et administrent des questionnaires dans LimeSurvey. Il ne suppose **aucune compétence technique** : vous n'avez pas besoin de savoir coder, ni de connaître le HTML, le CSS ou le fonctionnement d'un thème. Si vous savez créer un groupe de questions et rédiger un libellé de question, vous avez le niveau requis.
-
-Les quelques opérations plus techniques et rares (le mode code de l'éditeur, l'identifiant d'un accordéon, le marquage de la langue d'un passage) ne vous seront **jamais** demandées. Le jour où un tel besoin se présente, adressez-vous à votre **référent thème / webmestre** : ce guide vous indiquera à chaque fois vers qui vous tourner.
+Ce guide est destiné aux **gestionnaires d'enquêtes** : les agents métier qui conçoivent, rédigent et administrent des questionnaires dans LimeSurvey. Il ne suppose **aucune compétence technique** : vous n'avez pas besoin de connaître le HTML ou le fonctionnement d'un thème. Si vous savez créer un groupe de questions et rédiger un libellé de question, vous avez le niveau requis.
 
 ### Ce que vous allez apprendre
 
@@ -46,7 +44,7 @@ Concrètement, vous n'avez **jamais** à choisir une couleur, régler une taille
 
 Avant de suivre ce guide, assurez-vous de disposer de :
 
-1. Un **accès administrateur** (ou de conception) à votre instance LimeSurvey.
+1. Un **accès contributeur** à votre instance LimeSurvey.
 2. Le **thème DSFR activé** sur le questionnaire concerné. Cela se vérifie dans les réglages du questionnaire, à la rubrique du thème (voir l'Annexe A si le thème n'est pas encore disponible ; sa mise en place est réservée à l'administrateur).
 
 ![Le thème DSFR sélectionné dans les réglages généraux du questionnaire](img/0-theme-active-sondage.png)
@@ -70,7 +68,7 @@ Vos questionnaires sont publiés au nom d'une administration. À ce titre, ils s
 
 ### Ce que le thème fait à votre place
 
-Vous n'avez **rien à installer, rien à paramétrer visuellement, rien à corriger** côté présentation. Le thème applique automatiquement :
+Vous n'avez **rien à paramétrer visuellement** côté présentation. Le thème applique automatiquement :
 
 - l'apparence officielle DSFR (couleurs, police Marianne, en-têtes, boutons) ;
 - les bonnes pratiques RGAA techniques et graphiques (contrastes, focus au clavier, structure de titres, libellés associés aux champs) ;
@@ -78,7 +76,7 @@ Vous n'avez **rien à installer, rien à paramétrer visuellement, rien à corri
 
 Autrement dit, deux questionnaires créés par deux personnes différentes auront la même qualité de présentation, sans effort particulier.
 
-> **⚠️ Une nuance importante.** Le thème prend en charge la part **technique et graphique** de l'accessibilité. Mais la conformité RGAA **légale** dépend aussi de votre **contenu éditorial** : un libellé de question clair, une image correctement décrite, un lien explicite, une langue accessible. Cette part-là relève de vous, et de personne d'autre (voir section 4 (Accessibilité éditoriale)). Le thème **vous met sur de bons rails, il ne signe pas l'audit à votre place.**
+> **⚠️ Une nuance importante.** Le thème prend en charge la part **technique et graphique** de l'accessibilité. Mais la conformité RGAA **légale** dépend aussi de votre **contenu éditorial** : un libellé de question clair, une image correctement décrite, un lien explicite, une langue accessible. Cette part-là relève de vous, et de personne d'autre (voir section 4 (Accessibilité éditoriale)). Le thème **vous met sur de bons rails, il ne garantit pas la conformité à votre place.**
 
 ### Votre rôle : le sens, pas la forme
 
@@ -93,7 +91,7 @@ Retenez la formule : **libellé de question = titre (texte court)**, **aide = co
 
 ### Les composants ont un sens, pas une décoration
 
-Le thème met à votre disposition des composants DSFR (encadrés, mises en avant, accordéons, badges…). **Chacun porte un sens précis** : on ne les choisit pas parce qu'ils sont « jolis », mais parce qu'ils correspondent à une intention éditoriale.
+Le thème met à votre disposition des composants DSFR (encadrés, mises en avant, accordéons, badges…). **Chacun porte un sens précis** : on ne les choisit pas pour leur forme ou leur rendu, mais parce qu'ils correspondent à une intention éditoriale.
 
 Quelques exemples pour fixer les idées (le référentiel complet est détaillé à la **section 6 (Mises en forme et composants DSFR)**) :
 
@@ -132,49 +130,32 @@ Pour chaque option : son **rôle**, sa **valeur par défaut**, **quand la change
 
 Ces options concernent la mise en page générale et le comportement du questionnaire.
 
-#### `container` — Largeur du conteneur
-- **Rôle** : affiche le questionnaire centré dans un conteneur de largeur limitée, ou en pleine largeur.
-- **Défaut** : `off` (pleine largeur).
-- **Quand la changer** : passez à `on` pour centrer le contenu du questionnaire au lieu qu'il occupe toute la largeur de l'écran. Recommandé pour les questionnaires à contenu textuel dense (meilleur confort de lecture).
-- **Impact a11y/DSFR** : le contenu centré respecte les marges DSFR ; utile pour limiter la longueur des lignes de texte.
-
-#### `showpopups` — Affichage des messages
-- **Rôle** : mode d'affichage des messages système (sauvegarde, question « douce » non répondue) : **Sur la page** (`0`), **Popup** (`1`), ou **Masqués** (`-1`).
-- **Défaut** : `0` (sur la page).
-- **Quand la changer** : `1` pour des popups, `-1` pour masquer totalement ces messages.
-- **Impact a11y/DSFR** : l'affichage **sur la page** (défaut) est le plus accessible car le message reste dans le flux ; évitez les popups si vous n'avez pas besoin de forcer l'attention.
-
-#### `showclearall` — Bouton « Tout effacer »
+#### Bouton « Tout effacer »
 - **Rôle** : affiche en bas de page un bouton permettant de réinitialiser toutes les réponses.
 - **Défaut** : `off`.
 - **Quand la changer** : activez-le pour laisser le répondant remettre à zéro sa saisie.
 - **Impact a11y/DSFR** : action destructive ; ne l'activez que si elle a un sens pour vos répondants.
 
-#### `questionhelptextposition` — Position de l'aide de question
-- **Rôle** : place le texte d'aide **au-dessus** (`top`) ou **en dessous** (`bottom`) de la question.
-- **Défaut** : `top`.
-- **Quand la changer** : `bottom` pour afficher l'aide sous le libellé de la question.
-- **Impact a11y/DSFR** : l'aide reste rattachée à la question quel que soit le choix ; c'est une préférence éditoriale.
 
-#### `fixnumauto` — Correction automatique des nombres
+#### Correction automatique des nombres
 - **Rôle** : corrige la saisie numérique (virgule → point). `enable` = tous les champs numériques côté répondant ; `partial` = uniquement les calculs côté serveur ; `disable` = aucune correction.
 - **Défaut** : `enable`.
 - **Quand la changer** : `partial` pour ne corriger que les calculs côté serveur ; `disable` si vous voulez imposer un format de saisie strict.
 - **Impact a11y/DSFR** : `enable` évite des erreurs de saisie frustrantes (virgule décimale française) — laissez-le sauf besoin précis.
 
-#### `showquestioncode` — Afficher le code de question
+#### Afficher le code de question
 - **Rôle** : affiche le code/numéro de question (utile pour les questions conditionnelles, selon les réglages du questionnaire).
 - **Défaut** : `on`.
 - **Quand la changer** : désactivez pour masquer ces codes aux répondants.
 - **Impact a11y/DSFR** : sans incidence directe ; un code technique visible peut toutefois nuire à la lisibilité pour le répondant.
 
-#### `sanitize_rte_content` — Nettoyage des mises en forme non conformes ⭐
+#### Nettoyage des mises en forme non conformes ⭐
 - **Rôle** : nettoie automatiquement les mises en forme du libellé et de l'aide des questions pour garantir la conformité DSFR.
 - **Défaut** : `on`.
 - **Quand la changer** : ne le désactivez **que** si vous devez volontairement conserver une mise en forme particulière dans un libellé de question ou une aide — au risque de casser la conformité DSFR.
 - **Impact a11y/DSFR** : **option de conformité clé.** Elle empêche que des couleurs, tailles ou polices collées depuis Word ou un autre site ne dégradent l'accessibilité et la charte. **Laissez-la activée.** C'est le filet de sécurité qui garantit que la présentation reste normalisée quel que soit le contenu collé (voir la section 5 (Utiliser l'éditeur de texte)).
 
-#### `contributor_hints` — Repères contributeur ⭐
+#### Repères contributeur ⭐
 - **Rôle** : en **prévisualisation**, signale les mises en forme qui ne seront **pas conservées**. Ces repères sont visibles uniquement en aperçu — **jamais** par les répondants.
 - **Défaut** : `on`.
 - **Quand la changer** : désactivez-le pour ne plus voir ces avertissements en prévisualisation (déconseillé pendant la conception).
@@ -182,7 +163,7 @@ Ces options concernent la mise en page générale et le comportement du question
 
 ![Repères contributeur affichés en prévisualisation, signalant une mise en forme non conservée](img/8-couleur-vers-composant.png)
 
-#### `show_pdf_export` — Export PDF du récapitulatif
+#### Export PDF du récapitulatif
 - **Rôle** : affiche le bouton « Exporter en PDF » sur le récapitulatif des réponses. (Le bouton « Export PDF queXML », l'export standard de LimeSurvey, reste quant à lui toujours disponible.)
 - **Défaut** : `on`.
 - **Quand la changer** : désactivez pour masquer ce bouton d'export du récapitulatif.
@@ -204,19 +185,19 @@ Ces options concernent la mise en page générale et le comportement du question
 >
 > Et une règle d'affichage : **dès qu'un logo opérateur est présent**, le texte du bloc-marque Marianne (`marianne_text`, onglet Header et footer) **doit afficher « République Française »**. En cas de doute, n'activez pas le logo : le bloc-marque seul est toujours conforme.
 
-#### `brandlogo` — Activer le logo opérateur
+#### Activer le logo opérateur
 - **Rôle** : active l'affichage du logo opérateur dans l'en-tête.
 - **Défaut** : `off`.
 - **Quand la changer** : activez **uniquement** si votre entité est autorisée (opérateur/direction recevant du public) **et** certifiée SIRCOM (voir encadré).
 - **Impact a11y/DSFR** : usage réglementé du bloc-marque ; un logo affiché à tort constitue un défaut de conformité.
 
-#### `brandlogo_sircom_certified` — Certification SIRCOM
+#### Certification SIRCOM
 - **Rôle** : atteste que vous avez obtenu l'accord du SIRCOM pour utiliser le logo de l'entité dans l'en-tête d'un site en Design System.
 - **Défaut** : `off`.
 - **Quand la changer** : activez pour attester la certification — c'est un **prérequis** à l'usage de `brandlogo`.
 - **Impact a11y/DSFR** : garde-fou de conformité ; ne cochez pas cette case sans accord réel.
 
-#### `brandlogofile` — Fichier du logo
+#### Fichier du logo
 - **Rôle** : sélectionne le fichier logo à afficher (liste déroulante ; formats PNG, JPG, GIF, ICO, SVG). Dépend de `brandlogo`.
 - **Défaut** : `./files/logo.png`.
 - **Quand la changer** : choisissez le fichier logo de votre entité. **Taille recommandée : 96 px de hauteur.**
@@ -228,49 +209,49 @@ Ces options concernent la mise en page générale et le comportement du question
 
 ![Onglet Header et footer avec les champs de titre et de bloc-marque](img/c2c-header-footer.png)
 
-#### `dsfr_theme` — Schéma de couleurs par défaut
+#### Schéma de couleurs par défaut
 - **Rôle** : variante de couleurs par défaut : **Clair** (`light`), **Sombre** (`dark`), **Système** (`system`). Le répondant peut choisir via la modale « Paramètres d'affichage » ; **sa préférence prime** et reste mémorisée sur son appareil.
 - **Défaut** : `light`.
 - **Quand la changer** : `dark` pour forcer le sombre par défaut, `system` pour suivre le réglage d'affichage clair/sombre du système du répondant.
 - **Impact a11y/DSFR** : les trois schémas sont conformes ; laisser le choix au répondant est une bonne pratique d'accessibilité (déjà assuré par la modale).
 
-#### `show_marianne` — Afficher la Marianne
+#### Afficher la Marianne
 - **Rôle** : affiche le logo Marianne du bloc-marque.
 - **Défaut** : `on`.
 - **Quand la changer** : **rarement** désactivé ; laissez `on` pour la conformité DSFR de l'État.
 - **Impact a11y/DSFR** : le bloc-marque est un élément **obligatoire** du DSFR pour un site de l'État.
 
-#### `show_footer_links` — Liens du pied de page
+#### Liens du pied de page
 - **Rôle** : affiche la barre de liens du pied de page (accessibilité, mentions légales, données personnelles, cookies).
 - **Défaut** : `on`.
 - **Quand la changer** : ne désactivez que si ces liens sont gérés ailleurs (**déconseillé**).
 - **Impact a11y/DSFR** : ces liens sont **obligatoires** (accessibilité, mentions légales, données personnelles). Les masquer met votre site en défaut de conformité.
 
-#### `marianne_text` — Texte du bloc-marque
+#### Texte du bloc-marque
 - **Rôle** : texte sous le bloc-marque Marianne, utilisé **dans l'en-tête ET le pied de page** (zone de 2 lignes).
 - **Défaut** : « République Française » (réparti sur deux lignes).
 - **Quand la changer** : **doit** afficher « République Française » dès qu'un logo opérateur (`brandlogo`) est présent (voir encadré Images).
 - **Impact a11y/DSFR** : élément normé du bloc-marque ; conservez le libellé officiel.
 
-#### `header_title` — Titre du service
+#### Titre du service
 - **Rôle** : titre du service/site affiché dans l'en-tête (zone de 2 lignes).
 - **Défaut** : `Ministères économiques et financiers`.
 - **Quand la changer** : renseignez le nom du service ou du site propre à votre questionnaire.
 - **Impact a11y/DSFR** : c'est le repère d'identification principal ; soyez explicite et concis.
 
-#### `baseline_text` — Baseline
+#### Baseline
 - **Rôle** : accroche affichée sous le titre du service, dans l'en-tête (zone de 2 lignes).
 - **Défaut** : vide.
 - **Quand la changer** : renseignez pour afficher une accroche sous le titre du service.
 - **Impact a11y/DSFR** : facultatif ; gardez-la courte.
 
-#### `footer_text` — Texte du pied de page
+#### Texte du pied de page
 - **Rôle** : texte libre / description courte dans le pied de page (zone de 3 lignes).
 - **Défaut** : « galileo.finances.gouv.fr est le service en ligne destiné aux enquêtes et formulaires en ligne des ministères économiques et financiers ».
 - **Quand la changer** : adaptez au service qui édite le questionnaire.
 - **Impact a11y/DSFR** : contenu éditorial ; texte clair et sans jargon.
 
-#### `intellectual_property` — Propriété intellectuelle
+#### Propriété intellectuelle
 - **Rôle** : mention de propriété intellectuelle (licence, copyright ; zone de 3 lignes). **Réutilisée dans les mentions légales auto-générées.**
 - **Défaut** : « Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de ce site sont proposés sous licence etalab-2.0 ».
 - **Quand la changer** : adaptez si la licence ou le copyright diffère.
@@ -282,99 +263,86 @@ Ces options concernent la mise en page générale et le comportement du question
 
 ![Onglet Accessibilité avec la mention de conformité RGAA](img/c2d-accessibilite.png)
 
-Ces options alimentent la **déclaration d'accessibilité** obligatoire et la mention affichée en pied de page.
+Ces options alimentent la **déclaration d'accessibilité** obligatoire et la mention affichée en pied de page. À ne modifier que dans le cas où vous réalisez un audit spécifique de votre formulaire.
 
-#### `rgaa_conformity` — Niveau de conformité RGAA
-- **Rôle** : mention affichée en pied de page : **Totalement**, **Partiellement** ou **Non** conforme. Doit refléter l'**audit réel** du site rendu, **contenu éditorial compris**.
+#### Niveau de conformité RGAA
+- **Rôle** : mention affichée en pied de page : **Totalement**, **Partiellement** ou **Non** conforme.
 - **Défaut** : `totalement`.
-- **Quand la changer** : mettez `partiellement` ou `non` selon le résultat réel de l'audit d'accessibilité.
-- **Impact a11y/DSFR** : **mention légale engageante.** N'affirmez jamais « Totalement conforme » sans audit ; votre contenu (libellés, images, liens) fait partie du périmètre audité — d'où l'importance de la section 4 (Accessibilité éditoriale).
+- **Quand la changer** : Si vous réalisez un audit de votre formulaire, indiquez les résultats de l'audit.
 
-> #### ⚠️ Ne laissez jamais la valeur par défaut
->
-> La valeur par défaut « Totalement conforme » produit une déclaration juridiquement **fausse** tant qu'aucun audit d'accessibilité n'a eu lieu. **Réglez-la sur votre niveau réel (Non ou Partiellement)** : c'est une **étape obligatoire avant activation** du questionnaire (voir la section 7 (Prévisualiser et vérifier)).
+
+> #### ⚠️ Déclaration d'accessibilité
 >
 > Le thème prend en charge la part **technique et graphique** de l'accessibilité (contrastes, focus, structure des composants) ; mais la conformité RGAA **légale** dépend **aussi** de votre contenu éditorial (libellés, images, liens), qui reste votre responsabilité. Le thème **vous met sur de bons rails, il ne signe pas l'audit à votre place.**
 
-#### `rgaa_declaration_date` — Date de la déclaration
+#### Date de la déclaration
 - **Rôle** : date de publication de la déclaration d'accessibilité (format JJ/MM/AAAA ; date réelle, figée, elle n'évolue pas à l'affichage).
 - **Défaut** : vide.
-- **Quand la changer** : renseignez la date réelle de publication de la déclaration.
-- **Impact a11y/DSFR** : obligation réglementaire ; date exacte requise.
 
-#### `accessibility_statement_url` — URL de la déclaration
+#### URL de la déclaration
 - **Rôle** : URL de la page dédiée de déclaration d'accessibilité. Si renseignée, le lien du pied de page **remplace la modale**.
 - **Défaut** : vide.
-- **Quand la changer** : renseignez quand la déclaration RGAA est publiée à une URL pérenne (**recommandé**).
-- **Impact a11y/DSFR** : une déclaration sur page dédiée pérenne est la solution la plus robuste.
 
-#### `accessibility_content` — Contenu de la modale
+#### Contenu de la modale
 - **Rôle** : contenu affiché dans la modale « Accessibilité » (déclaration type ; zone de 40 lignes). Le titre principal est déjà fourni automatiquement.
 - **Défaut** : vide.
-- **Quand la changer** : remplissez pour fournir le contenu de la déclaration en modale — **sauf** si vous utilisez `accessibility_statement_url`.
-- **Impact a11y/DSFR** : utilisez soit l'URL, soit ce contenu ; ne dupliquez pas.
 
 ---
 
 ### Onglet « Mentions légales »
 
-Ces champs **génèrent automatiquement** les mentions légales. Renseignez-les tant que `legal_content` est vide.
+Ces champs **génèrent automatiquement** les mentions légales. Un certain nombre de champs **sont vides par défaut et doivent être renseignés**
 
-#### `editor` — Éditeur
+#### Éditeur
 - **Rôle** : nom, adresse, SIRET, contact (zone de 5 lignes). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `legal_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `publication_director` — Directeur de publication
+#### Directeur de publication
 - **Rôle** : nom, fonction (zone de 3 lignes). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `legal_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `host` — Hébergeur
+#### Hébergeur
 - **Rôle** : nom, adresse, téléphone (zone de 3 lignes). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `legal_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `legal_content` — Mentions légales personnalisées
+#### Mentions légales personnalisées
 - **Rôle** : contenu personnalisé (zone de 10 lignes). **Si rempli, il remplace entièrement** le contenu par défaut, et les champs ci-dessus sont **ignorés**.
-- **Défaut** : vide.
-- **Quand la changer** : remplissez **uniquement** pour surcharger totalement les mentions légales générées.
-- **Impact a11y/DSFR** : mention légale obligatoire ; laissez la génération auto faire le travail sauf besoin spécifique.
+- **Défaut** : vide. — **À renseigner**
+
 
 ---
 
 ### Onglet « Données personnelles »
 
-Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD). Renseignez-les tant que `privacy_content` est vide.
+Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD).
 
-#### `data_controller` — Responsable de traitement
+#### Responsable de traitement
 - **Rôle** : nom, organisme, contact (zone de 3 lignes). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `privacy_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `survey_purpose` — Finalité
+#### Finalité
 - **Rôle** : finalité/objectif du questionnaire (zone de 3 lignes). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `privacy_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `data_retention` — Durée de conservation
+#### Durée de conservation
 - **Rôle** : durée de conservation des données (ex. « 12 mois »). Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `privacy_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `contact_email` — Contact DPO / RGPD
+#### Contact DPO / RGPD
 - **Rôle** : email du DPO ou référent RGPD. Sert à la génération auto.
-- **Défaut** : vide. — **Quand la changer** : renseignez tant que `privacy_content` est vide.
+- **Défaut** : vide. — **À renseigner**
 
-#### `privacy_content` — Politique personnalisée
+#### Politique personnalisée
 - **Rôle** : contenu personnalisé (zone de 10 lignes). **Si rempli, il remplace entièrement** la génération auto (responsable, finalité, base légale, destinataires, durée, droits, contact, réclamation CNIL).
-- **Défaut** : vide.
-- **Quand la changer** : remplissez **uniquement** pour surcharger totalement la politique générée.
-- **Impact a11y/DSFR** : obligation RGPD ; la génération auto couvre déjà les rubriques attendues.
+- **Défaut** : vide. — **À renseigner**
 
 ---
 
 ### Onglet « Gestion des cookies »
 
-#### `cookies_content` — Contenu de la modale cookies
+#### Contenu de la modale cookies
 - **Rôle** : contenu de la modale « Gestion des cookies » (zone de 10 lignes). Le titre principal est déjà fourni automatiquement.
-- **Défaut** : vide.
-- **Quand la changer** : remplissez pour fournir votre politique de gestion des cookies.
-- **Impact a11y/DSFR** : lien obligatoire du pied de page ; fournissez un contenu même bref.
+- **Défaut** : Mention minimales sur les cookies de session (exemptés de consentement)
 
 ---
 
@@ -384,19 +352,19 @@ Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD
 
 > **Pourquoi pas un CAPTCHA ?** Le CAPTCHA natif de LimeSurvey n'est **pas conforme RGAA** : le CAPTCHA image natif ne fournit **pas d'alternative accessible** (texte ou audio) et constitue donc un obstacle contraire au RGAA. Cette protection le remplace par un **défi texte accessible**, intégré dans le flot normal du questionnaire.
 
-#### `antibot_enabled` — Activer la protection
+#### Activer la protection
 - **Rôle** : active la protection anti-bot (alternative accessible au CAPTCHA).
 - **Défaut** : `off`.
 - **Quand la changer** : activez pour protéger un questionnaire **public** des soumissions automatisées sans casser l'accessibilité.
 - **Impact a11y/DSFR** : solution **accessible** par conception ; **nettement plus accessible qu'un CAPTCHA image, mais à concevoir avec soin** (voir les défis ci-dessous). À préférer systématiquement au CAPTCHA.
 
-#### `antibot_timer` — Délai minimum
+#### Délai minimum
 - **Rôle** : temps minimum (en secondes) avant validation.
 - **Défaut** : `2`.
 - **Quand la changer** : augmentez (max conseillé **10 s**) pour renforcer la protection ; **minimum conseillé 2 s** pour ne pas gêner les humains rapides.
 - **Impact a11y/DSFR** : un délai **ne doit jamais être la seule barrière** — combinez-le avec un défi texte. Un délai trop long peut par ailleurs pénaliser certains répondants ; restez dans la fourchette 2–10 s.
 
-#### `antibot_custom_questions` — Questions personnalisées
+#### Questions personnalisées
 - **Rôle** : vos propres défis, **une par ligne** au format `Question|Réponse` (zone de 8 lignes). Vide = **15 questions par défaut** du thème ; rempli = **uniquement** vos questions personnalisées.
 - **Défaut** : vide.
 - **Quand la changer** : renseignez pour remplacer les questions par défaut par vos propres défis texte.
@@ -406,9 +374,9 @@ Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD
 
 ### En résumé
 
-- Deux options veillent en permanence sur la conformité : **`sanitize_rte_content`** (nettoie les mises en forme collées) et **`contributor_hints`** (vous prévient en aperçu). **Laissez-les activées.**
-- Réglez **impérativement** le niveau de conformité RGAA (`rgaa_conformity`) sur votre valeur **réelle avant activation** : la valeur par défaut « Totalement conforme » est **juridiquement fausse** sans audit (voir la section 7 (Prévisualiser et vérifier)).
-- Le **logo opérateur** (`brandlogo`) est réservé aux entités autorisées et certifiées SIRCOM ; en cas de doute, le **bloc-marque Marianne seul suffit et reste toujours conforme**.
+- Deux options veillent en permanence sur la conformité : **Nettoyer les styles inline du titre et de l'aide des questions** (nettoie les mises en forme collées) et **Repères contributeur en prévisualisation** (vous prévient en aperçu). **Laissez-les activées.**
+- Réglez **si possible** le niveau de conformité RGAA  sur votre valeur **réelle avant activation** : la valeur par défaut « Totalement conforme » est **juridiquement fragile** sans audit (voir la section 7 (Prévisualiser et vérifier)).
+- Le **logo opérateur** est réservé aux entités autorisées et certifiées SIRCOM ; en cas de doute, le **bloc-marque Marianne seul suffit et reste toujours conforme**.
 - Les onglets **Accessibilité, Mentions légales, Données personnelles, Cookies** alimentent des pages **obligatoires** : renseignez-les, et laissez la **génération automatique** faire le travail sauf besoin de surcharge totale.
 - Après tout changement, **prévisualisez** (voir la section 7 (Prévisualiser et vérifier)) pour vérifier le rendu.
 
@@ -547,7 +515,7 @@ Et si une **aide** devient longue au point d'appeler des sous-titres ? C'est le 
 
 ### 4.4. Ne jamais faire porter le sens par la seule couleur
 
-Environ 8 % des hommes perçoivent mal certaines couleurs, et un lecteur d'écran n'annonce aucune couleur. Une information transmise **uniquement** par la couleur est donc perdue pour une partie du public.
+Environ 8,5 % de la population perçoit mal certaines couleurs, et un lecteur d'écran n'annonce aucune couleur. Une information transmise **uniquement** par la couleur est donc perdue pour une partie du public.
 
 - N'écrivez pas « les champs en rouge sont obligatoires » : ajoutez une mention texte. Le caractère obligatoire d'une question est d'ailleurs signalé **nativement** par LimeSurvey (astérisque et mention), pas seulement par une couleur — vous n'avez rien à ajouter à la main.
 - Ne dites pas « voir l'encadré vert / la partie orange » : nommez le contenu, pas sa couleur.

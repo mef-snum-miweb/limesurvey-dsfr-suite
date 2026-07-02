@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Guide du contributeur ��� Th��me DSFR pour LimeSurvey</title>
+  <title>Guide du contributeur — Thème DSFR pour LimeSurvey</title>
   <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -338,16 +338,9 @@ des questionnaires conformes RGAA et DSFR sans compétence technique.</p>
 <p>Ce guide est destiné aux <strong>gestionnaires d’enquêtes</strong> :
 les agents métier qui conçoivent, rédigent et administrent des
 questionnaires dans LimeSurvey. Il ne suppose <strong>aucune compétence
-technique</strong> : vous n’avez pas besoin de savoir coder, ni de
-connaître le HTML, le CSS ou le fonctionnement d’un thème. Si vous savez
-créer un groupe de questions et rédiger un libellé de question, vous
-avez le niveau requis.</p>
-<p>Les quelques opérations plus techniques et rares (le mode code de
-l’éditeur, l’identifiant d’un accordéon, le marquage de la langue d’un
-passage) ne vous seront <strong>jamais</strong> demandées. Le jour où un
-tel besoin se présente, adressez-vous à votre <strong>référent thème /
-webmestre</strong> : ce guide vous indiquera à chaque fois vers qui vous
-tourner.</p>
+technique</strong> : vous n’avez pas besoin de connaître le HTML ou le
+fonctionnement d’un thème. Si vous savez créer un groupe de questions et
+rédiger un libellé de question, vous avez le niveau requis.</p>
 <h3 id="ce-que-vous-allez-apprendre">Ce que vous allez apprendre</h3>
 <ul>
 <li><strong>Pourquoi</strong> vos questionnaires adoptent
@@ -389,8 +382,8 @@ thème habille le reste.</p>
 <h3 id="prérequis">Prérequis</h3>
 <p>Avant de suivre ce guide, assurez-vous de disposer de :</p>
 <ol type="1">
-<li>Un <strong>accès administrateur</strong> (ou de conception) à votre
-instance LimeSurvey.</li>
+<li>Un <strong>accès contributeur</strong> à votre instance
+LimeSurvey.</li>
 <li>Le <strong>thème DSFR activé</strong> sur le questionnaire concerné.
 Cela se vérifie dans les réglages du questionnaire, à la rubrique du
 thème (voir l’Annexe A si le thème n’est pas encore disponible ; sa mise
@@ -444,9 +437,8 @@ déjà conforme ; à vous le fond.</p>
 </blockquote>
 <h3 id="ce-que-le-thème-fait-à-votre-place">Ce que le thème fait à votre
 place</h3>
-<p>Vous n’avez <strong>rien à installer, rien à paramétrer visuellement,
-rien à corriger</strong> côté présentation. Le thème applique
-automatiquement :</p>
+<p>Vous n’avez <strong>rien à paramétrer visuellement</strong> côté
+présentation. Le thème applique automatiquement :</p>
 <ul>
 <li>l’apparence officielle DSFR (couleurs, police Marianne, en-têtes,
 boutons) ;</li>
@@ -466,7 +458,7 @@ la conformité RGAA <strong>légale</strong> dépend aussi de votre
 image correctement décrite, un lien explicite, une langue accessible.
 Cette part-là relève de vous, et de personne d’autre (voir section 4
 (Accessibilité éditoriale)). Le thème <strong>vous met sur de bons
-rails, il ne signe pas l’audit à votre place.</strong></p>
+rails, il ne garantit pas la conformité à votre place.</strong></p>
 </blockquote>
 <h3 id="votre-rôle-le-sens-pas-la-forme">Votre rôle : le sens, pas la
 forme</h3>
@@ -494,7 +486,7 @@ question.</p>
 ont un sens, pas une décoration</h3>
 <p>Le thème met à votre disposition des composants DSFR (encadrés, mises
 en avant, accordéons, badges…). <strong>Chacun porte un sens
-précis</strong> : on ne les choisit pas parce qu’ils sont « jolis »,
+précis</strong> : on ne les choisit pas pour leur forme ou leur rendu,
 mais parce qu’ils correspondent à une intention éditoriale.</p>
 <p>Quelques exemples pour fixer les idées (le référentiel complet est
 détaillé à la <strong>section 6 (Mises en forme et composants
@@ -573,36 +565,7 @@ DSFR</figcaption>
 </figure>
 <p>Ces options concernent la mise en page générale et le comportement du
 questionnaire.</p>
-<h4 id="container-largeur-du-conteneur"><code>container</code> — Largeur
-du conteneur</h4>
-<ul>
-<li><strong>Rôle</strong> : affiche le questionnaire centré dans un
-conteneur de largeur limitée, ou en pleine largeur.</li>
-<li><strong>Défaut</strong> : <code>off</code> (pleine largeur).</li>
-<li><strong>Quand la changer</strong> : passez à <code>on</code> pour
-centrer le contenu du questionnaire au lieu qu’il occupe toute la
-largeur de l’écran. Recommandé pour les questionnaires à contenu textuel
-dense (meilleur confort de lecture).</li>
-<li><strong>Impact a11y/DSFR</strong> : le contenu centré respecte les
-marges DSFR ; utile pour limiter la longueur des lignes de texte.</li>
-</ul>
-<h4 id="showpopups-affichage-des-messages"><code>showpopups</code> —
-Affichage des messages</h4>
-<ul>
-<li><strong>Rôle</strong> : mode d’affichage des messages système
-(sauvegarde, question « douce » non répondue) : <strong>Sur la
-page</strong> (<code>0</code>), <strong>Popup</strong> (<code>1</code>),
-ou <strong>Masqués</strong> (<code>-1</code>).</li>
-<li><strong>Défaut</strong> : <code>0</code> (sur la page).</li>
-<li><strong>Quand la changer</strong> : <code>1</code> pour des popups,
-<code>-1</code> pour masquer totalement ces messages.</li>
-<li><strong>Impact a11y/DSFR</strong> : l’affichage <strong>sur la
-page</strong> (défaut) est le plus accessible car le message reste dans
-le flux ; évitez les popups si vous n’avez pas besoin de forcer
-l’attention.</li>
-</ul>
-<h4 id="showclearall-bouton-tout-effacer"><code>showclearall</code> —
-Bouton « Tout effacer »</h4>
+<h4 id="bouton-tout-effacer">Bouton « Tout effacer »</h4>
 <ul>
 <li><strong>Rôle</strong> : affiche en bas de page un bouton permettant
 de réinitialiser toutes les réponses.</li>
@@ -612,20 +575,8 @@ répondant remettre à zéro sa saisie.</li>
 <li><strong>Impact a11y/DSFR</strong> : action destructive ; ne
 l’activez que si elle a un sens pour vos répondants.</li>
 </ul>
-<h4 id="questionhelptextposition-position-de-laide-de-question"><code>questionhelptextposition</code>
-— Position de l’aide de question</h4>
-<ul>
-<li><strong>Rôle</strong> : place le texte d’aide
-<strong>au-dessus</strong> (<code>top</code>) ou <strong>en
-dessous</strong> (<code>bottom</code>) de la question.</li>
-<li><strong>Défaut</strong> : <code>top</code>.</li>
-<li><strong>Quand la changer</strong> : <code>bottom</code> pour
-afficher l’aide sous le libellé de la question.</li>
-<li><strong>Impact a11y/DSFR</strong> : l’aide reste rattachée à la
-question quel que soit le choix ; c’est une préférence éditoriale.</li>
-</ul>
-<h4 id="fixnumauto-correction-automatique-des-nombres"><code>fixnumauto</code>
-— Correction automatique des nombres</h4>
+<h4 id="correction-automatique-des-nombres">Correction automatique des
+nombres</h4>
 <ul>
 <li><strong>Rôle</strong> : corrige la saisie numérique (virgule →
 point). <code>enable</code> = tous les champs numériques côté répondant
@@ -639,8 +590,7 @@ voulez imposer un format de saisie strict.</li>
 erreurs de saisie frustrantes (virgule décimale française) — laissez-le
 sauf besoin précis.</li>
 </ul>
-<h4 id="showquestioncode-afficher-le-code-de-question"><code>showquestioncode</code>
-— Afficher le code de question</h4>
+<h4 id="afficher-le-code-de-question">Afficher le code de question</h4>
 <ul>
 <li><strong>Rôle</strong> : affiche le code/numéro de question (utile
 pour les questions conditionnelles, selon les réglages du
@@ -652,8 +602,8 @@ codes aux répondants.</li>
 technique visible peut toutefois nuire à la lisibilité pour le
 répondant.</li>
 </ul>
-<h4 id="sanitize_rte_content-nettoyage-des-mises-en-forme-non-conformes"><code>sanitize_rte_content</code>
-— Nettoyage des mises en forme non conformes ⭐</h4>
+<h4 id="nettoyage-des-mises-en-forme-non-conformes">Nettoyage des mises
+en forme non conformes ⭐</h4>
 <ul>
 <li><strong>Rôle</strong> : nettoie automatiquement les mises en forme
 du libellé et de l’aide des questions pour garantir la conformité
@@ -670,8 +620,7 @@ depuis Word ou un autre site ne dégradent l’accessibilité et la charte.
 garantit que la présentation reste normalisée quel que soit le contenu
 collé (voir la section 5 (Utiliser l’éditeur de texte)).</li>
 </ul>
-<h4 id="contributor_hints-repères-contributeur"><code>contributor_hints</code>
-— Repères contributeur ⭐</h4>
+<h4 id="repères-contributeur">Repères contributeur ⭐</h4>
 <ul>
 <li><strong>Rôle</strong> : en <strong>prévisualisation</strong>,
 signale les mises en forme qui ne seront <strong>pas
@@ -693,8 +642,7 @@ composants DSFR) et 7 (Prévisualiser et vérifier)).</li>
 <figcaption aria-hidden="true">Repères contributeur affichés en
 prévisualisation, signalant une mise en forme non conservée</figcaption>
 </figure>
-<h4 id="show_pdf_export-export-pdf-du-récapitulatif"><code>show_pdf_export</code>
-— Export PDF du récapitulatif</h4>
+<h4 id="export-pdf-du-récapitulatif">Export PDF du récapitulatif</h4>
 <ul>
 <li><strong>Rôle</strong> : affiche le bouton « Exporter en PDF » sur le
 récapitulatif des réponses. (Le bouton « Export PDF queXML », l’export
@@ -732,8 +680,7 @@ présent</strong>, le texte du bloc-marque Marianne
 afficher « République Française »</strong>. En cas de doute, n’activez
 pas le logo : le bloc-marque seul est toujours conforme.</p>
 </blockquote>
-<h4 id="brandlogo-activer-le-logo-opérateur"><code>brandlogo</code> —
-Activer le logo opérateur</h4>
+<h4 id="activer-le-logo-opérateur">Activer le logo opérateur</h4>
 <ul>
 <li><strong>Rôle</strong> : active l’affichage du logo opérateur dans
 l’en-tête.</li>
@@ -745,8 +692,7 @@ SIRCOM (voir encadré).</li>
 <li><strong>Impact a11y/DSFR</strong> : usage réglementé du bloc-marque
 ; un logo affiché à tort constitue un défaut de conformité.</li>
 </ul>
-<h4 id="brandlogo_sircom_certified-certification-sircom"><code>brandlogo_sircom_certified</code>
-— Certification SIRCOM</h4>
+<h4 id="certification-sircom">Certification SIRCOM</h4>
 <ul>
 <li><strong>Rôle</strong> : atteste que vous avez obtenu l’accord du
 SIRCOM pour utiliser le logo de l’entité dans l’en-tête d’un site en
@@ -758,8 +704,7 @@ certification — c’est un <strong>prérequis</strong> à l’usage de
 <li><strong>Impact a11y/DSFR</strong> : garde-fou de conformité ; ne
 cochez pas cette case sans accord réel.</li>
 </ul>
-<h4 id="brandlogofile-fichier-du-logo"><code>brandlogofile</code> —
-Fichier du logo</h4>
+<h4 id="fichier-du-logo">Fichier du logo</h4>
 <ul>
 <li><strong>Rôle</strong> : sélectionne le fichier logo à afficher
 (liste déroulante ; formats PNG, JPG, GIF, ICO, SVG). Dépend de
@@ -781,8 +726,8 @@ et footer » — En-tête et pied de page</h3>
 <figcaption aria-hidden="true">Onglet Header et footer avec les champs
 de titre et de bloc-marque</figcaption>
 </figure>
-<h4 id="dsfr_theme-schéma-de-couleurs-par-défaut"><code>dsfr_theme</code> —
-Schéma de couleurs par défaut</h4>
+<h4 id="schéma-de-couleurs-par-défaut">Schéma de couleurs par
+défaut</h4>
 <ul>
 <li><strong>Rôle</strong> : variante de couleurs par défaut :
 <strong>Clair</strong> (<code>light</code>), <strong>Sombre</strong>
@@ -798,8 +743,7 @@ d’affichage clair/sombre du système du répondant.</li>
 ; laisser le choix au répondant est une bonne pratique d’accessibilité
 (déjà assuré par la modale).</li>
 </ul>
-<h4 id="show_marianne-afficher-la-marianne"><code>show_marianne</code> —
-Afficher la Marianne</h4>
+<h4 id="afficher-la-marianne">Afficher la Marianne</h4>
 <ul>
 <li><strong>Rôle</strong> : affiche le logo Marianne du
 bloc-marque.</li>
@@ -810,8 +754,7 @@ l’État.</li>
 <li><strong>Impact a11y/DSFR</strong> : le bloc-marque est un élément
 <strong>obligatoire</strong> du DSFR pour un site de l’État.</li>
 </ul>
-<h4 id="show_footer_links-liens-du-pied-de-page"><code>show_footer_links</code>
-— Liens du pied de page</h4>
+<h4 id="liens-du-pied-de-page">Liens du pied de page</h4>
 <ul>
 <li><strong>Rôle</strong> : affiche la barre de liens du pied de page
 (accessibilité, mentions légales, données personnelles, cookies).</li>
@@ -822,8 +765,7 @@ sont gérés ailleurs (<strong>déconseillé</strong>).</li>
 <strong>obligatoires</strong> (accessibilité, mentions légales, données
 personnelles). Les masquer met votre site en défaut de conformité.</li>
 </ul>
-<h4 id="marianne_text-texte-du-bloc-marque"><code>marianne_text</code> —
-Texte du bloc-marque</h4>
+<h4 id="texte-du-bloc-marque">Texte du bloc-marque</h4>
 <ul>
 <li><strong>Rôle</strong> : texte sous le bloc-marque Marianne, utilisé
 <strong>dans l’en-tête ET le pied de page</strong> (zone de 2
@@ -836,8 +778,7 @@ est présent (voir encadré Images).</li>
 <li><strong>Impact a11y/DSFR</strong> : élément normé du bloc-marque ;
 conservez le libellé officiel.</li>
 </ul>
-<h4 id="header_title-titre-du-service"><code>header_title</code> — Titre
-du service</h4>
+<h4 id="titre-du-service">Titre du service</h4>
 <ul>
 <li><strong>Rôle</strong> : titre du service/site affiché dans l’en-tête
 (zone de 2 lignes).</li>
@@ -848,8 +789,7 @@ du site propre à votre questionnaire.</li>
 <li><strong>Impact a11y/DSFR</strong> : c’est le repère d’identification
 principal ; soyez explicite et concis.</li>
 </ul>
-<h4 id="baseline_text-baseline"><code>baseline_text</code> —
-Baseline</h4>
+<h4 id="baseline">Baseline</h4>
 <ul>
 <li><strong>Rôle</strong> : accroche affichée sous le titre du service,
 dans l’en-tête (zone de 2 lignes).</li>
@@ -859,8 +799,7 @@ accroche sous le titre du service.</li>
 <li><strong>Impact a11y/DSFR</strong> : facultatif ; gardez-la
 courte.</li>
 </ul>
-<h4 id="footer_text-texte-du-pied-de-page"><code>footer_text</code> —
-Texte du pied de page</h4>
+<h4 id="texte-du-pied-de-page">Texte du pied de page</h4>
 <ul>
 <li><strong>Rôle</strong> : texte libre / description courte dans le
 pied de page (zone de 3 lignes).</li>
@@ -872,8 +811,7 @@ questionnaire.</li>
 <li><strong>Impact a11y/DSFR</strong> : contenu éditorial ; texte clair
 et sans jargon.</li>
 </ul>
-<h4 id="intellectual_property-propriété-intellectuelle"><code>intellectual_property</code>
-— Propriété intellectuelle</h4>
+<h4 id="propriété-intellectuelle">Propriété intellectuelle</h4>
 <ul>
 <li><strong>Rôle</strong> : mention de propriété intellectuelle
 (licence, copyright ; zone de 3 lignes). <strong>Réutilisée dans les
@@ -895,34 +833,19 @@ conformité RGAA</figcaption>
 </figure>
 <p>Ces options alimentent la <strong>déclaration
 d’accessibilité</strong> obligatoire et la mention affichée en pied de
-page.</p>
-<h4 id="rgaa_conformity-niveau-de-conformité-rgaa"><code>rgaa_conformity</code>
-— Niveau de conformité RGAA</h4>
+page. À ne modifier que dans le cas où vous réalisez un audit spécifique
+de votre formulaire.</p>
+<h4 id="niveau-de-conformité-rgaa">Niveau de conformité RGAA</h4>
 <ul>
 <li><strong>Rôle</strong> : mention affichée en pied de page :
 <strong>Totalement</strong>, <strong>Partiellement</strong> ou
-<strong>Non</strong> conforme. Doit refléter l’<strong>audit
-réel</strong> du site rendu, <strong>contenu éditorial
-compris</strong>.</li>
+<strong>Non</strong> conforme.</li>
 <li><strong>Défaut</strong> : <code>totalement</code>.</li>
-<li><strong>Quand la changer</strong> : mettez
-<code>partiellement</code> ou <code>non</code> selon le résultat réel de
-l’audit d’accessibilité.</li>
-<li><strong>Impact a11y/DSFR</strong> : <strong>mention légale
-engageante.</strong> N’affirmez jamais « Totalement conforme » sans
-audit ; votre contenu (libellés, images, liens) fait partie du périmètre
-audité — d’où l’importance de la section 4 (Accessibilité
-éditoriale).</li>
+<li><strong>Quand la changer</strong> : Si vous réalisez un audit de
+votre formulaire, indiquez les résultats de l’audit.</li>
 </ul>
 <blockquote>
-<h4 id="ne-laissez-jamais-la-valeur-par-défaut">⚠️ Ne laissez jamais la
-valeur par défaut</h4>
-<p>La valeur par défaut « Totalement conforme » produit une déclaration
-juridiquement <strong>fausse</strong> tant qu’aucun audit
-d’accessibilité n’a eu lieu. <strong>Réglez-la sur votre niveau réel
-(Non ou Partiellement)</strong> : c’est une <strong>étape obligatoire
-avant activation</strong> du questionnaire (voir la section 7
-(Prévisualiser et vérifier)).</p>
+<h4 id="déclaration-daccessibilité">⚠️ Déclaration d’accessibilité</h4>
 <p>Le thème prend en charge la part <strong>technique et
 graphique</strong> de l’accessibilité (contrastes, focus, structure des
 composants) ; mais la conformité RGAA <strong>légale</strong> dépend
@@ -930,148 +853,104 @@ composants) ; mais la conformité RGAA <strong>légale</strong> dépend
 liens), qui reste votre responsabilité. Le thème <strong>vous met sur de
 bons rails, il ne signe pas l’audit à votre place.</strong></p>
 </blockquote>
-<h4 id="rgaa_declaration_date-date-de-la-déclaration"><code>rgaa_declaration_date</code>
-— Date de la déclaration</h4>
+<h4 id="date-de-la-déclaration">Date de la déclaration</h4>
 <ul>
 <li><strong>Rôle</strong> : date de publication de la déclaration
 d’accessibilité (format JJ/MM/AAAA ; date réelle, figée, elle n’évolue
 pas à l’affichage).</li>
 <li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : renseignez la date réelle de
-publication de la déclaration.</li>
-<li><strong>Impact a11y/DSFR</strong> : obligation réglementaire ; date
-exacte requise.</li>
 </ul>
-<h4 id="accessibility_statement_url-url-de-la-déclaration"><code>accessibility_statement_url</code>
-— URL de la déclaration</h4>
+<h4 id="url-de-la-déclaration">URL de la déclaration</h4>
 <ul>
 <li><strong>Rôle</strong> : URL de la page dédiée de déclaration
 d’accessibilité. Si renseignée, le lien du pied de page <strong>remplace
 la modale</strong>.</li>
 <li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : renseignez quand la déclaration
-RGAA est publiée à une URL pérenne (<strong>recommandé</strong>).</li>
-<li><strong>Impact a11y/DSFR</strong> : une déclaration sur page dédiée
-pérenne est la solution la plus robuste.</li>
 </ul>
-<h4 id="accessibility_content-contenu-de-la-modale"><code>accessibility_content</code>
-— Contenu de la modale</h4>
+<h4 id="contenu-de-la-modale">Contenu de la modale</h4>
 <ul>
 <li><strong>Rôle</strong> : contenu affiché dans la modale «
 Accessibilité » (déclaration type ; zone de 40 lignes). Le titre
 principal est déjà fourni automatiquement.</li>
 <li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : remplissez pour fournir le
-contenu de la déclaration en modale — <strong>sauf</strong> si vous
-utilisez <code>accessibility_statement_url</code>.</li>
-<li><strong>Impact a11y/DSFR</strong> : utilisez soit l’URL, soit ce
-contenu ; ne dupliquez pas.</li>
 </ul>
 <hr />
 <h3 id="onglet-mentions-légales">Onglet « Mentions légales »</h3>
 <p>Ces champs <strong>génèrent automatiquement</strong> les mentions
-légales. Renseignez-les tant que <code>legal_content</code> est
-vide.</p>
-<h4 id="editor-éditeur"><code>editor</code> — Éditeur</h4>
+légales. Un certain nombre de champs <strong>sont vides par défaut et
+doivent être renseignés</strong></p>
+<h4 id="éditeur">Éditeur</h4>
 <ul>
 <li><strong>Rôle</strong> : nom, adresse, SIRET, contact (zone de 5
 lignes). Sert à la génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>legal_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="publication_director-directeur-de-publication"><code>publication_director</code>
-— Directeur de publication</h4>
+<h4 id="directeur-de-publication">Directeur de publication</h4>
 <ul>
 <li><strong>Rôle</strong> : nom, fonction (zone de 3 lignes). Sert à la
 génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>legal_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="host-hébergeur"><code>host</code> — Hébergeur</h4>
+<h4 id="hébergeur">Hébergeur</h4>
 <ul>
 <li><strong>Rôle</strong> : nom, adresse, téléphone (zone de 3 lignes).
 Sert à la génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>legal_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="legal_content-mentions-légales-personnalisées"><code>legal_content</code>
-— Mentions légales personnalisées</h4>
+<h4 id="mentions-légales-personnalisées">Mentions légales
+personnalisées</h4>
 <ul>
 <li><strong>Rôle</strong> : contenu personnalisé (zone de 10 lignes).
 <strong>Si rempli, il remplace entièrement</strong> le contenu par
 défaut, et les champs ci-dessus sont <strong>ignorés</strong>.</li>
-<li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : remplissez
-<strong>uniquement</strong> pour surcharger totalement les mentions
-légales générées.</li>
-<li><strong>Impact a11y/DSFR</strong> : mention légale obligatoire ;
-laissez la génération auto faire le travail sauf besoin spécifique.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
 <hr />
 <h3 id="onglet-données-personnelles">Onglet « Données personnelles
 »</h3>
 <p>Ces champs <strong>génèrent automatiquement</strong> la politique de
-confidentialité (RGPD). Renseignez-les tant que
-<code>privacy_content</code> est vide.</p>
-<h4 id="data_controller-responsable-de-traitement"><code>data_controller</code>
-— Responsable de traitement</h4>
+confidentialité (RGPD).</p>
+<h4 id="responsable-de-traitement">Responsable de traitement</h4>
 <ul>
 <li><strong>Rôle</strong> : nom, organisme, contact (zone de 3 lignes).
 Sert à la génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>privacy_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="survey_purpose-finalité"><code>survey_purpose</code> —
-Finalité</h4>
+<h4 id="finalité">Finalité</h4>
 <ul>
 <li><strong>Rôle</strong> : finalité/objectif du questionnaire (zone de
 3 lignes). Sert à la génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>privacy_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="data_retention-durée-de-conservation"><code>data_retention</code> —
-Durée de conservation</h4>
+<h4 id="durée-de-conservation">Durée de conservation</h4>
 <ul>
 <li><strong>Rôle</strong> : durée de conservation des données (ex. « 12
 mois »). Sert à la génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>privacy_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="contact_email-contact-dpo-rgpd"><code>contact_email</code> —
-Contact DPO / RGPD</h4>
+<h4 id="contact-dpo-rgpd">Contact DPO / RGPD</h4>
 <ul>
 <li><strong>Rôle</strong> : email du DPO ou référent RGPD. Sert à la
 génération auto.</li>
-<li><strong>Défaut</strong> : vide. — <strong>Quand la changer</strong>
-: renseignez tant que <code>privacy_content</code> est vide.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
-<h4 id="privacy_content-politique-personnalisée"><code>privacy_content</code>
-— Politique personnalisée</h4>
+<h4 id="politique-personnalisée">Politique personnalisée</h4>
 <ul>
 <li><strong>Rôle</strong> : contenu personnalisé (zone de 10 lignes).
 <strong>Si rempli, il remplace entièrement</strong> la génération auto
 (responsable, finalité, base légale, destinataires, durée, droits,
 contact, réclamation CNIL).</li>
-<li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : remplissez
-<strong>uniquement</strong> pour surcharger totalement la politique
-générée.</li>
-<li><strong>Impact a11y/DSFR</strong> : obligation RGPD ; la génération
-auto couvre déjà les rubriques attendues.</li>
+<li><strong>Défaut</strong> : vide. — <strong>À renseigner</strong></li>
 </ul>
 <hr />
 <h3 id="onglet-gestion-des-cookies">Onglet « Gestion des cookies »</h3>
-<h4 id="cookies_content-contenu-de-la-modale-cookies"><code>cookies_content</code>
-— Contenu de la modale cookies</h4>
+<h4 id="contenu-de-la-modale-cookies">Contenu de la modale cookies</h4>
 <ul>
 <li><strong>Rôle</strong> : contenu de la modale « Gestion des cookies »
 (zone de 10 lignes). Le titre principal est déjà fourni
 automatiquement.</li>
-<li><strong>Défaut</strong> : vide.</li>
-<li><strong>Quand la changer</strong> : remplissez pour fournir votre
-politique de gestion des cookies.</li>
-<li><strong>Impact a11y/DSFR</strong> : lien obligatoire du pied de page
-; fournissez un contenu même bref.</li>
+<li><strong>Défaut</strong> : Mention minimales sur les cookies de
+session (exemptés de consentement)</li>
 </ul>
 <hr />
 <h3 id="onglet-protection-anti-bot">Onglet « Protection anti-bot »</h3>
@@ -1088,8 +967,7 @@ audio) et constitue donc un obstacle contraire au RGAA. Cette protection
 le remplace par un <strong>défi texte accessible</strong>, intégré dans
 le flot normal du questionnaire.</p>
 </blockquote>
-<h4 id="antibot_enabled-activer-la-protection"><code>antibot_enabled</code>
-— Activer la protection</h4>
+<h4 id="activer-la-protection">Activer la protection</h4>
 <ul>
 <li><strong>Rôle</strong> : active la protection anti-bot (alternative
 accessible au CAPTCHA).</li>
@@ -1103,8 +981,7 @@ accessible qu’un CAPTCHA image, mais à concevoir avec soin</strong>
 (voir les défis ci-dessous). À préférer systématiquement au
 CAPTCHA.</li>
 </ul>
-<h4 id="antibot_timer-délai-minimum"><code>antibot_timer</code> — Délai
-minimum</h4>
+<h4 id="délai-minimum">Délai minimum</h4>
 <ul>
 <li><strong>Rôle</strong> : temps minimum (en secondes) avant
 validation.</li>
@@ -1117,8 +994,7 @@ conseillé 2 s</strong> pour ne pas gêner les humains rapides.</li>
 délai trop long peut par ailleurs pénaliser certains répondants ; restez
 dans la fourchette 2–10 s.</li>
 </ul>
-<h4 id="antibot_custom_questions-questions-personnalisées"><code>antibot_custom_questions</code>
-— Questions personnalisées</h4>
+<h4 id="questions-personnalisées">Questions personnalisées</h4>
 <ul>
 <li><strong>Rôle</strong> : vos propres défis, <strong>une par
 ligne</strong> au format <code>Question|Réponse</code> (zone de 8
@@ -1137,17 +1013,18 @@ marquées, pour rester accessibles.</li>
 <h3 id="en-résumé">En résumé</h3>
 <ul>
 <li>Deux options veillent en permanence sur la conformité :
-<strong><code>sanitize_rte_content</code></strong> (nettoie les mises en
-forme collées) et <strong><code>contributor_hints</code></strong> (vous
-prévient en aperçu). <strong>Laissez-les activées.</strong></li>
-<li>Réglez <strong>impérativement</strong> le niveau de conformité RGAA
-(<code>rgaa_conformity</code>) sur votre valeur <strong>réelle avant
-activation</strong> : la valeur par défaut « Totalement conforme » est
-<strong>juridiquement fausse</strong> sans audit (voir la section 7
-(Prévisualiser et vérifier)).</li>
-<li>Le <strong>logo opérateur</strong> (<code>brandlogo</code>) est
-réservé aux entités autorisées et certifiées SIRCOM ; en cas de doute,
-le <strong>bloc-marque Marianne seul suffit et reste toujours
+<strong>Nettoyer les styles inline du titre et de l’aide des
+questions</strong> (nettoie les mises en forme collées) et
+<strong>Repères contributeur en prévisualisation</strong> (vous prévient
+en aperçu). <strong>Laissez-les activées.</strong></li>
+<li>Réglez <strong>si possible</strong> le niveau de conformité RGAA sur
+votre valeur <strong>réelle avant activation</strong> : la valeur par
+défaut « Totalement conforme » est <strong>juridiquement
+fragile</strong> sans audit (voir la section 7 (Prévisualiser et
+vérifier)).</li>
+<li>Le <strong>logo opérateur</strong> est réservé aux entités
+autorisées et certifiées SIRCOM ; en cas de doute, le
+<strong>bloc-marque Marianne seul suffit et reste toujours
 conforme</strong>.</li>
 <li>Les onglets <strong>Accessibilité, Mentions légales, Données
 personnelles, Cookies</strong> alimentent des pages
@@ -1463,7 +1340,7 @@ menu de niveaux de titre ; si un cas exceptionnel en exigeait un,
 demandez à votre <strong>référent thème / webmestre</strong>.</p>
 <h3 id="ne-jamais-faire-porter-le-sens-par-la-seule-couleur">4.4. Ne
 jamais faire porter le sens par la seule couleur</h3>
-<p>Environ 8 % des hommes perçoivent mal certaines couleurs, et un
+<p>Environ 8,5 % de la population perçoit mal certaines couleurs, et un
 lecteur d’écran n’annonce aucune couleur. Une information transmise
 <strong>uniquement</strong> par la couleur est donc perdue pour une
 partie du public.</p>
