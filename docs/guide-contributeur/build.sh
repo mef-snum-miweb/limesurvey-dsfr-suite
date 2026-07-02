@@ -31,14 +31,21 @@ pandoc "$TMP" --toc --toc-depth=3 -o guide-contributeur.docx
 
 rm -f "$TMP"
 
-# 4) PDF via Chrome headless (depuis le HTML autonome ; images = data-URI, aucun serveur requis)
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-if [ -x "$CHROME" ]; then
-  "$CHROME" --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf-no-header \
+# 4) PDF via Chrome/Chromium headless (depuis le HTML autonome ; images = data-URI, aucun serveur requis)
+#    Surchargez avec CHROME=/chemin/vers/chrome ./build.sh si besoin.
+if [ -z "${CHROME:-}" ]; then
+  for c in google-chrome google-chrome-stable chromium chromium-browser \
+           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"; do
+    if command -v "$c" >/dev/null 2>&1; then CHROME="$c"; break; fi
+    if [ -x "$c" ]; then CHROME="$c"; break; fi
+  done
+fi
+if [ -n "${CHROME:-}" ]; then
+  "$CHROME" --headless=new --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf-no-header \
     --print-to-pdf="$(pwd)/guide-contributeur.pdf" "file://$(pwd)/guide-contributeur.html" >/dev/null 2>&1
-  echo "✔ PDF régénéré"
+  echo "✔ PDF régénéré (via $CHROME)"
 else
-  echo "⚠ Chrome introuvable — PDF non régénéré (HTML/Word OK)"
+  echo "⚠ Chrome/Chromium introuvable — PDF non régénéré (HTML/Word OK)"
 fi
 
 echo "✔ Exports à jour : guide-contributeur.{html,docx,pdf}"

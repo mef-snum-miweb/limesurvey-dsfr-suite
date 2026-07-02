@@ -4,19 +4,19 @@
 
 ## Sommaire
 
-- À qui s'adresse ce guide
-- 1. La philosophie du thème — conformité RGAA et DSFR
-- 2. Gérer les options du thème
-- 3. Créer un questionnaire
-- 4. Accessibilité éditoriale (RGAA au quotidien)
-- 5. Utiliser l'éditeur de texte
-- 6. Mises en forme et composants DSFR
-- 7. Prévisualiser et vérifier
-- 8. Recettes rapides
-- 9. Pièges et FAQ
-- 10. Aide et remontées
-- Annexe A — Mise en place (administrateur)
-- Annexe B — Référentiel des composants DSFR
+- [À qui s'adresse ce guide](#à-qui-sadresse-ce-guide)
+- [1. La philosophie du thème — conformité RGAA et DSFR](#1-la-philosophie-du-thème--conformité-rgaa-et-dsfr)
+- [2. Gérer les options du thème](#2-gérer-les-options-du-thème)
+- [3. Créer un questionnaire](#3-créer-un-questionnaire)
+- [4. Accessibilité éditoriale (RGAA au quotidien)](#4-accessibilité-éditoriale-rgaa-au-quotidien)
+- [5. Utiliser l'éditeur de texte](#5-utiliser-léditeur-de-texte)
+- [6. Mises en forme et composants DSFR](#6-mises-en-forme-et-composants-dsfr)
+- [7. Prévisualiser et vérifier](#7-prévisualiser-et-vérifier)
+- [8. Recettes rapides](#8-recettes-rapides)
+- [9. Pièges et FAQ](#9-pièges-et-faq)
+- [10. Aide et remontées](#10-aide-et-remontées)
+- [Annexe A — Mise en place (administrateur)](#annexe-a--mise-en-place-administrateur)
+- [Annexe B — Référentiel des composants DSFR](#annexe-b--référentiel-des-composants-dsfr)
 
 ---
 
@@ -103,7 +103,7 @@ Quelques exemples pour fixer les idées (le référentiel complet est détaillé
 
 Utiliser un composant à contre-emploi (une alerte pour décorer, un badge partout) nuit à la lisibilité **et** à l'accessibilité. Le bon réflexe : « quel est le sens de ce que je veux dire ? », puis choisir le composant qui correspond.
 
-![Un questionnaire rendu avec le thème DSFR : en-tête Marianne, libellé de question en titre, texte d'aide enrichi en dessous](img/c1-apercu-formulaire-dsfr.png)
+![Un questionnaire rendu avec le thème DSFR, en prévisualisation : en-tête Marianne, description de groupe et libellé de question affiché en titre](img/c1-apercu-formulaire-dsfr.png)
 
 ### À retenir
 
@@ -116,7 +116,7 @@ Utiliser un composant à contre-emploi (une alerte pour décorer, un badge parto
 
 ## 2. Gérer les options du thème
 
-Le thème DSFR expose un ensemble d'**options** que vous réglez depuis l'administration de LimeSurvey, sans toucher au code. Ces réglages pilotent l'apparence (largeur d'affichage, mode sombre), l'en-tête et le pied de page (logos, titres, liens légaux) et des comportements de conformité (mise en forme automatique des contenus, protection anti-bot). Cette page les passe **toutes en revue**, onglet par onglet.
+Le thème DSFR expose un ensemble d'**options** que vous réglez depuis l'administration de LimeSurvey, sans toucher au code. Ces réglages pilotent l'apparence (largeur d'affichage, mode sombre), l'en-tête et le pied de page (logos, titres, liens légaux) et des comportements de conformité (mise en forme automatique des contenus, protection anti-bot). Cette section les passe **toutes en revue**, onglet par onglet.
 
 > **Où trouver ces options ?** Elles se règlent **questionnaire par questionnaire**. Ouvrez votre questionnaire, puis **Paramètres › Options de thème du questionnaire**, et cliquez sur **« Personnaliser le thème »** pour pouvoir les modifier. Les réglages sont répartis en onglets. Par défaut, chaque option **hérite** d'une valeur globale déjà conforme : vous n'ajustez que ce qui concerne votre questionnaire. Vérifiez toujours l'effet en **prévisualisation** (voir la section 7 (Prévisualiser et vérifier)).
 
@@ -183,7 +183,7 @@ Ces options concernent la mise en page générale et le comportement du question
 ![Repères contributeur affichés en prévisualisation, signalant une mise en forme non conservée](img/8-couleur-vers-composant.png)
 
 #### `show_pdf_export` — Export PDF du récapitulatif
-- **Rôle** : affiche le bouton « Exporter en PDF » sur le récapitulatif des réponses. (Un second bouton d'export PDF standard reste toujours disponible par ailleurs.)
+- **Rôle** : affiche le bouton « Exporter en PDF » sur le récapitulatif des réponses. (Le bouton « Export PDF queXML », l'export standard de LimeSurvey, reste quant à lui toujours disponible.)
 - **Défaut** : `on`.
 - **Quand la changer** : désactivez pour masquer ce bouton d'export du récapitulatif.
 - **Impact a11y/DSFR** : sans incidence ; simple confort pour le répondant.
@@ -414,8 +414,6 @@ Ces champs **génèrent automatiquement** la politique de confidentialité (RGPD
 
 ---
 
----
-
 ## 3. Créer un questionnaire
 
 Créer un bon questionnaire, ce n'est pas d'abord une affaire de mise en forme : le thème DSFR s'occupe automatiquement de la présentation, des couleurs, des espacements et de l'accessibilité. Votre travail à vous, gestionnaire d'enquête, porte sur le **sens** : quelles questions poser, dans quel ordre, comment les regrouper, et comment formuler chaque libellé de question pour qu'il soit clair. Cette section vous donne les repères pour structurer votre questionnaire et pour bien distinguer ce qui va dans le **libellé de question** de ce qui va dans l'**aide**.
@@ -481,16 +479,16 @@ Autrement dit : **le titre pose la question, l'aide l'explique.** Si vous vous s
 
 ### 3.3 Les repères contributeur en prévisualisation
 
-Quand vous prévisualisez votre questionnaire, le thème affiche des **repères réservés au contributeur** : ce sont des indications d'aide à la conception qui **n'apparaîtront pas** pour le répondant final et **ne sont pas conservées** dans le questionnaire diffusé.
+Quand vous prévisualisez votre questionnaire, le thème affiche des **repères réservés au contributeur** : des encarts bleus « **Aperçu contributeur** », attachés aux questions concernées, qui signalent qu'une mise en forme ne sera **pas conservée** à l'affichage. Ce sont des aides à la conception : elles **n'apparaissent jamais** pour le répondant final (elles sont pilotées par l'option `contributor_hints`, voir la section 2).
 
-Le plus visible est le **bandeau « Aperçu contributeur »**, affiché en haut de la prévisualisation. Il vous signale que vous êtes en mode conception et que certains éléments visibles à l'écran sont des aides internes, non destinées au public.
+Chaque repère dit précisément ce qui pose problème et où placer le contenu à la place. Par exemple, si vous avez collé des paragraphes, un sous-titre ou une couleur de texte dans un **libellé** de question, le repère indique : « *l'intitulé est un titre : la mise en forme suivante n'est pas conservée : 2 paragraphes, un sous-titre et une couleur de texte. Pour du contenu riche, placez-le dans le champ Aide de la question.* »
 
-![Bandeau « Aperçu contributeur » affiché en haut de la prévisualisation](img/8-couleur-vers-composant.png)
+![Repère « Aperçu contributeur » attaché à une question en prévisualisation, signalant la mise en forme non conservée](img/8-couleur-vers-composant.png)
 
 **Ce que cela change pour vous :**
 
-- Ne vous inquiétez pas de la présence de ce bandeau : il **disparaît** dans la version réellement diffusée.
-- Servez-vous-en comme d'un **garde-fou** : tant que vous le voyez, vous êtes en train de vérifier votre travail, pas en train de regarder le rendu définitif.
+- Ne vous inquiétez pas de la présence de ces encarts : ils **disparaissent** dans la version réellement diffusée.
+- Servez-vous-en comme d'un **garde-fou** : chaque repère vous dit, pendant la conception, quelle mise en forme sera neutralisée et quoi faire à la place (le plus souvent : déplacer le contenu riche dans le champ **Aide**).
 - Pour juger du rendu final tel que le verra le répondant, reportez-vous à la section 7 (Prévisualiser et vérifier), qui explique comment lire l'aperçu et ce qu'il faut contrôler.
 
 > **À retenir :** structurez d'abord (groupes, ordre, conditions), formulez ensuite (libellé de question court en titre, contenu riche en aide), et laissez le thème DSFR gérer toute la présentation à votre place.
@@ -540,14 +538,12 @@ Le bon réflexe : écrivez ce que vous **diriez à voix haute** à quelqu'un qui
 
 Les titres forment le **plan** de la page. Les personnes qui utilisent un lecteur d'écran naviguent de titre en titre : si la hiérarchie est incohérente, elles se perdent.
 
-Deux règles simples :
+La bonne nouvelle : dans un questionnaire, **cette hiérarchie est déjà construite pour vous**. Le titre du questionnaire, les titres de groupe et chaque **libellé de question** (rendu comme un titre de niveau 3, voir la section 3) s'emboîtent automatiquement, sans saut de niveau. Vous n'avez donc **pas de titres à créer** — seulement deux règles à respecter :
 
-1. **On ne saute pas de niveau.** Après un titre de niveau 2 vient un niveau 3, pas directement un niveau 4. On descend marche par marche.
-2. **Un titre est un titre — pas du gras.** Ne simulez **jamais** un titre en mettant une phrase en **gras** ou en MAJUSCULES : visuellement ça ressemble à un titre, mais pour un lecteur d'écran ce n'est que du texte ordinaire, sans rôle de structure. Utilisez le style de titre du menu **Styles** de l'éditeur (voir la section 6 (Mises en forme et composants DSFR)).
+1. **Ne cassez pas le plan existant.** Laissez la structure porter les titres : un nouveau sujet = un nouveau groupe (avec son titre), une nouvelle question = un libellé court. Ne « sous-titrez » pas une page en insérant des phrases-titres dans les textes.
+2. **Un titre est un titre — pas du gras.** Ne simulez **jamais** un titre en mettant une phrase en **gras** ou en MAJUSCULES : visuellement ça ressemble à un titre, mais pour un lecteur d'écran ce n'est que du texte ordinaire, sans rôle de structure.
 
-Rappel propre au questionnaire (voir la section 3 (Créer un questionnaire)) : **le libellé de question est déjà un titre** (court et clair). Dans la zone d'**aide**, si vous devez sous-titrer un contenu riche, repartez du niveau immédiatement inférieur, sans redéfinir le libellé de question.
-
-![Menu Styles de l'éditeur : choix d'un vrai niveau de titre plutôt que du gras](img/3bis-menu-styles-titres.png)
+Et si une **aide** devient longue au point d'appeler des sous-titres ? C'est le signal qu'il faut **restructurer** : découper en plusieurs questions ou groupes, ou replier le contenu secondaire dans un **accordéon** — son en-tête joue alors le rôle de titre, correctement structuré (voir la section 6 (Mises en forme et composants DSFR)). L'éditeur ne propose volontairement pas de menu de niveaux de titre ; si un cas exceptionnel en exigeait un, demandez à votre **référent thème / webmestre**.
 
 ### 4.4. Ne jamais faire porter le sens par la seule couleur
 
@@ -577,7 +573,7 @@ L'accessibilité, c'est aussi la **compréhension**. Vos répondants ne connaiss
 |---|---|---|
 | Intitulés de liens explicites | Compréhensibles hors contexte | Décrire la destination ; **Téléchargement de fichier** pour un fichier |
 | Alternatives d'images utiles | L'information passe sans la vue | Décrire l'info ; alternative vide si décoratif ; jamais de texte en image |
-| Hiérarchie de titres | Un plan navigable | Menu **Styles**, sans sauter de niveau ; jamais de faux titre en gras |
+| Hiérarchie de titres | Un plan navigable | Laisser la structure porter les titres (groupes, libellés) ; jamais de faux titre en gras |
 | Sens jamais porté par la couleur seule | Daltonisme, lecteurs d'écran | Texte + couleur ; **Badge** lisible par son libellé, **Alerte** typée par son sens |
 | Langue claire | Compréhension de tous | Phrases courtes, sigles développés, vocabulaire cohérent |
 
@@ -587,13 +583,13 @@ L'accessibilité, c'est aussi la **compréhension**. Vos répondants ne connaiss
 
 Chaque fois que vous saisissez un libellé de question, un texte d'aide, une introduction de groupe ou un message de fin, LimeSurvey vous ouvre le même éditeur de texte enrichi. C'est là que se joue l'essentiel de votre travail éditorial. Cette section fait le tour de l'outil et, surtout, clarifie **ce que vous pouvez faire, ce que vous devez éviter, et pourquoi**.
 
-Le principe à garder en tête : **vous vous occupez du sens, le thème s'occupe de la présentation.** Vous n'avez donc jamais à régler une couleur, une taille de police ou une graisse « à la main » : la mise en forme conforme (RGAA + DSFR) est appliquée automatiquement. Ce que vous tapez qui sortirait du cadre est simplement neutralisé à l'enregistrement — ce n'est pas un défaut, c'est la conformité qui fait son travail.
+Le principe à garder en tête : **vous vous occupez du sens, le thème s'occupe de la présentation.** Vous n'avez donc jamais à régler une couleur, une taille de police ou une graisse « à la main » : la mise en forme conforme (RGAA + DSFR) est appliquée automatiquement. Ce que vous saisissez qui sortirait du cadre est simplement neutralisé **à l'affichage** — dans l'aperçu comme pour le répondant. Ce n'est pas un défaut, c'est la conformité qui fait son travail.
 
 ### 5.1. Deux barres d'outils : la simple et la complète
 
-L'éditeur s'ouvre par défaut sur une **barre d'outils simple** (une seule ligne d'icônes : les mises en forme de base). Un **bouton de bascule** situé à l'extrémité de la barre permet de l'agrandir en **barre complète**, qui déploie davantage d'options — dont les deux menus qui vous serviront le plus pour le DSFR : le menu **Styles** et la palette **Modèles** (bouton *Templates* de l'éditeur). Un nouvel appui sur le même bouton referme la barre.
+L'éditeur s'ouvre par défaut sur une **barre d'outils simple** (une seule ligne d'icônes : les mises en forme de base). Un **bouton de bascule** de la barre permet de l'agrandir en **barre complète**, qui déploie davantage d'options — dont les deux menus qui vous serviront le plus pour le DSFR : le menu **Styles** et la palette **Modèles** (bouton *Templates* de l'éditeur). Un nouvel appui sur le même bouton referme la barre.
 
-![Bouton de bascule entre la barre d'outils simple et la barre complète](img/4a-bascule-barres.png)
+![La barre d'outils complète : les menus Styles et Modèles (encadrés) apparaissent une fois la barre déployée](img/4a-bascule-barres.png)
 
 Retenez :
 
@@ -604,7 +600,7 @@ Retenez :
 
 ### 5.2. Ce que vous pouvez utiliser sans crainte
 
-Ces mises en forme sont **conservées** telles quelles à l'enregistrement, parce qu'elles portent un sens et restent compatibles avec le DSFR :
+Ces mises en forme, appliquées **via les boutons de l'éditeur**, sont **conservées** telles quelles à l'affichage, parce qu'elles portent un sens et restent compatibles avec le DSFR :
 
 - **Gras** et *italique* — pour accentuer un mot important (avec parcimonie : tout mettre en gras n'accentue plus rien).
 - **Souligné** — possible, mais attention : sur le web, le souligné évoque un lien. Réservez-le aux cas où il apporte vraiment quelque chose.
@@ -614,9 +610,10 @@ Ces mises en forme sont **conservées** telles quelles à l'enregistrement, parc
 
 ### 5.3. Ce que vous devez éviter
 
-Ces manipulations ne servent à rien ici : soit elles sont **retirées** à l'enregistrement, soit elles introduisent des problèmes invisibles.
+Ces manipulations ne servent à rien ici : soit elles sont **neutralisées** à l'affichage, soit elles introduisent des problèmes invisibles.
 
-- **Couleurs de texte, tailles de police, changement de police** — même si un bouton semble le permettre, ces réglages manuels sont **retirés** à l'enregistrement pour garantir la conformité et la cohérence visuelle. Le contraste, la taille et la typographie sont déjà gérés par le thème DSFR. Vouloir « mettre un mot en rouge » ne fonctionnera pas ; pour signaler quelque chose d'important, utilisez plutôt un composant DSFR qui porte ce sens (une **mise en avant** ou une **alerte**, voir la section 6 (Mises en forme et composants DSFR)).
+- **Couleurs de texte, tailles de police, changement de police** — même si un bouton semble le permettre, ces réglages manuels sont **retirés au moment de l'affichage** pour garantir la conformité et la cohérence visuelle : votre saisie reste enregistrée telle quelle, mais le thème neutralise ces styles au rendu, dans l'aperçu comme pour le répondant. Le contraste, la taille et la typographie sont déjà gérés par le thème DSFR. Vouloir « mettre un mot en rouge » ne fonctionnera pas ; pour signaler quelque chose d'important, utilisez plutôt un composant DSFR qui porte ce sens (une **mise en avant** ou une **alerte**, voir la section 6 (Mises en forme et composants DSFR)).
+- **Alignements et espacements manuels** — centrer ou justifier un paragraphe, forcer des marges : ces réglages sont eux aussi retirés à l'affichage. La mise en page (alignements, espacements, interlignes) est entièrement prise en charge par le DSFR.
 - **Coller depuis Word (ou un PDF, un e-mail mis en forme)** — le copier-coller depuis un traitement de texte embarque un « bagage » caché de balises et de styles propriétaires. Résultat : espacements bizarres, polices qui sautent, listes cassées, et beaucoup de nettoyage. **Le bon réflexe : coller le texte, puis reconstruire la mise en forme dans l'éditeur** (listes, gras, liens). Pour coller du texte pur, utilisez le collage sans mise en forme de votre système (Ctrl+Maj+V / Cmd+Maj+V) avant de re-styler.
 
 > Pourquoi c'est retiré et pas juste « déconseillé » ? Parce que la présentation est **normalisée pour vous** : c'est une obligation légale d'accessibilité (RGAA) et de charte (DSFR). L'éditeur vous laisse vous concentrer sur le fond ; il fait le tri sur la forme.
@@ -631,17 +628,20 @@ Si vous êtes dans ce cas, **ne modifiez rien vous-même** : demandez à votre *
 
 ### 5.5. Récapitulatif : conservé ou normalisé
 
-| Ce que vous faites | Résultat à l'enregistrement |
+| Ce que vous faites | Résultat à l'affichage |
 | --- | --- |
-| Gras, italique, souligné | ✅ Conservé |
+| Gras, italique, souligné (boutons de l'éditeur) | ✅ Conservé |
 | Liste à puces / numérotée | ✅ Conservé |
 | Lien (avec libellé explicite) | ✅ Conservé |
 | Exposant | ✅ Conservé |
 | Style DSFR (menu **Styles**) ou composant (palette **Modèles**) | ✅ Conservé |
 | Couleur de texte manuelle | 🚫 Retirée |
 | Taille de police manuelle | 🚫 Retirée |
-| Changement de police manuel | 🚫 Retirée |
+| Changement de police manuel | 🚫 Retiré |
+| Alignement manuel (centré, justifié) | 🚫 Retiré |
 | Mise en forme collée depuis Word | ⚠️ Nettoyée / imprévisible — à reconstruire |
+
+> « Retiré » signifie que votre saisie reste enregistrée, mais que le thème la neutralise **au moment du rendu**, dans l'aperçu comme sur le questionnaire diffusé. En prévisualisation, les **repères contributeur** (voir les sections 2 et 3) vous signalent précisément ce qui ne sera pas conservé.
 
 En résumé : servez-vous de l'éditeur pour **structurer** (listes, liens, accentuations utiles) et laissez le thème **habiller**. Pour tout ce qui relève de la couleur, du composant ou de la mise en valeur visuelle, passez par les menus **Styles** et **Modèles** — c'est l'objet de la section 6 (Mises en forme et composants DSFR).
 
@@ -695,7 +695,9 @@ Un **badge** est un marqueur **court et non cliquable** qui signale l'**état** 
 
 ### 6.2. La palette Modèles : insérer des composants DSFR
 
-Le bouton **Modèles** ouvre une **boîte de dialogue** listant des composants DSFR prêts à insérer. Placez le curseur là où vous voulez insérer le bloc, cliquez sur le modèle voulu : le composant s'ajoute avec un **texte d'exemple** que vous n'avez plus qu'à remplacer.
+Le bouton **Modèles** ouvre une **boîte de dialogue** (« Contenu des modèles ») listant des composants DSFR prêts à insérer. Placez le curseur là où vous voulez insérer le bloc, cliquez sur le modèle voulu : le composant s'ajoute avec un **texte d'exemple** que vous n'avez plus qu'à remplacer.
+
+> **Attention à la case « Remplacer le contenu actuel »**, en haut de la boîte de dialogue : cochée, le modèle **remplace tout** le contenu du champ ; décochée, il **s'insère** à la position du curseur, sans rien effacer. Vérifiez-la avant de cliquer.
 
 ![La palette Modèles ouverte, avec la liste des composants DSFR disponibles](img/annexeB-palette.png)
 
@@ -842,9 +844,9 @@ Dans l'aperçu, gardez en tête la règle centrale du guide et relisez chaque qu
 
 ### Le cas des composants interactifs (accordéon)
 
-Un point important à ne pas confondre avec un bug. Dans l'écran d'édition, un accordéon apparaît **déplié** (vous voyez tout son contenu, c'est normal, l'éditeur montre le texte brut).
+Un point important à ne pas confondre avec un bug. Dans l'écran d'**édition**, un accordéon apparaît **déplié** et inerte (vous voyez tout son contenu, c'est normal : l'éditeur montre le texte brut, sans l'interactivité).
 
-En revanche, sur **l'aperçu du questionnaire complet** comme sur le **questionnaire activé**, l'accordéon se comporte comme prévu : il est **replié par défaut** et le répondant le **déplie en cliquant**. C'est exactement le comportement attendu — l'information complémentaire reste discrète tant qu'on ne la demande pas.
+En revanche, dans **tout aperçu** (question, groupe ou questionnaire complet) comme sur le **questionnaire activé**, l'accordéon se comporte comme prévu : il est **replié par défaut** et le répondant le **déplie en cliquant**. C'est exactement le comportement attendu — l'information complémentaire reste discrète tant qu'on ne la demande pas.
 
 ![Un accordéon replié dans l'aperçu répondant, puis déplié après clic](img/c6-accordeon-apercu.png)
 
@@ -940,7 +942,7 @@ Cette section répond aux surprises les plus fréquentes rencontrées par les ge
 
 Le résultat est alors coloré **et** compréhensible par tous, et il reste conforme même quand la charte évolue.
 
-![L'alerte et le badge DSFR remplacent une couleur posée à la main](img/8-couleur-vers-composant.png)
+![En prévisualisation, le repère contributeur signale la couleur de texte qui ne sera pas conservée](img/8-couleur-vers-composant.png)
 
 ### « Mon tableau ne rentre pas dans le libellé de la question »
 
@@ -954,11 +956,21 @@ Le résultat est alors coloré **et** compréhensible par tous, et il reste conf
 
 ![Le tableau déplacé du libellé vers le champ Aide](img/8-tableau-vers-aide.png)
 
-### « Mon accordéon ne se déplie pas quand j'aperçois la question »
+### « Mon accordéon s'affiche tout déplié, ou ne réagit pas au clic »
 
-En bref : l'aperçu d'une **seule** question est un rendu simplifié qui ne charge pas l'interactivité ; l'accordéon fonctionne, mais uniquement dans l'**aperçu complet** du questionnaire ou le questionnaire **activé**. Il n'y a donc rien à corriger. Ce cas est détaillé en section 7 (Prévisualiser et vérifier).
+**Ce qui se passe.** Vous regardez l'accordéon dans l'**écran d'édition** : il y apparaît déplié et inerte, car l'éditeur montre le contenu brut, sans l'interactivité. Il n'y a rien à corriger.
 
-![Où cliquer pour l'aperçu complet plutôt que l'aperçu d'une seule question](img/8-apercu-complet-vs-question.png)
+**Ce qu'il faut faire.** Jugez toujours un composant interactif dans un **aperçu** (question, groupe ou questionnaire complet) ou sur le questionnaire **activé** : l'accordéon y est replié par défaut et se déplie au clic. Ce cas est détaillé en section 7 (Prévisualiser et vérifier). Si l'accordéon reste inerte **même en aperçu**, voyez le piège suivant (filtre de sécurité).
+
+![Les trois boutons d'aperçu : questionnaire, groupe, question](img/8-apercu-complet-vs-question.png)
+
+### « Un composant fonctionne chez l'administrateur, mais pas chez moi »
+
+**Ce qui se passe.** Vous insérez un accordéon ou une mise en exergue correctement, mais après enregistrement le composant perd sa mise en forme, disparaît ou reste inerte — alors que la même manipulation fonctionne sur le compte de votre administrateur.
+
+**Pourquoi.** LimeSurvey applique un **filtrage de sécurité (dit « filtre XSS »)** au contenu saisi par les comptes qui ne sont pas superadministrateurs. Selon la configuration de la plateforme, ce filtre peut retirer des éléments nécessaires aux composants DSFR.
+
+**Ce qu'il faut faire.** Ce n'est ni une erreur de votre part, ni réparable depuis l'éditeur : c'est un réglage de la plateforme. Signalez-le à votre **administrateur LimeSurvey** ou à votre référent thème (le point est documenté pour lui en Annexe A.4).
 
 ### « J'ai écrit un long texte d'introduction, mais il s'affiche aplati / sans mise en forme »
 
@@ -979,12 +991,11 @@ Gardez le libellé pour **la question, en une phrase**.
 | --- | --- | --- |
 | Ma couleur a disparu | Normalisation DSFR du texte | Utilisez une alerte, une mise en avant ou un badge (voir section 6) |
 | Mon tableau est écrasé | Il est dans le **libellé** (= titre) | Déplacez-le dans l'**aide** |
-| Mon accordéon ne s'ouvre pas | Aperçu d'**une seule** question (rendu réduit) | Testez sur l'**aperçu complet** ou le questionnaire **activé** (voir section 7) |
+| Mon accordéon est déplié / inerte | Vous le regardez dans l'**éditeur** (contenu brut) | Jugez-le en **aperçu** ou sur le questionnaire **activé** (voir section 7) |
+| Un composant disparaît chez moi, pas chez l'admin | Filtre de sécurité (XSS) des comptes non-superadmin | À signaler à l'**administrateur** (voir Annexe A.4) |
 | Mon texte long est aplati | Il est dans le **libellé** (= titre) | Aide, ou question « Texte d'affichage » |
 
 **Le fil rouge :** le **libellé de question** porte la question (court, un titre) ; l'**aide** et les **questions Texte d'affichage** portent le contenu riche ; et le **sens** (attention, statut, alerte) passe par un **composant DSFR**, jamais par une couleur posée à la main. Si un doute persiste, voyez la section 10 (Aide et remontées).
-
----
 
 ---
 
@@ -1018,6 +1029,8 @@ Pour tout ce qui est **non sensible**, le thème dispose d'un espace de suivi pu
 **`https://github.com/mef-snum-miweb/limesurvey-theme-dsfr`** — onglet **« Issues »**.
 
 C'est là que se déclarent les bugs et les demandes d'évolution du thème lui-même. Une « issue » (prononcez « i-chou ») est simplement un ticket : un titre, une description, et un fil de discussion.
+
+> **Le thème ou l'éditeur ?** Si votre remontée concerne l'**éditeur de texte** (menu Styles, palette Modèles), elle relève du plugin **CKEditorDSFR**, qui a son propre dépôt : **`https://github.com/mef-snum-miweb/limesurvey-ckeditor-dsfr`** — onglet « Issues » également. Dans le doute, postez sur le dépôt du thème : les mainteneurs réorienteront.
 
 Vous n'êtes pas développeur, et ce n'est pas grave : une bonne remontée tient en quelques lignes claires. Décrivez **ce que vous attendiez**, **ce que vous avez obtenu**, et **comment le reproduire**. Par exemple :
 
@@ -1071,17 +1084,19 @@ Trois étapes, dans l'ordre :
 2. Activer le thème sur le questionnaire concerné.
 3. Activer le plugin **CKEditorDSFR** qui fournit les composants et mises en forme DSFR de l'éditeur.
 
+Les fichiers se récupèrent depuis les dépôts GitHub officiels : [`limesurvey-theme-dsfr`](https://github.com/mef-snum-miweb/limesurvey-theme-dsfr) pour le thème et [`limesurvey-ckeditor-dsfr`](https://github.com/mef-snum-miweb/limesurvey-ckeditor-dsfr) pour le plugin (le dépôt d'ensemble [`limesurvey-dsfr-suite`](https://github.com/mef-snum-miweb/limesurvey-dsfr-suite) fournit en outre un environnement Docker de démonstration et de test). La suite est testée avec **LimeSurvey 6.16** ; la compatibilité avec LimeSurvey 7 est déclarée par les modules.
+
 ### A.1 Déposer le thème DSFR
 
 Le dépôt par le **système de fichiers** (filesystem) est la méthode **recommandée** : elle est plus fiable que l'import d'une archive via l'interface web et facilite les mises à jour ultérieures.
 
-Concrètement, placez le dossier du thème dans le répertoire des thèmes de questionnaire de votre installation LimeSurvey, puis laissez LimeSurvey le détecter. Le thème apparaît alors dans la liste des thèmes disponibles côté administration.
+Concrètement, placez le dossier du thème dans le répertoire des **thèmes utilisateur** de votre installation LimeSurvey — `upload/themes/survey/` — et non dans `themes/survey/`, réservé aux thèmes du cœur et écrasé lors des mises à jour de LimeSurvey. Laissez ensuite LimeSurvey le détecter : le thème apparaît dans la liste des thèmes disponibles côté administration.
 
 > Pourquoi le filesystem plutôt que l'upload ? Parce qu'une mise à jour du thème (nouvelle version) se résume alors à remplacer les fichiers sur le serveur, sans manipulation dans l'interface et sans risque d'écraser une personnalisation par erreur.
 
 ### A.2 Activer le thème sur le questionnaire
 
-Le thème se choisit **questionnaire par questionnaire** : déposer les fichiers ne l'applique pas automatiquement. Ouvrez le questionnaire voulu, puis sélectionnez le thème DSFR dans ses réglages de présentation (paramètres généraux / thème du questionnaire).
+Le thème se choisit **questionnaire par questionnaire** : déposer les fichiers ne l'applique pas automatiquement. Ouvrez le questionnaire voulu, puis sélectionnez le thème DSFR dans **Paramètres › Général**, champ **« Thème »**.
 
 Une fois le thème sélectionné, prévisualisez le questionnaire pour confirmer que la charte DSFR s'affiche bien (en-tête, typographie Marianne, couleurs de l'État). Les **options** du thème (bandeau, pied de page, etc.) sont ensuite réglées par le gestionnaire comme décrit en **section 2** de ce guide.
 
@@ -1138,7 +1153,7 @@ Le **sens détaillé** de chaque composant est développé à la section 6 (Mise
 - **À ne PAS utiliser pour :** masquer une consigne indispensable ; diffuser un message d'état, une erreur ou une confirmation (→ Alerte) ; afficher un statut court (→ Badge) ; naviguer entre pages ; replier un texte d'une ou deux phrases.
 - **Où :** dans l'**aide** d'une question ou une **introduction** — jamais dans un libellé de question ni une consigne obligatoire.
 - **Plusieurs accordéons au même endroit :** le plus simple est de les répartir dans des aides de questions différentes. Pour en placer plusieurs à un même endroit, demandez à votre référent thème / webmestre.
-- **En aperçu :** un accordéon peut apparaître déplié en prévisualisation — c'est normal (voir la section 7, Prévisualiser et vérifier).
+- **Dans l'éditeur :** l'accordéon apparaît déplié et inerte — c'est normal ; en aperçu comme sur le questionnaire activé, il est replié et se déplie au clic (voir la section 7, Prévisualiser et vérifier).
 - **Bon réflexe :** en-têtes explicites et autoporteurs (le répondant devine le contenu sans ouvrir), au plus 6-8 plis, pas d'imbrication, pas de panneaux tous préouverts.
 - 📖 [Accordéon — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/accordeon/)
 
@@ -1147,7 +1162,7 @@ Le **sens détaillé** de chaque composant est développé à la section 6 (Mise
 - **Sens :** un message d'**état statique**, que vous maîtrisez et affichez à un moment précis du parcours. Le **type** porte le sens : information (bleu), succès (vert), avertissement (orange), erreur (rouge).
 - **À utiliser pour :** annoncer une information d'état dont vous décidez le contenu — « La collecte se termine le 30 juin », période de collecte en cours, maintenance prévue, mode brouillon.
 - **À ne PAS utiliser pour :** recopier en dur une confirmation d'enregistrement, une erreur de validation ou un rappel de champ obligatoire manquant — LimeSurvey et le thème les affichent **automatiquement**, ne les dupliquez jamais dans une aide ; un encart affiché en permanence (une alerte permanente n'alerte plus) ; du contenu riche ; un statut d'élément (→ Badge) ; choisir la couleur « pour que ça se voie » (le type a un sens normé).
-- **Où :** au plus près de ce qu'elle concerne, au bon moment — pas en continu. La palette propose les quatre types : **information, succès, avertissement, erreur**.
+- **Où :** au plus près de ce qu'elle concerne, au bon moment — pas en continu. La palette propose les quatre types : **information, succès, erreur, avertissement**.
 - **Bon réflexe :** titre court qui résume l'état, message qui dit **quoi faire ensuite**, une seule alerte à la fois par niveau.
 - 📖 [Alerte — DSFR](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/alerte/)
 
@@ -1224,8 +1239,6 @@ Aide au choix rapide. En cas d'hésitation entre deux composants voisins, la col
 ### B.10 Pour aller plus loin
 
 Le catalogue complet, avec toutes les variantes et exemples officiels, est sur le **Système de Design de l'État** : [systeme-de-design.gouv.fr](https://www.systeme-de-design.gouv.fr/composants-et-modeles/composants/). C'est la source de vérité en cas de doute sur un libellé ou une variante.
-
----
 
 ---
 

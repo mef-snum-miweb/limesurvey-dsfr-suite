@@ -33,9 +33,8 @@ nommée **exactement** comme le guide l'attend : enregistrer dans
 ### Écran 1 — Rendu front (question vitrine)
 `…/index.php/survey/index/action/previewquestion/sid/527199/gid/16/qid/238`
 - `c1-apercu-formulaire-dsfr` — vue haut : en-tête Marianne + libellé + aide. **Annoter** : en-tête (présentation DSFR auto), libellé (« titre court »), aide (« contenu riche »).
-- `apercu-contributeur-bandeau` **et** `c2a-contributor-hints` — le bandeau « Aperçu contributeur ». **Annoter** : entourer le bandeau ; noter « invisible pour le répondant ».
+- `8-couleur-vers-composant` — le repère « Aperçu contributeur » attaché à la question, signalant la mise en forme non conservée (visible uniquement en aperçu, jamais par les répondants).
 - `3bis-badge-statut-texte` — la ligne « Statut : Nouveau Clôturée ». **Annoter** : le texte porte le sens, la couleur n'est qu'un renfort.
-- `8-couleur-vers-composant` — le bandeau illustre la mise en forme retirée.
 - `c6-accordeon-apercu` — cliquer « En savoir plus » pour déplier ; idéalement montrer replié + déplié.
 - `3bis-telechargement-fichier` — descendre jusqu'au bloc « Notice d'aide au remplissage — PDF ». **Annoter** : intitulé + format/poids décrivent le document.
 
@@ -54,34 +53,27 @@ nommée **exactement** comme le guide l'attend : enregistrer dans
 
 ### Écran 4 — Éditeur (question 238 → **Éditer** → onglet **Aide**)
 `…/index.php/questionAdministration/view/surveyid/527199/gid/16/qid/238`
-- `4a-bascule-barres` — barre d'outils simple + complète. **Annoter** : le bouton de bascule ; les menus Styles et Modèles.
+- `4a-bascule-barres` — barre d'outils complète. **Annoter** : les menus Styles et Modèles.
 - `8-tableau-vers-aide` — vue avec les onglets Question / Aide (montrer que le riche va dans l'Aide).
-- `c5-menu-styles` **et** `3bis-menu-styles-titres` — clic sur **Styles** (menu ouvert : Paragraphe introduction / plus grand / petit, Texte, Badges).
-- `c5-palette-templates` + `c7-palette-templates` + `annexeB-palette` + `annexeB-templates` — clic sur l'**icône document** (à droite de Styles) → dialogue « Contenu des modèles » listant les 11 composants.
+- `3bis-menu-styles-titres` — clic sur **Styles** (menu ouvert : Paragraphe introduction / plus grand / petit, Texte, Badges).
+- `annexeB-palette` — clic sur l'**icône document** (à droite de Styles) → dialogue « Contenu des modèles » listant les 11 composants.
 - `4b-mode-source` — clic sur **`</>`** (montre le HTML).
 - `3bis-alt-image` — clic sur l'**icône image** → champ « texte alternatif ».
-- `c5-telechargement-champs` — insérer le modèle **Téléchargement** → montrer les zones URL / intitulé / « Format – Poids ».
 
 ### Écran 5 — Boutons d'aperçu
 Même page que l'écran 4, **avant** de cliquer « Éditer » (barre du haut) :
-- `c6-boutons-apercu` **et** `8-apercu-complet-vs-question` — les 3 boutons « Prévisualiser le questionnaire / le groupe / la question ». **Annoter** : numéroter 1-2-3.
+- `8-apercu-complet-vs-question` — les 3 boutons « Prévisualiser le questionnaire / le groupe / la question ».
 
 ### Écran 6 — Sélecteur de thème
-Sondage → **Paramètres › Présentation** (choix du thème) :
+Sondage → **Paramètres › Général**, champ **« Thème »** :
 - `0-theme-active-sondage` **et** `a2-selection-theme` — le thème DSFR sélectionné. **Annoter** : le sélecteur.
 
-### Écran 7 — GitHub (remontées publiques)
-`https://github.com/mef-snum-miweb/limesurvey-theme-dsfr/issues`
-- `9-github-issues` — liste des tickets + bouton « New issue ». **Annoter** : le bouton « New issue ».
+## Récapitulatif des 21 fichiers attendus
 
-## Récapitulatif des 28 fichiers attendus
-
-c1-apercu-formulaire-dsfr · apercu-contributeur-bandeau · c2a-contributor-hints ·
-3bis-badge-statut-texte · 8-couleur-vers-composant · c6-accordeon-apercu ·
-3bis-telechargement-fichier · c2-panneau-options · c2a-options-generales ·
+0-theme-active-sondage · 3bis-alt-image · 3bis-badge-statut-texte ·
+3bis-menu-styles-titres · 3bis-telechargement-fichier · 4a-bascule-barres ·
+4b-mode-source · 8-apercu-complet-vs-question · 8-couleur-vers-composant ·
+8-tableau-vers-aide · a2-selection-theme · a3-plugin-active · annexeB-palette ·
+c1-apercu-formulaire-dsfr · c2-panneau-options · c2a-options-generales ·
 c2b-images-logos · c2c-header-footer · c2d-accessibilite · c2e-antibot ·
-a3-plugin-active · 4a-bascule-barres · 8-tableau-vers-aide · c5-menu-styles ·
-3bis-menu-styles-titres · c5-palette-templates · c7-palette-templates ·
-annexeB-palette · annexeB-templates · 4b-mode-source · 3bis-alt-image ·
-c5-telechargement-champs · c6-boutons-apercu · 8-apercu-complet-vs-question ·
-0-theme-active-sondage · a2-selection-theme · 9-github-issues
+c6-accordeon-apercu
