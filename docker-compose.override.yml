@@ -1,0 +1,33 @@
+# =============================================================================
+# LimeSurvey DSFR Suite — Overlay des 4 modules DSFR (auto-chargé)
+# =============================================================================
+#
+# Ce fichier est **automatiquement chargé** par Docker Compose en complément
+# de `docker-compose.yml`. Il ajoute au service `web` les bind-mounts des
+# 4 submodules DSFR — c'est la configuration « suite complète » historique.
+#
+# Pour lancer une instance **vanilla** (sans ces modules), bypasse cet
+# override :
+#   docker compose -f docker-compose.yml up -d
+#
+# En prod, l'instance vanilla persistante est fournie par le repo dédié
+# `mef-snum-miweb/limesurvey-core` (déployé sur limesurvey-core.lab.miweb.run).
+# =============================================================================
+
+services:
+  web:
+    volumes:
+      # --- Modules DSFR (submodules git) ---
+      # Le thème va dans le répertoire des thèmes UTILISATEUR (upload/themes/survey),
+      # pas dans le répertoire des thèmes STANDARD (themes/survey) qui est écrasé à
+      # chaque mise à jour du core LimeSurvey. Aligné avec docker-compose.dev.yml.
+      # NB : bind-mount imbriqué dans le volume `limesurvey-upload` du fichier de
+      # base ; Docker applique le montage le plus profond → `dsfr` est bien servi
+      # depuis le submodule.
+      - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
+      - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
+      - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
+      # --- Plugin CKEditorDSFR (palette de composants + styles, cf. ADR-071) ---
+      # Injection via événements natifs CKEditor (aucun override de config.js).
+      # À activer une fois dans Configuration > Plugins (persisté en base).
+      - ./modules/ckeditor-dsfr:/var/www/html/plugins/CKEditorDSFR

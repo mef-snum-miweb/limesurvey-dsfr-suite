@@ -23,6 +23,7 @@ Ce repo sert trois scénarios distincts — chacun avec ses propres prérequis. 
 | **Lancer la suite de tests** (unit + E2E + a11y + round-trip) | [→ Tests](#2-tests--lancer-et-consulter-les-rapports) | Docker **+** Node 18+ |
 | **Modifier le thème ou un plugin** | [→ Développement](#3-développement--modifier-le-thème-ou-un-plugin) | Docker + Node 18+ + lecture de [`CONTRIBUTING`](modules/theme-dsfr/CONTRIBUTING.md) |
 | **Déployer en prod** | [→ Production](#4-déploiement-en-production) | Docker + réseau Traefik |
+| **Tester une installation à froid** (Upload & install d'un module sur une instance vierge) | [→ Instance vanilla](#5-instance-vanilla-tester-linstallation-à-froid-dun-module) | Docker |
 
 ---
 
@@ -182,7 +183,41 @@ cp .env.example .env        # adapter les valeurs pour la prod
 ./deploy.sh                 # pull repo + submodules + images Docker, restart
 ```
 
-Le réseau `ecosystem-network` doit exister (créé par la stack Traefik). Les labels Traefik dans [`docker-compose.yml`](docker-compose.yml) sont à adapter au domaine cible.
+Le réseau externe Traefik (nom via `TRAEFIK_NETWORK` dans `.env`) doit exister. Les labels Traefik dans [`docker-compose.yml`](docker-compose.yml) sont paramétrés via `.env` (`PUBLIC_DOMAIN`, `TRAEFIK_CERT_RESOLVER`, etc.).
+
+**Architecture Compose** : `docker-compose.yml` est la base vanilla ; `docker-compose.override.yml` (auto-chargé) ajoute les 4 bind-mounts DSFR. Le comportement historique de `docker compose up -d` est inchangé — il continue à monter la suite complète.
+
+---
+
+## 5. Instance vanilla — tester l'installation à froid d'un module
+
+Objectif : disposer d'un LimeSurvey **sans aucun addon** pour valider l'installation d'un module via *Configuration → Plugins → Upload & install* ou *Thèmes → Importer*. Deux options selon le besoin :
+
+### Localement (dev jetable)
+
+```bash
+docker compose -f docker-compose.dev.vanilla.yml up -d
+# → http://localhost:8082  (admin / admin)
+docker compose -f docker-compose.dev.vanilla.yml down -v   # reset complet
+```
+
+Cohabite avec l'instance suite dev sur `:8081` (volumes et containers distincts).
+
+### Sur le lab (persistante, HTTPS réel)
+
+Instance dédiée déployée depuis le repo [`mef-snum-miweb/limesurvey-core`](https://github.com/mef-snum-miweb/limesurvey-core) :
+
+> <https://limesurvey-core.lab.miweb.run>
+
+### Depuis le repo suite (production, ponctuel)
+
+Le `deploy.sh` accepte un flag pour bypasser l'override modules :
+
+```bash
+./deploy.sh --vanilla        # instance vanilla depuis les mêmes fichiers
+```
+
+À utiliser uniquement pour un test ponctuel dans un environnement dédié — ne pas lancer contre la DB de production de la suite, LimeSurvey planterait sur les plugins actifs en base sans fichiers montés.
 
 ---
 
