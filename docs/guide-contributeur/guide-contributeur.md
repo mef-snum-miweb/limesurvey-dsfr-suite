@@ -553,6 +553,8 @@ Chaque fois que vous saisissez un libellé de question, un texte d'aide, une int
 
 Le principe à garder en tête : **vous vous occupez du sens, le thème s'occupe de la présentation.** Vous n'avez donc jamais à régler une couleur, une taille de police ou une graisse « à la main » : la mise en forme conforme (RGAA + DSFR) est appliquée automatiquement. Ce que vous saisissez qui sortirait du cadre est simplement neutralisé **à l'affichage** — dans l'aperçu comme pour le répondant. Ce n'est pas un défaut, c'est la conformité qui fait son travail.
 
+> ⚠️ **Même éditeur, champs différents.** L'éditeur est identique partout, mais ce qu'il autorise dépend du champ. Ce que décrivent les sections 5.2 et 5.3 vaut pour les **champs à contenu riche** : l'**aide** d'une question, les **introductions de groupe**, les **textes de début et de fin**. Le **libellé de question**, lui, est un **titre** (voir la section 3.2) : les listes, paragraphes multiples, tableaux et composants y sont **aplatis à l'affichage**, même si l'éditeur vous laisse les saisir. Seuls le gras, l'italique, les liens et l'exposant y subsistent.
+
 ### 5.1. Deux barres d'outils : la simple et la complète
 
 L'éditeur s'ouvre par défaut sur une **barre d'outils simple** (une seule ligne d'icônes : les mises en forme de base). Un **bouton de bascule** de la barre permet de l'agrandir en **barre complète**, qui déploie davantage d'options — dont les deux menus qui vous serviront le plus pour le DSFR : le menu **Styles** et la palette **Modèles** (bouton *Templates* de l'éditeur). Un nouvel appui sur le même bouton referme la barre.
@@ -566,15 +568,17 @@ Retenez :
 
 > À noter : les menus **Styles** et **Modèles** sont présents dans la barre complète, quelle que soit la barre par laquelle vous avez commencé. Si vous ne les voyez pas, c'est que vous êtes en barre simple : cliquez sur le bouton de bascule.
 
-### 5.2. Ce que vous pouvez utiliser sans crainte
+### 5.2. Ce que vous pouvez utiliser sans crainte (dans les champs à contenu riche)
 
-Ces mises en forme, appliquées **via les boutons de l'éditeur**, sont **conservées** telles quelles à l'affichage, parce qu'elles portent un sens et restent compatibles avec le DSFR :
+Ces mises en forme, appliquées **via les boutons de l'éditeur** dans une **aide**, une **introduction de groupe** ou un **texte de début ou de fin**, sont **conservées** telles quelles à l'affichage, parce qu'elles portent un sens et restent compatibles avec le DSFR :
 
 - **Gras** et *italique* — pour accentuer un mot important (avec parcimonie : tout mettre en gras n'accentue plus rien).
 - **Souligné** — possible, mais attention : sur le web, le souligné évoque un lien. Réservez-le aux cas où il apporte vraiment quelque chose.
 - **Listes à puces** et **listes numérotées** — idéales pour énumérer des critères, des étapes, des exemples. Préférez toujours une vraie liste à des tirets tapés à la main : c'est plus lisible et mieux restitué par les lecteurs d'écran.
 - **Liens** — vers une page d'information, une notice, une définition. Rédigez un libellé de lien **explicite** (voir la section 4 (Accessibilité éditoriale)) : jamais « cliquez ici ».
 - **Exposant** — utile pour « m² », « 1ᵉʳ », un appel de note, une formule simple. Conservé.
+
+> Dans un **libellé de question**, cette liste se réduit : gras, italique, lien et exposant subsistent ; **une liste ou plusieurs paragraphes y seraient aplatis en une seule ligne de titre**. Si vous en ressentez le besoin, c'est que ce contenu doit descendre dans l'**aide** (voir la section 3.2). En prévisualisation, le repère contributeur vous signale précisément ce qui ne sera pas conservé dans l'intitulé.
 
 ### 5.3. Ce que vous devez éviter
 
@@ -607,6 +611,7 @@ Si vous êtes dans ce cas, **ne modifiez rien vous-même** : demandez à votre *
 | Taille de police manuelle | 🚫 Retirée |
 | Changement de police manuel | 🚫 Retiré |
 | Alignement manuel (centré, justifié) | 🚫 Retiré |
+| Liste, paragraphes multiples ou composant **dans un libellé de question** | 🚫 Aplatis — le libellé est un titre (voir 3.2) |
 | Mise en forme collée depuis Word | ⚠️ Nettoyée / imprévisible — à reconstruire |
 
 > « Retiré » signifie que votre saisie reste enregistrée, mais que le thème la neutralise **au moment du rendu**, dans l'aperçu comme sur le questionnaire diffusé. En prévisualisation, les **repères contributeur** (voir les sections 2 et 3) vous signalent précisément ce qui ne sera pas conservé.
