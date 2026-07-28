@@ -219,6 +219,20 @@ Le `deploy.sh` accepte un flag pour bypasser l'override modules :
 
 À utiliser uniquement pour un test ponctuel dans un environnement dédié — ne pas lancer contre la DB de production de la suite, LimeSurvey planterait sur les plugins actifs en base sans fichiers montés.
 
+### Choisir le mode au déploiement (spawn ou orchestrateur)
+
+Sous un orchestrateur qui lance `docker compose up` sans argument (ex. `spawn` sur le lab), le mode se choisit **par le `.env` de l'app**, sans toucher à l'outillage :
+
+```bash
+# .env — mode vanilla : ne charger QUE la base (ignore l'override modules)
+COMPOSE_FILE=docker-compose.yml
+```
+
+- **Sans cette ligne** (défaut) : base + override auto-chargé → **suite complète**, modules livrés par submodules git (admin devops).
+- **Avec cette ligne** : instance **vanilla** → thème et plugins s'installent et se mettent à jour en **ZIP via l'UI d'admin** (admin fonctionnel). Les fichiers installés vivent dans le volume `upload/` et survivent aux redéploiements.
+
+Le choix se fait **à la création de l'instance** : ne pas basculer une instance existante d'un mode à l'autre sans migration (risque de double copie d'un même plugin — un garde-fou du plugin CKEditorDSFR l'affiche en admin le cas échéant, cf. sa doc « Migrer d'une installation filesystem vers le ZIP »).
+
 ---
 
 ## Documentation complémentaire
