@@ -50,7 +50,12 @@ const tick = () => new Promise((r) => setTimeout(r, 0));
 
 describe('transformValidationMessages', () => {
   beforeEach(() => { document.body.innerHTML = ''; });
-  afterEach(() => {
+  afterEach(async () => {
+    // validation-messages.js programme `setTimeout(updateErrorSummary, 50)` :
+    // laisser ce timer tirer AVANT le démontage du jsdom, sinon il s'exécute
+    // après la fin du fichier de test et crashe (`document is not defined`)
+    // — flake observé uniquement en suite complète sous charge.
+    await new Promise((r) => setTimeout(r, 60));
     document.body.innerHTML = '';
     delete (window as any).jQuery;
   });
