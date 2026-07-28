@@ -1,0 +1,62 @@
+# =============================================================================
+# LimeSurvey DSFR Suite — Développement local, instance **vanilla**
+# =============================================================================
+#
+# Instance LimeSurvey **sans** les modules DSFR, pour tester localement
+# l'installation à froid d'un module (Upload & install via l'UI). Cohabite
+# avec l'instance suite dev (`docker-compose.dev.yml`) : port `8082` et
+# volumes/containers nommés distincts.
+#
+# Usage :
+#   docker compose -f docker-compose.dev.vanilla.yml up -d
+#   → http://localhost:8082  (admin / admin)
+#
+# Pour repartir de zéro :
+#   docker compose -f docker-compose.dev.vanilla.yml down -v
+# =============================================================================
+
+services:
+  limesurvey:
+    image: martialblog/limesurvey:6.16.16-260408-apache
+    container_name: limesurvey-dev-vanilla
+    restart: unless-stopped
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=limesurvey
+      - DB_PASSWORD=limesurvey
+      - DB_NAME=limesurvey
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
+      - ADMIN_NAME=Administrateur
+      - ADMIN_EMAIL=admin@example.com
+    ports:
+      - "8082:8080"
+    volumes:
+      # Aucun bind-mount de module — instance vraiment vierge.
+      - limesurvey-upload-dev-vanilla:/var/www/html/upload
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: limesurvey-dev-vanilla-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=limesurvey
+      - MYSQL_USER=limesurvey
+      - MYSQL_PASSWORD=limesurvey
+    volumes:
+      - limesurvey-db-dev-vanilla:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  limesurvey-db-dev-vanilla:
+  limesurvey-upload-dev-vanilla:
