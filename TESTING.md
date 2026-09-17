@@ -23,6 +23,15 @@ Les tests tournent **en local sur la machine hôte** (Node + Chromium). Docker n
 
 ### Installation (une fois par machine)
 
+**Node 24 (LTS)** — la version est déclarée dans [`.nvmrc`](.nvmrc) et contrainte par
+le champ `engines` de `package.json`. Node 20 n'est plus supporté (fin de vie en
+avril 2026, et en dessous du minimum exigé par jsdom).
+
+```bash
+nvm use            # lit .nvmrc ; `nvm install 24` la première fois
+node --version     # doit afficher v24.x
+```
+
 ```bash
 # 1. Dépendances Node (vitest, playwright, jsdom, axe-core, esbuild)
 npm ci

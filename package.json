@@ -16,6 +16,9 @@
     "dev:purge-cache": "docker exec limesurvey-dev sh -c 'rm -rf /var/www/html/tmp/assets/*' && echo 'Cache Yii purgé — rechargez la page dans le navigateur'",
     "test:visual": "VISUAL=1 npx playwright test tests/e2e/visual.spec.ts"
   },
+  "engines": {
+    "node": ">=22.22.2 <23 || >=24.15.0"
+  },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
