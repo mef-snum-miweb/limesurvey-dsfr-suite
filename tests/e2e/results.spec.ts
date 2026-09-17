@@ -83,11 +83,27 @@ async function fillAndSubmitSurvey(page: Page, variant: Variant): Promise<Filled
 function valuesEqual(expected: string, actual: string): boolean {
   if (expected === actual) return true;
   // Normalisation "null → ''" déjà faite par l'appelant.
-  // Comparaison numérique si les deux côtés parsent en nombres finis.
-  const e = parseFloat(expected);
-  const a = parseFloat(actual);
-  if (!Number.isNaN(e) && !Number.isNaN(a) && expected.trim() !== '' && actual.trim() !== '') {
-    return e === a;
+
+  // Dates AVANT la comparaison numérique : `parseFloat('15/06/2024')` vaut 15
+  // et `parseFloat('2024-06-15 00:00:00')` vaut 2024 — la branche numérique
+  // conclurait à tort à une divergence. Le DOM porte la valeur affichée,
+  // la DB un datetime : on compare le jour, pas le format.
+  const asDay = (v: string): string | null => {
+    const fr = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (fr) return `${fr[3]}-${fr[2]}-${fr[1]}`;
+    const iso = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+    return null;
+  };
+  const expectedDay = asDay(expected.trim());
+  const actualDay = asDay(actual.trim());
+  if (expectedDay && actualDay) return expectedDay === actualDay;
+
+  // Comparaison numérique, uniquement si les DEUX côtés sont des nombres purs
+  // (la DB MySQL stocke "1.0000000000" là où le DOM a "1").
+  const isNumeric = (v: string): boolean => /^-?\d+([.,]\d+)?$/.test(v.trim());
+  if (isNumeric(expected) && isNumeric(actual)) {
+    return parseFloat(expected.replace(',', '.')) === parseFloat(actual.replace(',', '.'));
   }
   return false;
 }
