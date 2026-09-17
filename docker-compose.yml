@@ -34,9 +34,13 @@ services:
     # Le thème est désormais compatible 6.x ET 7.x (ADR-129), mais faire passer
     # la PROD en 7.x est une décision SÉPARÉE : elle implique une migration de
     # base irréversible (updatedb 648 → 712) et une reprise des questionnaires
-    # existants. Tant qu'elle n'est pas prise, la prod reste sur 6.16.16 ; la
-    # validation 7.x se fait sur https://limesurvey-7.lab.miweb.run (suivi #4).
-    image: martialblog/limesurvey:6.16.16-260408-apache
+    # existants. Tant qu'elle n'est pas prise, la prod reste sur 6.16.16.
+    #
+    # LS_CORE_IMAGE permet à une AUTRE instance (ex. un proto de validation 7.x
+    # sur le lab) de choisir son core depuis son seul `.env`, sans branche ni
+    # compose dédiés — chaque instance ayant ses propres volumes, les bases ne
+    # se mélangent pas. Cf. README § « Faire cohabiter une instance 6.x et 7.x ».
+    image: ${LS_CORE_IMAGE:-martialblog/limesurvey:6.16.16-260408-apache}
     # INSTANCE_NAME (défaut `limesurvey`) préfixe conteneurs et routeurs Traefik :
     # permet de faire cohabiter plusieurs instances sur le même hôte (ex. prod 6.x
     # et lab 7.x). Défauts = noms historiques de la prod.
