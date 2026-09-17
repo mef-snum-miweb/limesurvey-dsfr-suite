@@ -37,6 +37,13 @@ function numericValue(variant: Variant, fieldName: string): string {
   return String(shifted);
 }
 
+/**
+ * Sous-champs d'une question Date : `day<fieldname>`, `month…`, `year…`.
+ * Le fieldname est SGQA (`282267X1X24`) en LimeSurvey 6.x et `Q24` en 7.x —
+ * d'où les deux formes reconnues (ADR-129 : on détecte le format, pas la version).
+ */
+export const DATE_PART_RE = /^(day|month|year|hour|minute)(\d+X\d+X\d+|Q\d+)/;
+
 function datePartsFor(variant: Variant): { day: string; month: string; year: string } {
   return variant === 'A'
     ? { day: '15', month: '06', year: '2024' }
@@ -90,7 +97,7 @@ async function fillSelects(page: Page, variant: Variant): Promise<void> {
   );
   for (const { name, options } of snapshot) {
     if (!name || options.length === 0) continue;
-    if (/^(day|month|year|hour|minute)\d/.test(name)) continue;
+    if (/^(day|month|year|hour|minute)(\d+X\d+X\d+|Q\d+)/.test(name)) continue;
     const picked = options[variant === 'A' ? 0 : Math.min(1, options.length - 1)];
     await page.locator(`select[name="${cssEscape(name)}"]`).first().selectOption(picked);
   }
@@ -202,7 +209,7 @@ export async function snapshotFormState(page: Page): Promise<FilledValues> {
         'input[type="text"], input[type="email"], input[type="url"], input[type="number"]',
       ).forEach((el) => {
         if (!el.name || el.name.startsWith('java')) return;
-        if (/^(day|month|year|hour|minute)\d/.test(el.name)) return;
+        if (/^(day|month|year|hour|minute)(\d+X\d+X\d+|Q\d+)/.test(el.name)) return;
         if (!isLiveInput(el)) return;
         result.push({ name: el.name, value: el.value, kind: 'text' });
       });
@@ -238,7 +245,7 @@ export async function snapshotFormState(page: Page): Promise<FilledValues> {
       container.querySelectorAll<HTMLSelectElement>('select').forEach((el) => {
         if (!el.name) return;
         if (el.closest('.ranking-question-dsfr')) return;
-        if (/^(day|month|year|hour|minute)\d/.test(el.name)) return;
+        if (/^(day|month|year|hour|minute)(\d+X\d+X\d+|Q\d+)/.test(el.name)) return;
         if (!isLiveInput(el)) return;
         result.push({ name: el.name, value: el.value, kind: 'select' });
       });

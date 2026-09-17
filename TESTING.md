@@ -68,6 +68,38 @@ Orchestrateur : [`run_tests.sh`](run_tests.sh). Cinq modes via switch :
 ./run_tests.sh --full      # Tout : --classic + --results
 ```
 
+### Gate double 6.x / 7.x (ADR-129)
+
+Le thème supporte **deux cores sur une seule branche** : toute modification doit donc
+passer la suite sur les deux.
+
+```bash
+LS_CORE=6 ./run_tests.sh --full   # 6.16.16 (référence), port 8081
+LS_CORE=7 ./run_tests.sh --full   # 7.1.0,               port 8082
+```
+
+Les deux stacks cohabitent : conteneurs (`LS_PREFIX`), port (`LS_PORT`), image
+(`LS_IMAGE`) et volumes (nom de projet compose) distincts. Aucun nom de conteneur
+ni port n'est codé en dur dans les tests — tout passe par
+[`tests/e2e/helpers/env.ts`](tests/e2e/helpers/env.ts).
+
+**Préparer une base 7.x** : le dump `db/init.sql` est figé au schéma 6.x (DBVersion 648).
+Le rejouer sur une instance 7.x **corrompt le schéma** — `db/seed.sh` le refuse
+désormais explicitement. La bonne méthode conserve les `qid` (un import `.lss` les
+renumérote et casse les sélecteurs des tests) :
+
+```bash
+export LS_IMAGE=martialblog/limesurvey:7.1.0-260913-apache LS_PREFIX=limesurvey-ls7 LS_PORT=8082
+docker compose -p ls7 -f docker-compose.dev.yml up -d db     # 1. base seule
+docker exec -i limesurvey-ls7-db mysql -ulimesurvey -plimesurvey limesurvey < db/init.sql
+docker compose -p ls7 -f docker-compose.dev.yml up -d        # 2. le core migre (648 → 712)
+docker cp db/Ls7setupCommand.php limesurvey-ls7:/var/www/html/application/commands/
+docker exec -u www-data -w /var/www/html limesurvey-ls7 php application/commands/console.php ls7setup
+```
+
+Pour partir d'une instance 7.x **vierge** (sans historique 6.x), utiliser
+[`db/seed-ls7.sh`](db/seed-ls7.sh) avec un répertoire de `.lss`.
+
 ### Snapshots visuels (sur demande)
 
 ```bash
@@ -86,11 +118,18 @@ Les questions à ordre aléatoire (random_order/answer_order) sont masquées.
 
 ### Avant un round-trip
 
-Le mode `--results` ajoute des lignes dans `lime_survey_<sid>`. Pour repartir d'une base propre :
+Le mode `--results` ajoute des lignes dans la table de réponses du questionnaire.
+Attention à son nom, qui dépend du core : `lime_survey_<sid>` en 6.x,
+`lime_responses_<sid>` en 7.x (les tests le détectent, cf. `responseTable()`).
+Pour repartir d'une base propre :
 
 ```bash
+# 6.x
 docker exec limesurvey-dev-db mysql -u limesurvey -plimesurvey limesurvey \
     -e "TRUNCATE TABLE lime_survey_282267;"
+# 7.x
+docker exec limesurvey-ls7-db mysql -u limesurvey -plimesurvey limesurvey \
+    -e "TRUNCATE TABLE lime_responses_282267;"
 ```
 
 Le `sid` `282267` est celui du questionnaire de démo chargé par [`db/seed.sh`](db/seed.sh) — s'il change, adapte la commande.

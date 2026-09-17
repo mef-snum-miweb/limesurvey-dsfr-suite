@@ -28,11 +28,23 @@ services:
   # le réseau `mail` au service `web`. container_name reste `limesurvey-dsfr`.
   web:
     # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
-    # du thème est le core déployé (6.16.16, cf. check-list de montée de version
-    # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
-    # core silencieusement. Bump = décision explicite + re-gate complet.
-    image: martialblog/limesurvey:6.16.16-260408-apache
-    container_name: limesurvey-dsfr
+    # du thème est le core déployé. Un `docker compose pull` ne doit pas déplacer
+    # le core silencieusement. Bump = décision explicite + re-gate complet.
+    #
+    # Le thème est désormais compatible 6.x ET 7.x (ADR-129), mais faire passer
+    # la PROD en 7.x est une décision SÉPARÉE : elle implique une migration de
+    # base irréversible (updatedb 648 → 712) et une reprise des questionnaires
+    # existants. Tant qu'elle n'est pas prise, la prod reste sur 6.16.16.
+    #
+    # LS_CORE_IMAGE permet à une AUTRE instance (ex. un proto de validation 7.x
+    # sur le lab) de choisir son core depuis son seul `.env`, sans branche ni
+    # compose dédiés — chaque instance ayant ses propres volumes, les bases ne
+    # se mélangent pas. Cf. README § « Faire cohabiter une instance 6.x et 7.x ».
+    image: ${LS_CORE_IMAGE:-martialblog/limesurvey:6.16.16-260408-apache}
+    # INSTANCE_NAME (défaut `limesurvey`) préfixe conteneurs et routeurs Traefik :
+    # permet de faire cohabiter plusieurs instances sur le même hôte (ex. prod 6.x
+    # et lab 7.x). Défauts = noms historiques de la prod.
+    container_name: ${INSTANCE_NAME:-limesurvey}-dsfr
     restart: unless-stopped
     env_file: .env
     environment:
@@ -71,25 +83,25 @@ services:
       # Traefik lequel utiliser pour joindre l'app, sinon 404.
       - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}"
       # HTTP → HTTPS redirect
-      - "traefik.http.routers.limesurvey-http.rule=Host(`${PUBLIC_DOMAIN}`)"
-      - "traefik.http.routers.limesurvey-http.entrypoints=web"
-      - "traefik.http.routers.limesurvey-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.rule=Host(`${PUBLIC_DOMAIN}`)"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.entrypoints=web"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.middlewares=${INSTANCE_NAME:-limesurvey}-redirect-to-https"
       # HTTPS
-      - "traefik.http.routers.limesurvey-https.rule=Host(`${PUBLIC_DOMAIN}`)"
-      - "traefik.http.routers.limesurvey-https.entrypoints=websecure"
-      - "traefik.http.routers.limesurvey-https.tls=true"
-      - "traefik.http.routers.limesurvey-https.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
-      - "traefik.http.routers.limesurvey-https.tls.options=${TRAEFIK_TLS_OPTIONS:-default}"
-      - "traefik.http.routers.limesurvey-https.middlewares=${TRAEFIK_SECURITY_MW:-}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.rule=Host(`${PUBLIC_DOMAIN}`)"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.entrypoints=websecure"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls=true"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls.options=${TRAEFIK_TLS_OPTIONS:-default}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.middlewares=${TRAEFIK_SECURITY_MW:-}"
       # Service
-      - "traefik.http.services.limesurvey.loadbalancer.server.port=8080"
+      - "traefik.http.services.${INSTANCE_NAME:-limesurvey}.loadbalancer.server.port=8080"
       # Middleware
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.${INSTANCE_NAME:-limesurvey}-redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${INSTANCE_NAME:-limesurvey}-redirect-to-https.redirectscheme.permanent=true"
 
   db:
     image: mysql:8.0
-    container_name: limesurvey-db
+    container_name: ${INSTANCE_NAME:-limesurvey}-db
     restart: unless-stopped
     env_file: .env
     environment:

@@ -187,6 +187,39 @@ Le réseau externe Traefik (nom via `TRAEFIK_NETWORK` dans `.env`) doit exister.
 
 **Architecture Compose** : `docker-compose.yml` est la base vanilla ; `docker-compose.override.yml` (auto-chargé) ajoute les 4 bind-mounts DSFR. Le comportement historique de `docker compose up -d` est inchangé — il continue à monter la suite complète.
 
+> ⚠️ **Piège `spawn`** (vibelab-platform#79) : `spawn up` exporte
+> `COMPOSE_FILE=docker-compose.yml:.spawn-override.yml`, ce qui **court-circuite le
+> chargement automatique** de `docker-compose.override.yml` — l'instance repart en
+> LimeSurvey vanilla, sans les modules DSFR. `deploy.sh` reconstruit donc la liste
+> des fichiers lui-même et **échoue** si les 4 bind-mounts ne sont pas là. Après tout
+> `spawn up`, relancer `./deploy.sh` sur l'instance.
+
+### Faire cohabiter une instance 6.x et une instance 7.x
+
+Le thème est compatible **6.16.16 et 7.1.0** (ADR-129). Le core d'une instance se
+choisit dans son seul `.env`, sans branche ni compose dédiés :
+
+```bash
+# .env d'une instance de validation 7.x
+INSTANCE_NAME=limesurvey-7                                     # conteneurs et routeurs distincts
+LS_CORE_IMAGE=martialblog/limesurvey:7.1.0-260913-apache       # core 7.x
+PUBLIC_DOMAIN=limesurvey-7.lab.miweb.run
+```
+
+Sans `LS_CORE_IMAGE`, l'instance reste sur le core 6.16.16 de référence. Chaque
+instance ayant ses propres volumes, les bases ne se mélangent pas.
+
+> ⚠️ **Ne jamais changer ce tag sur une instance existante** : au démarrage, le core
+> migre la base (`updatedb`, 648 → 712) et l'opération est **irréversible**. Pour
+> comparer deux versions, on déploie deux instances.
+
+Déploiement type sur le lab :
+
+```bash
+ssh vps "spawn up limesurvey-7 git@github.com:mef-snum-miweb/limesurvey-dsfr-suite.git --keep --mail"
+ssh vps "cd /opt/apps/limesurvey-7 && ./deploy.sh"   # remonte les modules DSFR (piège ci-dessus)
+```
+
 ---
 
 ## 5. Instance vanilla — tester l'installation à froid d'un module
