@@ -59,8 +59,17 @@ test.describe('Bug 3 — question theme bootstrap_buttons : alignement boutons +
     await page.waitForLoadState('domcontentloaded');
     await navigateToSelector(page, '#question18', 15);
 
-    const otherBox = await page.locator('#question18 label[for="answer282267X3X18othercbox"]').first().boundingBox();
-    const naBox = await page.locator('#question18 label[for="answer282267X3X18"]').first().boundingBox();
+    // Le fieldname est SGQA (`282267X3X18`) en 6.x et `Q18` en 7.x : on le
+    // déduit du DOM plutôt que de le coder en dur (ADR-129).
+    const otherLabel = page.locator('#question18 label[for$="othercbox"]').first();
+    const otherFor = (await otherLabel.getAttribute('for')) ?? '';
+    const fieldname = otherFor.replace(/^answer/, '').replace(/othercbox$/, '');
+
+    const otherBox = await otherLabel.boundingBox();
+    const naBox = await page
+      .locator(`#question18 label[for="answer${cssEscape(fieldname)}"]`)
+      .first()
+      .boundingBox();
     const diff = Math.abs((otherBox?.y || 0) - (naBox?.y || 0));
     // Avant fix : 4px de décalage à cause du padding 0.25rem appliqué deux fois
     // (sur le wrapper externe ET sur le .form-check.bootstrap-buttons-div interne).
@@ -118,6 +127,11 @@ test.describe('Bug 1 — option exclusive (« Aucun ») ne doit pas masquer les 
 // mandatory et min_answers). Sans ce mode, Playwright peut paralléliser entre
 // fichiers et le test Bug 1 voit un état pollué.
 test.describe.configure({ mode: 'serial' });
+
+/** Échappe un fieldname dans un sélecteur CSS (les SGQA n'ont pas de caractère spécial, mais restons sûrs). */
+function cssEscape(value: string): string {
+  return value.replace(/["\\]/g, '\\$&');
+}
 
 // suite#31 : on ne rejoue plus `db/seed.sh --force` (dump figé au schéma 6.x,
 // destructeur sur une base 7.x migrée). On prend un instantané des tables de
