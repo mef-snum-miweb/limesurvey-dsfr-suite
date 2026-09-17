@@ -137,6 +137,45 @@ describe('fixTableAccessibility', () => {
     expect(document.querySelector('tbody th')!.getAttribute('scope')).toBe('row');
   });
 
+  it('double échelle : headers pointe la bonne échelle malgré les <td> vides du thead (#58)', () => {
+    // Markup du template dualscale/answer_dropdown : le <thead> intercale des
+    // <td> vides (colonne des libellés, séparateur), et le corps a un <td>
+    // séparateur entre les deux échelles.
+    document.body.innerHTML = `
+      <div class="fr-table">
+        <table id="tbl">
+          <thead>
+            <tr class="ls-heading">
+              <td></td>
+              <th class="left-header" id="left-header-q1">Échelle 1</th>
+              <td></td>
+              <th class="right-header" id="right-header-q1">Échelle 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" id="answertext-sq1">Sous-question 1</th>
+              <td class="answer-item" id="cell-scale-0"><select></select></td>
+              <td class="ddarrayseparator"></td>
+              <td class="answer-item" id="cell-scale-1"><select></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    fixTableAccessibility();
+
+    // Avant le correctif : `right-header-q1` atterrissait sur la première
+    // cellule, l'index ne comptant que les <th> du thead.
+    expect(document.getElementById('cell-scale-0')!.getAttribute('headers'))
+      .toBe('answertext-sq1 left-header-q1');
+    expect(document.getElementById('cell-scale-1')!.getAttribute('headers'))
+      .toBe('answertext-sq1 right-header-q1');
+    // Le séparateur est décoratif : pas de headers inventé.
+    expect(document.querySelector('.ddarrayseparator')!.hasAttribute('headers')).toBe(false);
+  });
+
   it('ne fait rien s\'il n\'y a pas de tableau ciblé', () => {
     document.body.innerHTML = '<div><table><tr><td>Pas ciblé</td></tr></table></div>';
     expect(() => fixTableAccessibility()).not.toThrow();
