@@ -206,6 +206,8 @@ et groupes, ou regrouper ?</a></li>
 question ou aide : où mettre quoi ?</a></li>
 <li><a href="#les-repères-contributeur-en-prévisualisation" id="toc-les-repères-contributeur-en-prévisualisation">3.3 Les repères
 contributeur en prévisualisation</a></li>
+<li><a href="#demander-le-consentement-à-la-politique-de-confidentialité" id="toc-demander-le-consentement-à-la-politique-de-confidentialité">3.4
+Demander le consentement à la politique de confidentialité</a></li>
 </ul></li>
 <li><a href="#accessibilité-éditoriale-rgaa-au-quotidien" id="toc-accessibilité-éditoriale-rgaa-au-quotidien">4. Accessibilité
 éditoriale (RGAA au quotidien)</a>
@@ -1203,6 +1205,86 @@ comment lire l’aperçu et ce qu’il faut contrôler.</li>
 conditions), formulez ensuite (libellé de question court en titre,
 contenu riche en aide), et laissez le thème DSFR gérer toute la
 présentation à votre place.</p>
+</blockquote>
+<h3 id="demander-le-consentement-à-la-politique-de-confidentialité">3.4
+Demander le consentement à la politique de confidentialité</h3>
+<p>Un questionnaire qui collecte des données personnelles peut exiger
+que le répondant <strong>accepte explicitement la politique de
+confidentialité</strong> avant de commencer. Ce réglage n’appartient pas
+au thème : il se trouve dans les <strong>réglages du
+questionnaire</strong>, onglet « Politique de confidentialité » (option
+<em>Afficher la politique de confidentialité</em>).</p>
+<p>Trois valeurs possibles :</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Réglage</th>
+<th>Ce que voit le répondant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Désactivé</strong></td>
+<td>Rien. Aucune case, aucun texte.</td>
+</tr>
+<tr>
+<td><strong>Texte</strong></td>
+<td>La politique s’affiche <strong>dans la page</strong> d’accueil du
+questionnaire, suivie de la case à cocher.</td>
+</tr>
+<tr>
+<td><strong>Modale</strong></td>
+<td>Un lien ouvre la politique dans une <strong>fenêtre modale</strong>
+; la case reste dans la page.</td>
+</tr>
+</tbody>
+</table>
+<p>Le contenu affiché est celui que vous avez renseigné dans l’onglet «
+Données personnelles » des options du thème (section 2) : soit la
+politique générée automatiquement à partir du responsable de traitement,
+de la finalité et de la durée de conservation, soit votre politique
+personnalisée si vous en avez saisi une.</p>
+<h4 id="la-case-est-bloquante">La case est bloquante</h4>
+<p>Dès que l’option est activée, <strong>la case doit être cochée pour
+passer à la page suivante</strong>. Le thème DSFR :</p>
+<ul>
+<li>pose l’attribut <code>required</code> sur la case — le blocage
+fonctionne donc <strong>même sans JavaScript</strong> ;</li>
+<li>remplace la bulle native du navigateur, non stylable et mal
+annoncée, par un <strong>message d’erreur DSFR</strong> sous la case
+(encadré rouge, <code>aria-invalid</code>, message lié à la case pour
+les lecteurs d’écran) ;</li>
+<li><strong>déplace l’astérisque</strong> hors de la case à cocher, pour
+que le libellé reste lisible ;</li>
+<li>efface le message dès que la case est cochée.</li>
+</ul>
+<h4 id="personnaliser-le-message-derreur">Personnaliser le message
+d’erreur</h4>
+<p>Le message affiché reprend, s’il est renseigné, le <strong>texte
+d’erreur défini dans les réglages du questionnaire</strong> (champ
+<em>Message d’erreur</em> de la politique de confidentialité). Sinon, le
+thème affiche un texte par défaut traduit. Écrivez un message qui dit
+quoi faire — « Veuillez accepter la politique de confidentialité pour
+continuer » — plutôt qu’un constat d’échec.</p>
+<h4 id="limite-connue-un-garde-fou-dinterface-pas-une-preuve-de-consentement">Limite
+connue : un garde-fou d’interface, pas une preuve de consentement</h4>
+<blockquote>
+<p>⚠️ Le blocage est <strong>côté navigateur</strong>. LimeSurvey
+embarque bien un contrôle serveur
+(<code>SurveyRuntimeHelper::checkForDataSecurityAccepted()</code>), mais
+il compare l’étape courante à la chaîne <code>&#39;0&#39;</code> alors que le
+cœur renvoie un entier depuis la version 5.4 : la condition n’est jamais
+vraie, et <strong>aucune vérification serveur n’a lieu</strong>. Une
+requête forgée qui saute la case est donc acceptée.</p>
+<p>Concrètement : la case remplit son rôle d’information et de recueil
+explicite auprès d’un répondant ordinaire, mais <strong>ne constitue pas
+une garantie technique</strong>. Si votre traitement exige une preuve de
+consentement opposable, prévoyez une question dédiée et obligatoire dans
+le questionnaire, dont la réponse sera enregistrée avec les données.</p>
 </blockquote>
 <hr />
 <h2 id="accessibilité-éditoriale-rgaa-au-quotidien">4. Accessibilité
