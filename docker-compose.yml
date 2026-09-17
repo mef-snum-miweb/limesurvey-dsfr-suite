@@ -27,12 +27,14 @@ services:
   # Service nommé `web` : requis par l'override mail de spawn (--mail) qui attache
   # le réseau `mail` au service `web`. container_name reste `limesurvey-dsfr`.
   web:
-    # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
-    # du thème est le core déployé (6.16.16, cf. check-list de montée de version
-    # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
-    # core silencieusement. Bump = décision explicite + re-gate complet.
-    image: martialblog/limesurvey:6.16.16-260408-apache
-    container_name: limesurvey-dsfr
+    # Tag PINNÉ (et non le flottant 7-apache). Branche limesurvey-7-0 : core
+    # LimeSurvey 7.1.0 (suivi #4). Un `docker compose pull` ne doit pas déplacer
+    # le core silencieusement. Bump = décision explicite + re-gate complet.
+    image: martialblog/limesurvey:7.1.0-260913-apache
+    # INSTANCE_NAME (défaut `limesurvey`) préfixe conteneurs et routeurs Traefik :
+    # permet de faire cohabiter plusieurs instances sur le même hôte (ex. prod 6.x
+    # et lab 7.x). Défauts = noms historiques de la prod.
+    container_name: ${INSTANCE_NAME:-limesurvey}-dsfr
     restart: unless-stopped
     env_file: .env
     environment:
@@ -71,25 +73,25 @@ services:
       # Traefik lequel utiliser pour joindre l'app, sinon 404.
       - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}"
       # HTTP → HTTPS redirect
-      - "traefik.http.routers.limesurvey-http.rule=Host(`${PUBLIC_DOMAIN}`)"
-      - "traefik.http.routers.limesurvey-http.entrypoints=web"
-      - "traefik.http.routers.limesurvey-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.rule=Host(`${PUBLIC_DOMAIN}`)"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.entrypoints=web"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-http.middlewares=${INSTANCE_NAME:-limesurvey}-redirect-to-https"
       # HTTPS
-      - "traefik.http.routers.limesurvey-https.rule=Host(`${PUBLIC_DOMAIN}`)"
-      - "traefik.http.routers.limesurvey-https.entrypoints=websecure"
-      - "traefik.http.routers.limesurvey-https.tls=true"
-      - "traefik.http.routers.limesurvey-https.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
-      - "traefik.http.routers.limesurvey-https.tls.options=${TRAEFIK_TLS_OPTIONS:-default}"
-      - "traefik.http.routers.limesurvey-https.middlewares=${TRAEFIK_SECURITY_MW:-}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.rule=Host(`${PUBLIC_DOMAIN}`)"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.entrypoints=websecure"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls=true"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.tls.options=${TRAEFIK_TLS_OPTIONS:-default}"
+      - "traefik.http.routers.${INSTANCE_NAME:-limesurvey}-https.middlewares=${TRAEFIK_SECURITY_MW:-}"
       # Service
-      - "traefik.http.services.limesurvey.loadbalancer.server.port=8080"
+      - "traefik.http.services.${INSTANCE_NAME:-limesurvey}.loadbalancer.server.port=8080"
       # Middleware
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.${INSTANCE_NAME:-limesurvey}-redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${INSTANCE_NAME:-limesurvey}-redirect-to-https.redirectscheme.permanent=true"
 
   db:
     image: mysql:8.0
-    container_name: limesurvey-db
+    container_name: ${INSTANCE_NAME:-limesurvey}-db
     restart: unless-stopped
     env_file: .env
     environment:
