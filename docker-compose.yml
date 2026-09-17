@@ -1,21 +1,32 @@
 # =============================================================================
-# LimeSurvey DSFR Suite — Production
+# LimeSurvey DSFR Suite — Production (base)
 # =============================================================================
 #
-# Ce fichier utilise les submodules git dans modules/ comme source des fichiers.
-# Avant de lancer :
-#   git submodule update --init --recursive
+# Ce fichier définit la **base vanilla** : LimeSurvey + MySQL + labels Traefik,
+# **sans** les 4 modules DSFR. Les bind-mounts des modules vivent dans
+# `docker-compose.override.yml`, qui est **auto-chargé** par Docker Compose.
 #
-# Usage :
-#   cp .env.example .env   # puis éditer les valeurs
+# Modes d'usage :
 #   docker compose up -d
+#     → charge base + override → suite complète (comportement historique)
 #
-# Réseau : utilise le réseau externe "ecosystem-network" (Traefik).
-# Adapter les labels Traefik à votre domaine.
+#   docker compose -f docker-compose.yml up -d
+#     → bypass l'override → **instance vanilla** (utile pour tester
+#       localement l'install à froid d'un module ; en prod on utilise
+#       plutôt le repo dédié `limesurvey-core`).
+#
+# Avant de lancer :
+#   git submodule update --init --recursive   # requis en mode suite
+#   cp .env.example .env                       # puis éditer les valeurs
+#
+# Réseau : utilise le réseau externe défini par TRAEFIK_NETWORK (défaut
+# `traefik_public`).
 # =============================================================================
 
 services:
-  limesurvey:
+  # Service nommé `web` : requis par l'override mail de spawn (--mail) qui attache
+  # le réseau `mail` au service `web`. container_name reste `limesurvey-dsfr`.
+  web:
     # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
     # du thème est le core déployé (6.16.16, cf. check-list de montée de version
     # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
@@ -29,16 +40,6 @@ services:
       - DB_HOST=db
       - DB_PORT=3306
     volumes:
-      # --- Modules DSFR (submodules git) ---
-      # Le thème va dans le répertoire des thèmes UTILISATEUR (upload/themes/survey),
-      # pas dans le répertoire des thèmes STANDARD (themes/survey) qui est écrasé à
-      # chaque mise à jour du core LimeSurvey. Aligné avec docker-compose.dev.yml.
-      # NB : ce bind-mount est imbriqué dans le volume `limesurvey-upload` monté sur
-      # /var/www/html/upload (ligne plus bas) ; Docker applique le montage le plus
-      # profond, donc `dsfr` est bien servi depuis le submodule.
-      - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
-      - ./modules/email-dsfr:/var/www/html/plugins/DSFRMail
-      - ./modules/conversation-albert:/var/www/html/plugins/ConversationIA
       # --- PHP : override des limites par défaut (upload 2M → 16M).
       # `martialblog/limesurvey` ne propage pas les variables d'env vers
       # php.ini, on monte donc le fichier directement dans conf.d/. Le
@@ -46,6 +47,11 @@ services:
       # dernier et écrase les valeurs par défaut. Cf. php-uploads.ini.
       - ./php-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
       # --- Données persistantes ---
+      # NB : les bind-mounts des modules DSFR (docker-compose.override.yml)
+      # sont imbriqués dans ce volume `limesurvey-upload` monté sur
+      # /var/www/html/upload ; Docker applique le montage le plus profond,
+      # donc `dsfr` (thème) est bien servi depuis le submodule quand
+      # l'override est chargé.
       - limesurvey-upload:/var/www/html/upload
     depends_on:
       db:
@@ -61,6 +67,9 @@ services:
       # TRAEFIK_SECURITY_MW      : middleware de sécurité (ex. security-headers@file)
       #                            → laisser vide si pas de middleware
       - "traefik.enable=true"
+      # Conteneur sur plusieurs réseaux (traefik + internal [+ mail]) → indiquer à
+      # Traefik lequel utiliser pour joindre l'app, sinon 404.
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}"
       # HTTP → HTTPS redirect
       - "traefik.http.routers.limesurvey-http.rule=Host(`${PUBLIC_DOMAIN}`)"
       - "traefik.http.routers.limesurvey-http.entrypoints=web"

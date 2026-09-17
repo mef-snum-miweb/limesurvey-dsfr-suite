@@ -2,13 +2,14 @@
 
 Suite d'intégration DSFR (Système de Design de l'État) pour [LimeSurvey](https://www.limesurvey.org/). Environnement Docker pour le dev local et le déploiement en production — sans fork de LimeSurvey, avec l'image officielle [`martialblog/limesurvey`](https://github.com/martialblog/docker-limesurvey).
 
-Trois modules vivent en submodules sous [`modules/`](modules/) :
+Quatre modules vivent en submodules sous [`modules/`](modules/) :
 
 | Module | Repo | Description |
 |---|---|---|
-| **Thème DSFR** | [`limesurvey-theme-dsfr`](https://github.com/bmatge/limesurvey-theme-dsfr) | Thème de sondage conforme au DSFR et au RGAA 4.1 |
-| **Email DSFR** | [`limesurvey-email-dsfr`](https://github.com/bmatge/limesurvey-email-dsfr) | Plugin de templates d'email conformes DSFR |
-| **Conversation Albert** | [`limesurvey-conversation-albert`](https://github.com/bmatge/limesurvey-conversation-albert) | Plugin d'assistant conversationnel IA |
+| **Thème DSFR** | [`limesurvey-theme-dsfr`](https://github.com/mef-snum-miweb/limesurvey-theme-dsfr) | Thème de sondage conforme au DSFR et au RGAA 4.1 |
+| **CKEditor DSFR** | [`limesurvey-ckeditor-dsfr`](https://github.com/mef-snum-miweb/limesurvey-ckeditor-dsfr) | Plugin éditeur : palette de composants + styles DSFR dans l'éditeur admin |
+| **Email DSFR** | [`limesurvey-email-dsfr`](https://github.com/mef-snum-miweb/limesurvey-email-dsfr) | Plugin de templates d'email conformes DSFR |
+| **Conversation Albert** | [`limesurvey-conversation-albert`](https://github.com/mef-snum-miweb/limesurvey-conversation-albert) | Plugin d'assistant conversationnel IA |
 
 ---
 
@@ -22,18 +23,19 @@ Ce repo sert trois scénarios distincts — chacun avec ses propres prérequis. 
 | **Lancer la suite de tests** (unit + E2E + a11y + round-trip) | [→ Tests](#2-tests--lancer-et-consulter-les-rapports) | Docker **+** Node 18+ |
 | **Modifier le thème ou un plugin** | [→ Développement](#3-développement--modifier-le-thème-ou-un-plugin) | Docker + Node 18+ + lecture de [`CONTRIBUTING`](modules/theme-dsfr/CONTRIBUTING.md) |
 | **Déployer en prod** | [→ Production](#4-déploiement-en-production) | Docker + réseau Traefik |
+| **Tester une installation à froid** (Upload & install d'un module sur une instance vierge) | [→ Instance vanilla](#5-instance-vanilla-tester-linstallation-à-froid-dun-module) | Docker |
 
 ---
 
 ## 1. Démo — faire tourner la suite
 
-Objectif : avoir LimeSurvey avec le thème DSFR et les 2 plugins **opérationnels en local**, pour naviguer dans l'admin ou répondre au questionnaire de démo. Pas de build, pas de Node, juste Docker.
+Objectif : avoir LimeSurvey avec le thème DSFR et les 3 plugins **opérationnels en local**, pour naviguer dans l'admin ou répondre au questionnaire de démo. Pas de build, pas de Node, juste Docker.
 
 **Prérequis** : [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/install/) (inclus dans Docker Desktop).
 
 ```bash
 # 1. Cloner avec les submodules
-git clone --recurse-submodules https://github.com/bmatge/limesurvey-dsfr-suite.git
+git clone --recurse-submodules https://github.com/mef-snum-miweb/limesurvey-dsfr-suite.git
 cd limesurvey-dsfr-suite
 
 # 2. Démarrer la stack (LimeSurvey + MySQL)
@@ -45,7 +47,7 @@ docker compose -f docker-compose.dev.yml up -d
 # 4. Ouvrir → http://localhost:8081  (admin / admin)
 ```
 
-Les 3 submodules sont montés en direct dans le conteneur — toute modification est visible après un simple refresh du navigateur, sans rebuild Docker.
+Les 4 submodules sont montés en direct dans le conteneur — toute modification est visible après un simple refresh du navigateur, sans rebuild Docker.
 
 Si tu as cloné **sans** `--recurse-submodules`, tu peux rattraper :
 
@@ -164,7 +166,7 @@ git commit -m "chore: bump theme-dsfr"
 git push
 ```
 
-Pour tirer les dernières versions des 3 submodules :
+Pour tirer les dernières versions des 4 submodules :
 
 ```bash
 git submodule update --remote --merge
@@ -175,13 +177,61 @@ git submodule update --remote --merge
 ## 4. Déploiement en production
 
 ```bash
-git clone --recurse-submodules https://github.com/bmatge/limesurvey-dsfr-suite.git
+git clone --recurse-submodules https://github.com/mef-snum-miweb/limesurvey-dsfr-suite.git
 cd limesurvey-dsfr-suite
 cp .env.example .env        # adapter les valeurs pour la prod
 ./deploy.sh                 # pull repo + submodules + images Docker, restart
 ```
 
-Le réseau `ecosystem-network` doit exister (créé par la stack Traefik). Les labels Traefik dans [`docker-compose.yml`](docker-compose.yml) sont à adapter au domaine cible.
+Le réseau externe Traefik (nom via `TRAEFIK_NETWORK` dans `.env`) doit exister. Les labels Traefik dans [`docker-compose.yml`](docker-compose.yml) sont paramétrés via `.env` (`PUBLIC_DOMAIN`, `TRAEFIK_CERT_RESOLVER`, etc.).
+
+**Architecture Compose** : `docker-compose.yml` est la base vanilla ; `docker-compose.override.yml` (auto-chargé) ajoute les 4 bind-mounts DSFR. Le comportement historique de `docker compose up -d` est inchangé — il continue à monter la suite complète.
+
+---
+
+## 5. Instance vanilla — tester l'installation à froid d'un module
+
+Objectif : disposer d'un LimeSurvey **sans aucun addon** pour valider l'installation d'un module via *Configuration → Plugins → Upload & install* ou *Thèmes → Importer*. Deux options selon le besoin :
+
+### Localement (dev jetable)
+
+```bash
+docker compose -f docker-compose.dev.vanilla.yml up -d
+# → http://localhost:8082  (admin / admin)
+docker compose -f docker-compose.dev.vanilla.yml down -v   # reset complet
+```
+
+Cohabite avec l'instance suite dev sur `:8081` (volumes et containers distincts).
+
+### Sur le lab (persistante, HTTPS réel)
+
+Instance dédiée déployée depuis le repo [`mef-snum-miweb/limesurvey-core`](https://github.com/mef-snum-miweb/limesurvey-core) :
+
+> <https://limesurvey-core.lab.miweb.run>
+
+### Depuis le repo suite (production, ponctuel)
+
+Le `deploy.sh` accepte un flag pour bypasser l'override modules :
+
+```bash
+./deploy.sh --vanilla        # instance vanilla depuis les mêmes fichiers
+```
+
+À utiliser uniquement pour un test ponctuel dans un environnement dédié — ne pas lancer contre la DB de production de la suite, LimeSurvey planterait sur les plugins actifs en base sans fichiers montés.
+
+### Choisir le mode au déploiement (spawn ou orchestrateur)
+
+Sous un orchestrateur qui lance `docker compose up` sans argument (ex. `spawn` sur le lab), le mode se choisit **par le `.env` de l'app**, sans toucher à l'outillage :
+
+```bash
+# .env — mode vanilla : ne charger QUE la base (ignore l'override modules)
+COMPOSE_FILE=docker-compose.yml
+```
+
+- **Sans cette ligne** (défaut) : base + override auto-chargé → **suite complète**, modules livrés par submodules git (admin devops).
+- **Avec cette ligne** : instance **vanilla** → thème et plugins s'installent et se mettent à jour en **ZIP via l'UI d'admin** (admin fonctionnel). Les fichiers installés vivent dans le volume `upload/` et survivent aux redéploiements.
+
+Le choix se fait **à la création de l'instance** : ne pas basculer une instance existante d'un mode à l'autre sans migration (risque de double copie d'un même plugin — un garde-fou du plugin CKEditorDSFR l'affiche en admin le cas échéant, cf. sa doc « Migrer d'une installation filesystem vers le ZIP »).
 
 ---
 
@@ -189,6 +239,7 @@ Le réseau `ecosystem-network` doit exister (créé par la stack Traefik). Les l
 
 | Sujet | Où |
 |---|---|
+| **Guide du contributeur** (gestionnaires d'enquêtes — thème + éditeur) | [`docs/guide-contributeur/guide-contributeur.md`](docs/guide-contributeur/guide-contributeur.md) |
 | Le thème DSFR lui-même | [`modules/theme-dsfr/README.md`](modules/theme-dsfr/README.md) |
 | Options de config du thème | [`modules/theme-dsfr/THEME_OPTIONS.md`](modules/theme-dsfr/THEME_OPTIONS.md) |
 | Couverture fonctionnelle du thème | [`modules/theme-dsfr/THEME_COVERAGE.md`](modules/theme-dsfr/THEME_COVERAGE.md) |
