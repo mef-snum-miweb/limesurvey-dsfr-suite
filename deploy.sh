@@ -34,6 +34,20 @@ echo "==> Mode : $MODE"
 # On reconstruit donc explicitement la liste des fichiers, en conservant
 # l'override de spawn (réseau mail, middlewares Traefik) quand il existe.
 if [ "$MODE" = "suite" ]; then
+  # `.spawn-override.yml` interpole ${APP_NAME} dans un nom de routeur Traefik.
+  # Hors de spawn, la variable est vide : le label devient
+  # `traefik.http.routers..middlewares=…`, Traefik rejette la configuration du
+  # conteneur et le site tombe en 404. On reprend donc le nom d'app depuis le
+  # méta spawn, à défaut le nom du répertoire de déploiement.
+  if [ -z "${APP_NAME:-}" ]; then
+    if [ -f .spawn-meta ]; then
+      APP_NAME=$(sed -n 's/^APP_NAME=//p' .spawn-meta | head -1)
+    fi
+    APP_NAME="${APP_NAME:-$(basename "$PWD")}"
+    export APP_NAME
+  fi
+  echo "==> APP_NAME : $APP_NAME"
+
   COMPOSE_FILE_LIST="docker-compose.yml:docker-compose.override.yml"
   # NB : pas de `[ -f … ] && …` ici — sous `set -e`, un test faux ferait
   # sortir le script.
