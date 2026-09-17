@@ -461,6 +461,46 @@ Chaque repère dit précisément ce qui pose problème et où placer le contenu 
 
 > **À retenir :** structurez d'abord (groupes, ordre, conditions), formulez ensuite (libellé de question court en titre, contenu riche en aide), et laissez le thème DSFR gérer toute la présentation à votre place.
 
+### 3.4 Demander le consentement à la politique de confidentialité
+
+Un questionnaire qui collecte des données personnelles peut exiger que le répondant **accepte explicitement la politique de confidentialité** avant de commencer. Ce réglage n'appartient pas au thème : il se trouve dans les **réglages du questionnaire**, onglet « Politique de confidentialité » (option *Afficher la politique de confidentialité*).
+
+Trois valeurs possibles :
+
+| Réglage | Ce que voit le répondant |
+|---|---|
+| **Désactivé** | Rien. Aucune case, aucun texte. |
+| **Texte** | La politique s'affiche **dans la page** d'accueil du questionnaire, suivie de la case à cocher. |
+| **Modale** | Un lien ouvre la politique dans une **fenêtre modale** ; la case reste dans la page. |
+
+Le contenu affiché est celui que vous avez renseigné dans l'onglet « Données personnelles » des options du thème (section 2) : soit la politique générée automatiquement à partir du responsable de traitement, de la finalité et de la durée de conservation, soit votre politique personnalisée si vous en avez saisi une.
+
+#### La case est bloquante
+
+Dès que l'option est activée, **la case doit être cochée pour passer à la page suivante**. Le thème DSFR :
+
+- pose l'attribut `required` sur la case — le blocage fonctionne donc **même sans JavaScript** ;
+- remplace la bulle native du navigateur, non stylable et mal annoncée, par un **message d'erreur DSFR** sous la case (encadré rouge, `aria-invalid`, message lié à la case pour les lecteurs d'écran) ;
+- **déplace l'astérisque** hors de la case à cocher, pour que le libellé reste lisible ;
+- efface le message dès que la case est cochée.
+
+#### Personnaliser le message d'erreur
+
+Le message affiché reprend, s'il est renseigné, le **texte d'erreur défini dans les réglages du questionnaire** (champ *Message d'erreur* de la politique de confidentialité). Sinon, le thème affiche un texte par défaut traduit. Écrivez un message qui dit quoi faire — « Veuillez accepter la politique de confidentialité pour continuer » — plutôt qu'un constat d'échec.
+
+#### Limite connue : un garde-fou d'interface, pas une preuve de consentement
+
+> ⚠️ Le blocage est **côté navigateur**. LimeSurvey embarque bien un contrôle serveur
+> (`SurveyRuntimeHelper::checkForDataSecurityAccepted()`), mais il compare l'étape courante à la
+> chaîne `'0'` alors que le cœur renvoie un entier depuis la version 5.4 : la condition n'est
+> jamais vraie, et **aucune vérification serveur n'a lieu**. Une requête forgée qui saute la case
+> est donc acceptée.
+>
+> Concrètement : la case remplit son rôle d'information et de recueil explicite auprès d'un
+> répondant ordinaire, mais **ne constitue pas une garantie technique**. Si votre traitement exige
+> une preuve de consentement opposable, prévoyez une question dédiée et obligatoire dans le
+> questionnaire, dont la réponse sera enregistrée avec les données.
+
 ---
 
 ## 4. Accessibilité éditoriale (RGAA au quotidien)
