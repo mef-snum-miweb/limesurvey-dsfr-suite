@@ -73,6 +73,20 @@ echo "==> Purge des caches LimeSurvey (tmp/assets + tmp/runtime)..."
 docker compose "${COMPOSE_ARGS[@]}" exec -T web sh -c \
   'rm -rf /var/www/html/tmp/runtime/* /var/www/html/tmp/assets/* 2>/dev/null' || true
 
+# --- Correctif de traduction française (limesurvey-theme-dsfr#73) ------------
+# Le catalogue fr livré avec LimeSurvey 7.x a perdu des entrées (msgid modifiés
+# en amont) : des messages de validation s'affichent en anglais. Le script est
+# auto-détectant — il ne touche à rien sur un core 6.x ni sur un catalogue déjà
+# complet — et doit être rejoué après chaque recréation de conteneur.
+if [ "$MODE" = "suite" ] && command -v python3 >/dev/null 2>&1; then
+  WEB_CONTAINER_NAME=$(docker compose "${COMPOSE_ARGS[@]}" ps --format '{{.Name}}' web 2>/dev/null | head -1)
+  if [ -n "$WEB_CONTAINER_NAME" ]; then
+    echo "==> Catalogue de traduction français..."
+    python3 tools/patch-fr-locale.py "$WEB_CONTAINER_NAME" || \
+      echo "⚠️  correctif de traduction non appliqué (non bloquant)" >&2
+  fi
+fi
+
 # --- Garde-fou : les modules DSFR sont-ils réellement montés ? ---------------
 # Un déploiement « réussi » mais sans bind-mounts = prod en vanilla (le symptôme
 # du piège ci-dessus). On le dit franchement plutôt que de laisser passer.
