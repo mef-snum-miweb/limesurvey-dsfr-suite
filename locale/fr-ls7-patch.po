@@ -1,0 +1,158 @@
+# Correctif de traduction française — LimeSurvey 7.x
+#
+# Le catalogue `locale/fr/fr.mo` livré avec LimeSurvey 7.1.0 a perdu 418 entrées
+# par rapport à 6.16.16 : de nombreux `msgid` ont changé (ponctuation finale
+# ajoutée en amont), ce qui a rendu les traductions existantes orphelines. Côté
+# répondant, les messages de validation s'affichent alors EN ANGLAIS dans un
+# questionnaire français (cf. limesurvey-theme-dsfr#73).
+#
+# Ce fichier ne contient que les chaînes RÉELLEMENT utilisées par le core 7.1
+# (helpers em_manager / frontend / qanda) et absentes de son catalogue :
+#   - reprises telles quelles de la traduction 6.16.16 quand seul le msgid a
+#     changé de ponctuation ;
+#   - traduites à la main sinon (marquées « nouvelle »).
+#
+# Appliqué par tools/patch-fr-locale.py, qui fusionne ce correctif avec le
+# catalogue du conteneur. À SUPPRIMER dès que LimeSurvey publie un catalogue
+# français à jour — le fichier n'est pas une traduction parallèle, c'est un
+# rattrapage temporaire.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
+# récupérée de 6.16.16
+msgid "Answer must be %s."
+msgstr "La réponse doit être %s"
+
+# récupérée de 6.16.16
+msgid "Answer must be greater or equal to %s."
+msgstr "La réponse doit être supérieure ou égale à %s"
+
+# récupérée de 6.16.16
+msgid "Answer must be less or equal to %s."
+msgstr "La réponse doit être inférieure ou égale à %s"
+
+# récupérée de 6.16.16
+msgid "Each answer must be at least %s."
+msgstr "Chaque entrée doit être au moins de %s"
+
+# récupérée de 6.16.16
+msgid "Each answer must be at most %s."
+msgstr "Chaque entrée doit être de maximum %s"
+
+# récupérée de 6.16.16
+msgid "Please fill in %s answers."
+msgstr "Veuillez donner  %s réponses"
+
+# récupérée de 6.16.16
+msgid "Please fill in at least %s answers."
+msgstr "Veuillez donner au minimum %s réponses."
+
+# récupérée de 6.16.16
+msgid "Please fill in at least one answer."
+msgstr "Veuillez donner au minimum une réponse."
+
+# récupérée de 6.16.16
+msgid "Please fill in at most %s answers."
+msgstr "Veuillez donner au maximum %s réponses."
+
+# récupérée de 6.16.16
+msgid "Please fill in at most one answer."
+msgstr "Veuillez donner au maximum une réponse."
+
+# récupérée de 6.16.16
+msgid "Please select %s answers."
+msgstr "Veuillez sélectionner %s réponses"
+
+# récupérée de 6.16.16
+msgid "Please select at least %s answers."
+msgstr "Veuillez sélectionner au moins %s réponses"
+
+# récupérée de 6.16.16
+msgid "Please select at least one answer."
+msgstr "Veuillez sélectionner au moins une réponse"
+
+# récupérée de 6.16.16
+msgid "Please select at most %s answers."
+msgstr "Veuillez sélectionner %s réponses maximum"
+
+# récupérée de 6.16.16
+msgid "Please select at most one answer."
+msgstr "Veuillez sélectionner une réponse maximum"
+
+# récupérée de 6.16.16
+msgid "Please select one answer."
+msgstr "Veuillez choisir une réponse"
+
+# récupérée de 6.16.16
+msgid "Please upload %s files."
+msgstr "Veuillez envoyer %s fichiers"
+
+# récupérée de 6.16.16
+msgid "Please upload at least %s files."
+msgstr "Veuillez envoyer au moins %s fichiers"
+
+# récupérée de 6.16.16
+msgid "Please upload at least one file."
+msgstr "Veuillez envoyer au moins un fichier"
+
+# récupérée de 6.16.16
+msgid "Please upload at most %s files."
+msgstr "Vous pouvez envoyer jusqu'à %s fichiers"
+
+# récupérée de 6.16.16
+msgid "Please upload at most one file."
+msgstr "Veuillez envoyer au plus un fichier"
+
+# récupérée de 6.16.16
+msgid "Please upload between %s and %s files."
+msgstr "Veuillez envoyer entre %s et %s fichiers"
+
+# récupérée de 6.16.16
+msgid "Please upload one file."
+msgstr "Veuillez envoyer un fichier"
+
+# récupérée de 6.16.16
+msgid "The sum must be at least %s."
+msgstr "La somme doit être d'au moins %s"
+
+# récupérée de 6.16.16
+msgid "The sum must be at most %s."
+msgstr "La somme doit être de maximum %s"
+
+# récupérée de 6.16.16
+msgid "Your answer must be %s."
+msgstr "Votre réponse doit être %s"
+
+# récupérée de 6.16.16
+msgid "Your answer must be at least %s."
+msgstr "Votre réponse doit être d'au moins %s"
+
+# récupérée de 6.16.16
+msgid "Your answer must be at most %s."
+msgstr "Votre réponse doit être au maximum %s"
+
+# nouvelle
+msgid "Each answer must be equal to %s."
+msgstr "Chaque réponse doit être égale à %s."
+
+# nouvelle
+msgid "End of the link that opens the privacy policy popup"
+msgstr "Fin du lien qui ouvre la politique de confidentialité"
+
+# nouvelle
+msgid "Error in default value: %s"
+msgstr "Erreur dans la valeur par défaut : %s"
+
+# nouvelle
+msgid "Please fill in one answer."
+msgstr "Veuillez donner une réponse."
+
+# nouvelle
+msgid "Responses were not saved"
+msgstr "Les réponses n'ont pas été enregistrées"
+
+# nouvelle
+msgid "Start of the link that opens the privacy policy popup"
+msgstr "Début du lien qui ouvre la politique de confidentialité"
