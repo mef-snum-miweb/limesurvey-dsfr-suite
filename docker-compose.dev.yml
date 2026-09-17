@@ -22,7 +22,7 @@ services:
     # du thème est le core déployé (6.16.16, cf. check-list de montée de version
     # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
     # core silencieusement. Bump = décision explicite + re-gate complet.
-    image: martialblog/limesurvey:6.16.16-260408-apache
+    image: martialblog/limesurvey:7.1.0-260913-apache
     container_name: limesurvey-dev
     restart: unless-stopped
     environment:
