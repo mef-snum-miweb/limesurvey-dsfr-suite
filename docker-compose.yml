@@ -27,10 +27,16 @@ services:
   # Service nommé `web` : requis par l'override mail de spawn (--mail) qui attache
   # le réseau `mail` au service `web`. container_name reste `limesurvey-dsfr`.
   web:
-    # Tag PINNÉ (et non le flottant 7-apache). Branche limesurvey-7-0 : core
-    # LimeSurvey 7.1.0 (suivi #4). Un `docker compose pull` ne doit pas déplacer
+    # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
+    # du thème est le core déployé. Un `docker compose pull` ne doit pas déplacer
     # le core silencieusement. Bump = décision explicite + re-gate complet.
-    image: martialblog/limesurvey:7.1.0-260913-apache
+    #
+    # Le thème est désormais compatible 6.x ET 7.x (ADR-129), mais faire passer
+    # la PROD en 7.x est une décision SÉPARÉE : elle implique une migration de
+    # base irréversible (updatedb 648 → 712) et une reprise des questionnaires
+    # existants. Tant qu'elle n'est pas prise, la prod reste sur 6.16.16 ; la
+    # validation 7.x se fait sur https://limesurvey-7.lab.miweb.run (suivi #4).
+    image: martialblog/limesurvey:6.16.16-260408-apache
     # INSTANCE_NAME (défaut `limesurvey`) préfixe conteneurs et routeurs Traefik :
     # permet de faire cohabiter plusieurs instances sur le même hôte (ex. prod 6.x
     # et lab 7.x). Défauts = noms historiques de la prod.
