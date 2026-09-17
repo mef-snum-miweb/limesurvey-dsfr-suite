@@ -1,5 +1,12 @@
 import { defineConfig } from '@playwright/test';
 
+// Gate double 6.x / 7.x (ADR-129) : le core visé est choisi par variables
+// d'environnement, jamais codé en dur. Voir tests/e2e/helpers/env.ts et
+// docker-compose.dev.yml (LS_IMAGE / LS_PREFIX / LS_PORT).
+const LS_PORT = process.env.LS_PORT || '8081';
+const LS_PROJECT = process.env.LS_PROJECT || 'limesurvey-dsfr-suite';
+const BASE_URL = process.env.LS_BASE_URL || `http://localhost:${LS_PORT}`;
+
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const reportDir = `./test-reports/${timestamp}`;
 
@@ -32,7 +39,7 @@ export default defineConfig({
     ['html', { outputFolder: `${reportDir}/html`, open: 'never' }],
   ],
   use: {
-    baseURL: 'http://localhost:8081',
+    baseURL: BASE_URL,
     locale: 'fr-FR',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -41,8 +48,8 @@ export default defineConfig({
     { name: 'chromium', use: { browserName: 'chromium' } },
   ],
   webServer: {
-    command: 'docker compose -f docker-compose.dev.yml up -d && ./db/seed.sh',
-    url: 'http://localhost:8081',
+    command: `docker compose -p ${LS_PROJECT} -f docker-compose.dev.yml up -d && ./db/seed.sh`,
+    url: BASE_URL,
     reuseExistingServer: true,
     timeout: 180_000,
   },

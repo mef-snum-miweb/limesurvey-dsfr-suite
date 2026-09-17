@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { DB_CONTAINER } from './helpers/env';
 import { test, expect } from './fixtures/survey';
 import { SURVEY_URL } from './fixtures/survey';
 
@@ -20,7 +21,7 @@ const SQL = (query: string) =>
     'docker',
     [
       'exec',
-      'limesurvey-dev-db',
+      DB_CONTAINER,
       'mysql',
       '-u', 'limesurvey',
       '-plimesurvey',

@@ -14,16 +14,26 @@
 # Usage :
 #   docker compose -f docker-compose.dev.yml up -d
 #   → http://localhost:8081 (admin / admin)
+#
+# Gate double 6.x / 7.x (ADR-129) — deux stacks côte à côte, volumes séparés
+# par le nom de projet compose (-p) :
+#
+#   LS_CORE=6 ./run_tests.sh      # 6.16.16 pinné, port 8081
+#   LS_CORE=7 ./run_tests.sh      # 7.1.0,    port 8082
+#
+# Variables : LS_IMAGE (tag du core), LS_PREFIX (noms de conteneurs),
+# LS_PORT (port hôte). Défauts = environnement 6.x historique.
 # =============================================================================
 
 services:
   limesurvey:
-    # Tag PINNÉ (et non le flottant 6-apache) : la référence d'iso-fonctionnalité
-    # du thème est le core déployé (6.16.16, cf. check-list de montée de version
-    # dans le README du thème). Un `docker compose pull` ne doit pas déplacer le
-    # core silencieusement. Bump = décision explicite + re-gate complet.
-    image: martialblog/limesurvey:7.1.0-260913-apache
-    container_name: limesurvey-dev
+    # Tag PINNÉ (et non le flottant 6-apache / 7-apache) : la référence
+    # d'iso-fonctionnalité du thème est le core déployé. Un `docker compose pull`
+    # ne doit pas déplacer le core silencieusement. Bump = décision explicite +
+    # re-gate complet. LS_IMAGE permet la gate double (ADR-129) sans éditer ce
+    # fichier ; le défaut reste le core 6.x de référence.
+    image: ${LS_IMAGE:-martialblog/limesurvey:6.16.16-260408-apache}
+    container_name: ${LS_PREFIX:-limesurvey-dev}
     restart: unless-stopped
     environment:
       - DB_TYPE=mysql
@@ -37,7 +47,7 @@ services:
       - ADMIN_NAME=Administrateur
       - ADMIN_EMAIL=admin@example.com
     ports:
-      - "8081:8080"
+      - "${LS_PORT:-8081}:8080"
     volumes:
       # --- Modules DSFR (submodules montés en direct) ---
       - ./modules/theme-dsfr:/var/www/html/upload/themes/survey/dsfr
@@ -55,7 +65,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: limesurvey-dev-db
+    container_name: ${LS_PREFIX:-limesurvey-dev}-db
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=root

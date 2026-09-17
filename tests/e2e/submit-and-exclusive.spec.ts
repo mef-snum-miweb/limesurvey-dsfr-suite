@@ -1,4 +1,10 @@
 import { execFileSync } from 'node:child_process';
+import {
+  DB_CONTAINER,
+  WEB_CONTAINER,
+  snapshotSurveyDefinition,
+  restoreSurveyDefinition,
+} from './helpers/env';
 import { test, expect } from './fixtures/survey';
 import { SURVEY_URL, navigateToSelector } from './fixtures/survey';
 
@@ -26,7 +32,7 @@ const SID = 282267;
 const sql = (q: string) =>
   execFileSync(
     'docker',
-    ['exec', 'limesurvey-dev-db', 'mysql', '-u', 'limesurvey', '-plimesurvey', '-D', 'limesurvey', '-sNe', q],
+    ['exec', DB_CONTAINER, 'mysql', '-u', 'limesurvey', '-plimesurvey', '-D', 'limesurvey', '-sNe', q],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
   ).trim();
 
@@ -36,11 +42,11 @@ test.describe('Bug 3 — question theme bootstrap_buttons : alignement boutons +
     // Active le question theme bootstrap_buttons sur Q18 (List Radio avec other=Y).
     execFileSync(
       'docker',
-      ['exec', 'limesurvey-dev-db', 'mysql', '-u', 'limesurvey', '-plimesurvey', '-D', 'limesurvey', '-sNe',
+      ['exec', DB_CONTAINER, 'mysql', '-u', 'limesurvey', '-plimesurvey', '-D', 'limesurvey', '-sNe',
         `UPDATE lime_questions SET question_theme_name='bootstrap_buttons' WHERE qid=18;`],
       { stdio: ['ignore', 'pipe', 'ignore'] },
     );
-    execFileSync('docker', ['exec', 'limesurvey-dev', 'sh', '-c', 'rm -rf /var/www/html/tmp/assets/*'], { stdio: ['ignore', 'pipe', 'ignore'] });
+    execFileSync('docker', ['exec', WEB_CONTAINER, 'sh', '-c', 'rm -rf /var/www/html/tmp/assets/*'], { stdio: ['ignore', 'pipe', 'ignore'] });
   });
 
   test.afterAll(() => {
@@ -113,11 +119,19 @@ test.describe('Bug 1 — option exclusive (« Aucun ») ne doit pas masquer les 
 // fichiers et le test Bug 1 voit un état pollué.
 test.describe.configure({ mode: 'serial' });
 
-const reseed = () =>
-  execFileSync('bash', ['./db/seed.sh', '--force'], {
-    cwd: process.cwd(),
-    stdio: ['ignore', 'pipe', 'ignore'],
-  });
+// suite#31 : on ne rejoue plus `db/seed.sh --force` (dump figé au schéma 6.x,
+// destructeur sur une base 7.x migrée). On prend un instantané des tables de
+// définition avant la 1re modif et on le restaure ensuite : indépendant de la
+// version du core.
+let surveyDefSnapshot = '';
+/** Instantané pris à la première demande (état canonique d'avant nos modifs). */
+const reseed = () => {
+  if (!surveyDefSnapshot) {
+    surveyDefSnapshot = snapshotSurveyDefinition();
+    return;
+  }
+  restoreSurveyDefinition(surveyDefSnapshot);
+};
 
 test.describe('Bug 2 — bouton « Imprimer vos réponses » sur la page submit', () => {
   test.beforeAll(() => {
@@ -126,9 +140,9 @@ test.describe('Bug 2 — bouton « Imprimer vos réponses » sur la page submit'
   });
 
   test.afterAll(() => {
-    // Restore via seed : plus robuste que de rejouer des updates individuels
-    // (GROUP_CONCAT a une limite à 1024 chars par défaut et tronquait
-    // silencieusement notre snapshot mandatory pour 204 questions).
+    // Restauration de l'instantané : plus robuste que de rejouer des updates
+    // individuels (GROUP_CONCAT tronquait silencieusement le snapshot mandatory
+    // pour 204 questions) et, contrairement au seed, sans dépendance au schéma.
     reseed();
   });
 

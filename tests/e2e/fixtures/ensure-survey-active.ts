@@ -16,9 +16,11 @@
  */
 import { execSync } from 'node:child_process';
 
-const CONTAINER = 'limesurvey-dev';
+import { WEB_CONTAINER, BASE_URL } from '../helpers/env';
 
-export async function ensureSurveyActive(sid: number, baseUrl = 'http://localhost:8081'): Promise<void> {
+const CONTAINER = WEB_CONTAINER;
+
+export async function ensureSurveyActive(sid: number, baseUrl = BASE_URL): Promise<void> {
   const res = await fetch(`${baseUrl}/index.php/${sid}?newtest=Y&lang=fr`, { redirect: 'follow' });
   if (res.ok) {
     return;
