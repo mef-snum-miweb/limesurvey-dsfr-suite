@@ -13,6 +13,50 @@ Quatre modules vivent en submodules sous [`modules/`](modules/) :
 
 ---
 
+## Compatibilité LimeSurvey 6.x et 7.x
+
+Le thème et la suite de tests supportent **LimeSurvey 6.16.16 (référence) et 7.1.0**, sur une
+**branche unique** — pas deux branches maintenues en miroir (ADR-129).
+
+| | 6.16.16 | 7.1.0 |
+|---|---|---|
+| Unitaires | 441/441 | 441/441 |
+| E2E (Playwright) | 145/145 | 145/145 |
+| Visuel (108 captures) | 20/20 | 20/20 |
+| Rendu comparé au core de référence | — | **identique** (comparaison croisée 20/20) |
+
+LimeSurvey 7 a renommé un grand nombre de conventions que le thème doit suivre — noms de
+champs POST, ids `javatbd`, structure de la liste de réponses (`<div>` → `<ul>/<li>`), rendu
+du ranking. Le thème détecte **ce qui change** (présence d'une variable, format du fieldname),
+jamais la version : elle n'est pas exposée aux templates Twig. Chaque bloc de transition porte
+le marqueur `LS6-COMPAT` — `grep -rn "LS6-COMPAT" modules/theme-dsfr/views/` en donne la liste.
+
+Le core d'une instance se choisit dans son `.env` (`LS_CORE_IMAGE`), et la suite de tests cible
+l'un ou l'autre avec `LS_CORE=6|7 ./run_tests.sh` :
+[→ cohabitation 6.x / 7.x](#faire-cohabiter-une-instance-6x-et-une-instance-7x).
+
+### Réserves connues
+
+Elles sont réelles et assumées — à lire avant de mettre une instance 7.x en production :
+
+- **L'upload de fichier n'a aucun test E2E**, alors que LimeSurvey 7 a renommé son champ
+  compteur (`_Cfilecount`). Le code est adapté et suit la même détection que le reste, mais
+  **ce n'est pas vérifié en exécution** : prévoir une vérification manuelle.
+- **`show_noanswer=1` sur la double échelle** n'est exercé par aucun questionnaire de test.
+  Le core 7 y présélectionne « Sans réponse » là où notre override garde « Veuillez
+  choisir… » — divergence assumée vis-à-vis du vanilla, non couverte.
+- **Le catalogue français de LimeSurvey 7.1 est incomplet** (5 605 entrées contre 5 886 en
+  6.16.16 : des `msgid` ont changé en amont). Sans rattrapage, des messages de validation
+  s'affichent **en anglais**. `deploy.sh` applique automatiquement
+  [`locale/fr-ls7-patch.po`](locale/fr-ls7-patch.po) — c'est un **correctif temporaire**, à
+  supprimer quand l'amont sera corrigé.
+- **Passer une instance existante de 6.x à 7.x migre sa base de façon irréversible**
+  (`updatedb`, 648 → 712). Pour comparer deux versions, on déploie deux instances.
+- La **prod reste volontairement sur 6.16.16** : la bascule est une décision séparée, qui
+  suppose la reprise des questionnaires existants.
+
+---
+
 ## Trois usages, trois parcours
 
 Ce repo sert trois scénarios distincts — chacun avec ses propres prérequis. **Prends le bon parcours selon ton intention**, tu ne pollues pas l'un avec l'autre.
@@ -20,8 +64,8 @@ Ce repo sert trois scénarios distincts — chacun avec ses propres prérequis. 
 | Je veux… | Parcours | Prérequis |
 |---|---|---|
 | **Essayer la suite** (démo visuelle, poser l'œil sur le thème, montrer à un collègue) | [→ Démo](#1-démo--faire-tourner-la-suite) | Docker |
-| **Lancer la suite de tests** (unit + E2E + a11y + round-trip) | [→ Tests](#2-tests--lancer-et-consulter-les-rapports) | Docker **+** Node 18+ |
-| **Modifier le thème ou un plugin** | [→ Développement](#3-développement--modifier-le-thème-ou-un-plugin) | Docker + Node 18+ + lecture de [`CONTRIBUTING`](modules/theme-dsfr/CONTRIBUTING.md) |
+| **Lancer la suite de tests** (unit + E2E + a11y + round-trip) | [→ Tests](#2-tests--lancer-et-consulter-les-rapports) | Docker **+** Node 24 (cf. [`.nvmrc`](.nvmrc)) |
+| **Modifier le thème ou un plugin** | [→ Développement](#3-développement--modifier-le-thème-ou-un-plugin) | Docker + Node 24 + lecture de [`CONTRIBUTING`](modules/theme-dsfr/CONTRIBUTING.md) |
 | **Déployer en prod** | [→ Production](#4-déploiement-en-production) | Docker + réseau Traefik |
 | **Tester une installation à froid** (Upload & install d'un module sur une instance vierge) | [→ Instance vanilla](#5-instance-vanilla-tester-linstallation-à-froid-dun-module) | Docker |
 
@@ -85,7 +129,7 @@ Objectif : exécuter les trois strates de tests du thème (unitaires Vitest, E2E
 ### Prérequis
 
 - **Docker** (pour l'app — voir section [Démo](#1-démo--faire-tourner-la-suite))
-- **Node 18+** et **npm**
+- **Node 24** (LTS, cf. [`.nvmrc`](.nvmrc) — `nvm use`) et **npm**
 - Les dépendances Node et le navigateur Chromium installés (cf. ci-dessous)
 
 ### Installation (une fois)
