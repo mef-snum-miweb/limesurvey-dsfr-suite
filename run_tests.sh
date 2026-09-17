@@ -40,6 +40,31 @@ case "$MODE" in
   --full)    RUN_UNIT=1; RUN_E2E_CLASSIC=1; RUN_E2E_RESULTS=1 ;;
 esac
 
+# --- Gate double 6.x / 7.x (ADR-129) -----------------------------------------
+# LS_CORE=6 (défaut) → core de référence 6.16.16, port 8081, projet compose
+# historique. LS_CORE=7 → core 7.x sur un port, des conteneurs et des volumes
+# distincts, pour que les deux stacks cohabitent sans se marcher dessus.
+LS_CORE="${LS_CORE:-6}"
+case "$LS_CORE" in
+  6)
+    export LS_IMAGE="${LS_IMAGE:-martialblog/limesurvey:6.16.16-260408-apache}"
+    export LS_PREFIX="${LS_PREFIX:-limesurvey-dev}"
+    export LS_PORT="${LS_PORT:-8081}"
+    export LS_PROJECT="${LS_PROJECT:-limesurvey-dsfr-suite}"
+    ;;
+  7)
+    export LS_IMAGE="${LS_IMAGE:-martialblog/limesurvey:7.1.0-260913-apache}"
+    export LS_PREFIX="${LS_PREFIX:-limesurvey-ls7}"
+    export LS_PORT="${LS_PORT:-8082}"
+    export LS_PROJECT="${LS_PROJECT:-ls7}"
+    ;;
+  *)
+    echo "LS_CORE invalide : '$LS_CORE' (attendu : 6 | 7)" >&2
+    exit 2
+    ;;
+esac
+echo "Core visé : LimeSurvey $LS_CORE — $LS_IMAGE (port $LS_PORT, conteneurs $LS_PREFIX*)"
+
 TIMESTAMP=$(date +%Y-%m-%dT%H-%M-%S)
 REPORT_DIR="./test-reports/${TIMESTAMP}"
 mkdir -p "${REPORT_DIR}"

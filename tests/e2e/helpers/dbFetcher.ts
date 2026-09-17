@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { mysql, responseTable } from './env';
 
 /**
  * Lit la dernière réponse complète (submitdate NON NULL) du questionnaire
@@ -12,21 +12,9 @@ import { execFileSync } from 'node:child_process';
  *          aux SGQA des questions (ex: "282267X1X1").
  */
 export function getLatestSubmittedResponse(surveyId = 282267): Record<string, string | null> {
-  const table = `lime_survey_${surveyId}`;
-  const sql = `SELECT * FROM \`${table}\` WHERE submitdate IS NOT NULL ORDER BY id DESC LIMIT 1\\G`;
-
-  const out = execFileSync(
-    'docker',
-    [
-      'exec',
-      'limesurvey-dev-db',
-      'mysql',
-      '-u', 'limesurvey',
-      '-plimesurvey',
-      'limesurvey',
-      '-e', sql,
-    ],
-    { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
+  const table = responseTable(surveyId);
+  const out = mysql(
+    `SELECT * FROM \`${table}\` WHERE submitdate IS NOT NULL ORDER BY id DESC LIMIT 1\\G`,
   );
 
   const row: Record<string, string | null> = {};
@@ -45,19 +33,7 @@ export function getLatestSubmittedResponse(surveyId = 282267): Record<string, st
 
 /** Compte le nombre de réponses soumises (utile pour s'assurer qu'une nouvelle a été créée). */
 export function countSubmittedResponses(surveyId = 282267): number {
-  const table = `lime_survey_${surveyId}`;
-  const out = execFileSync(
-    'docker',
-    [
-      'exec',
-      'limesurvey-dev-db',
-      'mysql',
-      '-u', 'limesurvey',
-      '-plimesurvey',
-      'limesurvey',
-      '-sNe', `SELECT COUNT(*) FROM \`${table}\` WHERE submitdate IS NOT NULL;`,
-    ],
-    { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
-  );
+  const table = responseTable(surveyId);
+  const out = mysql(`SELECT COUNT(*) FROM \`${table}\` WHERE submitdate IS NOT NULL;`, ['-sN']);
   return parseInt(out.trim(), 10) || 0;
 }

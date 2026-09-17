@@ -31,6 +31,9 @@ class ActivatesurveyCommand extends CConsoleCommand
         Yii::app()->db->createCommand("UPDATE {{surveys}} SET active='N' WHERE sid=$sid")->execute();
         Yii::app()->db->createCommand("DROP TABLE IF EXISTS {{survey_$sid}}")->execute();
         Yii::app()->db->createCommand("DROP TABLE IF EXISTS {{survey_{$sid}_timings}}")->execute();
+        // LS7 : tables renommées responses_<sid> / timings_<sid>
+        Yii::app()->db->createCommand("DROP TABLE IF EXISTS {{responses_$sid}}")->execute();
+        Yii::app()->db->createCommand("DROP TABLE IF EXISTS {{timings_$sid}}")->execute();
 
         // Recharger le modèle et activer (recrée la table de réponses).
         $survey = Survey::model()->findByPk($sid);
