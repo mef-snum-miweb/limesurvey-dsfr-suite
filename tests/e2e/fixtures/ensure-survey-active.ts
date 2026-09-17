@@ -16,11 +16,23 @@
  */
 import { execSync } from 'node:child_process';
 
-import { WEB_CONTAINER, BASE_URL } from '../helpers/env';
+import { WEB_CONTAINER, BASE_URL, mysql } from '../helpers/env';
 
 const CONTAINER = WEB_CONTAINER;
 
+/** Lève les bornes de date (expiration / ouverture) d'un questionnaire de test. */
+function clearSurveyDeadlines(sid: number): void {
+  mysql(`UPDATE lime_surveys SET expires = NULL, startdate = NULL WHERE sid = ${sid};`);
+}
+
 export async function ensureSurveyActive(sid: number, baseUrl = BASE_URL): Promise<void> {
+  // suite#22 : une date d'expiration passée rend le questionnaire injouable
+  // SANS erreur HTTP — le core sert une page « questionnaire expiré » en 200.
+  // Les walks partaient donc en timeout sur le bouton d'envoi, jamais rendu.
+  // Le dump de seed porte `expires` (527199 : 2026-07-02), et chaque reseed la
+  // restaure : on la lève ici plutôt qu'à la main.
+  clearSurveyDeadlines(sid);
+
   const res = await fetch(`${baseUrl}/index.php/${sid}?newtest=Y&lang=fr`, { redirect: 'follow' });
   if (res.ok) {
     return;

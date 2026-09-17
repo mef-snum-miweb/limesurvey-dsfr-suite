@@ -16,6 +16,18 @@ export default defineConfig({
   // Les snapshots visuels (lents, ~88 captures) ne tournent que sur demande :
   // `npm run test:visual` pose VISUAL=1. Exclus de la suite par défaut.
   testIgnore: process.env.VISUAL ? [] : ['**/visual.spec.ts'],
+  // Baselines visuelles séparées par core : la référence est le rendu de
+  // 6.16.16 (dossier historique) ; la 7.x a le sien, pour que la dérive entre
+  // les deux soit explicite au lieu d'écraser la référence.
+  //
+  // Comparaison CROISÉE (theme#47) : `LS_CORE=7 LS_VISUAL_REF=6 npm run test:visual`
+  // exécute la 7.x contre les baselines 6.x — chaque écart de rendu entre les
+  // deux cores ressort alors comme un échec, avec son image de diff.
+  snapshotPathTemplate:
+    (process.env.LS_VISUAL_REF || process.env.LS_CORE) === '7'
+      ? '{testDir}/{testFilePath}-snapshots-ls7/{arg}-{projectName}-{platform}{ext}'
+      : '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}-{platform}{ext}',
+
   expect: {
     toHaveScreenshot: {
       // Tolérance anti-bruit (anti-aliasing) — un vrai changement de rendu
